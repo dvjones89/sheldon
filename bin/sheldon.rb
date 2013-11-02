@@ -1,3 +1,8 @@
+# USAGE
+# Navigate to directory where symlinks are to be created (e.g ~/ssh)
+# Run 'sheldon <collection-name>' for example 'sheldon ssh'
+# For each file in the directory "config/ssh" you'll be given the option to symlink
+
 require 'FileUtils'
 
 target_dir = Dir.pwd
