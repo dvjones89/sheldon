@@ -14,7 +14,7 @@ Dir.entries(collection_dir).each do |entry|
     puts "Symlink #{entry}?"
     answer = STDIN.gets.chomp
     if answer.downcase == "y"
-      FileUtils.ln_s(source_path, target_dir)
+      FileUtils.ln_s(source_path, target_dir, :force=>true)
     end
   end
 end
