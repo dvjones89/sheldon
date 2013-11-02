@@ -1,7 +1,9 @@
 # USAGE
-# Navigate to directory where symlinks are to be created (e.g ~/ssh)
-# Run 'sheldon <collection-name>' for example 'sheldon ssh'
-# For each file in the directory "config/ssh" you'll be given the option to symlink
+# Navigate to directory where symlinks are to be created (e.g ~/.ssh)
+# Sheldon will try to symlink configs from a subdirectory with the same name as your current directory.
+# If the directories don't match, tell Sheldon where to find the configs:'sheldon .ssh2'
+
+# For each config in the source directory, you'll be given the option to symlink to your current location.
 
 require 'FileUtils'
 
