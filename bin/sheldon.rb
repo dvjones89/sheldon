@@ -5,18 +5,21 @@
 
 require 'FileUtils'
 
+# Get the user's current directory - This will be the target of any symlinks we create
 target_path = Dir.pwd
-target_dir = ARGV[0] || Dir.getwd
-puts target_dir
-collection_dir = File.expand_path("../../#{target_dir}",__FILE__)
 
-# Dir.entries(collection_dir).each do |entry|
-#   source_path =  File.join(collection_dir,entry)
-#   if File.file?(source_path)
-#     puts "Symlink #{entry}?"
-#     answer = STDIN.gets.chomp
-#     if answer.downcase == "y"
-#       FileUtils.ln_s(source_path, target_path, :force=>true)
-#     end
-#   end
-# end
+# Determine which sheldon directory to read configs from
+# This defaults to the name of the user's current directory but can be overwritten with first arg
+sheldon_dir = ARGV[0] || dirname = File.basename(Dir.getwd)
+sheldon_path = File.expand_path("../../#{sheldon_dir}",__FILE__)
+
+Dir.entries(sheldon_path).each do |config_file|
+  config_path =  File.join(sheldon_path,config_file)
+  if File.file?(config_path)
+    puts "Symlink #{config_file}?"
+    answer = STDIN.gets.chomp
+    if answer.downcase == "y"
+      FileUtils.ln_s(config_path, target_path, :force=>true)
+    end
+  end
+end
