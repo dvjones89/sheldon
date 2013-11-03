@@ -5,7 +5,7 @@
 
 # For each config in the source directory, you'll be given the option to symlink to your current location.
 
-require 'FileUtils'
+require 'fileutils'
 
 # Get the user's current directory - This will be the target of any symlinks we create
 target_path = Dir.pwd
