@@ -18,7 +18,7 @@ sheldon_path = File.expand_path("../../#{sheldon_dir}",__FILE__)
 Dir.entries(sheldon_path).each do |config_file|
   config_path =  File.join(sheldon_path,config_file)
   if File.file?(config_path)
-    puts "Symlink #{config_file}?"
+    print "Symlink #{config_file}? "
     answer = STDIN.gets.chomp
     if answer.downcase == "y"
       FileUtils.ln_s(config_path, target_path, :force=>true)
