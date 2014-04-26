@@ -18,7 +18,7 @@ class Sheldon
     end
     master_config = File.join(target_dir, 'config')
     File.open(master_config, 'w') { |f| f.write(buffer) }
-    puts 'Build Complete'
+    puts "Sheldon" + '💥'.encode('utf-8') + ": Built #{dir}"
   end
 
   # Takes user's working dir and offers to symlink any known configs.
@@ -30,7 +30,7 @@ class Sheldon
     Dir.entries(sheldon_path).each do |config_file|
       config_path = File.join(sheldon_path, config_file)
       if File.file?(config_path)
-        
+
         print "Symlink #{config_file} (y/n) ? "
         answer = STDIN.gets.chomp
         if answer.downcase == 'y'
