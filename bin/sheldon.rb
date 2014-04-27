@@ -18,7 +18,7 @@ class Sheldon
     end
     master_config = File.join(target_dir, 'config')
     File.open(master_config, 'w') { |f| f.write(buffer) }
-    puts "Sheldon" + '💥'.encode('utf-8') + ": Built #{dir}"
+    puts "Sheldon" + '💥'.encode('utf-8') + " Built #{dir}"
   end
 
   # Takes user's working dir and offers to symlink any known configs.
