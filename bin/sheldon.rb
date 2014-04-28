@@ -1,5 +1,6 @@
 # Another dotfile/config manager. Bazinga!
 class Sheldon
+  require 'fileutils'
 
   # Takes multiple 'config_' files and builds a master 'config' file
   # dir = the directory (relative to ~) that should be built.
@@ -27,12 +28,16 @@ class Sheldon
   # Takes user's working dir and offers to symlink any known configs.
     # working dir can be overriden as first argument
   def self.link(dir)
-    sheldon_dir = dir || File.basename(Dir.getwd)
+    remote_path = Dir.pwd
+    sheldon_dir = File.basename(remote_path)
     sheldon_path = File.expand_path("../../#{sheldon_dir}", __FILE__)
 
     Dir.entries(sheldon_path).each do |config_file|
       config_path = File.join(sheldon_path, config_file)
-      if File.file?(config_path)
+      target_path = File.join(remote_path, config_file)
+
+      # Only offer to link files that aren't already linked
+      if File.file?(config_path) && !File.exist?(target_path)
 
         print "Symlink #{config_file} (y/n) ? "
         answer = STDIN.gets.chomp
@@ -41,6 +46,8 @@ class Sheldon
         end
       end
     end
+
+    puts @logo + 'Sheldon' + @logo + ' Linking Complete'
   end
 
   # This is the entry point when Sheldon is called from command-line.
