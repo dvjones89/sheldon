@@ -4,6 +4,9 @@ class Sheldon
   # Takes multiple 'config_' files and builds a master 'config' file
   # dir = the directory (relative to ~) that should be built.
     # Defaults to current working dir.
+
+  @logo = '💥'.encode('utf-8') + ' '
+
   def self.build(dir)
     dir = File.basename(Dir.getwd) if dir.nil?
     home_directory = File.expand_path('~')
@@ -18,7 +21,7 @@ class Sheldon
     end
     master_config = File.join(target_dir, 'config')
     File.open(master_config, 'w') { |f| f.write(buffer) }
-    puts "Sheldon" + '💥'.encode('utf-8') + " Built #{dir}"
+    puts @logo + 'Sheldon' + @logo + " Built #{dir}"
   end
 
   # Takes user's working dir and offers to symlink any known configs.
