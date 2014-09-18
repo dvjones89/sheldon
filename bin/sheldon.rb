@@ -37,7 +37,7 @@ class Sheldon
       target_path = File.join(remote_path, config_file)
 
       # Only offer to link files that aren't already linked
-      if File.file?(config_path) && !File.exist?(target_path)
+      unless File.exist?(target_path)
 
         print "Symlink #{config_file} (y/n) ? "
         answer = STDIN.gets.chomp
