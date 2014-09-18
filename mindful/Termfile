@@ -1,0 +1,15 @@
+root:
+  ~/dev/mindful
+
+commands:
+  server:     vagrant ssh -c "cd /vagrant && bundle exec rails s && /bin/bash"
+  console:    vagrant ssh -c "cd /vagrant && bundle exec rails c && /bin/bash"
+  vagrant:    vagrant ssh -c "cd /vagrant && /bin/bash"
+  shell1:     /bin/zsh
+  shell2:     /bin/zsh
+  shell3:     /bin/zsh
+
+layout:
+  - [ server, console ]
+  - [ vagrant, shell1 ]
+  - [ shell2, shell3 ]
