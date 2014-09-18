@@ -28,13 +28,13 @@ class Sheldon
   # Takes user's working dir and offers to symlink any known configs.
     # working dir can be overriden as first argument
   def self.link(dir)
-    remote_path = Dir.pwd
-    sheldon_dir = File.basename(remote_path)
-    sheldon_path = File.expand_path("../../#{sheldon_dir}", __FILE__)
+    sheldon_data_dir = ENV['SHELDON_DATA_DIR'] || '~/dev/sheldon'
+    user_dir = File.basename(Dir.pwd)
+    sheldon_path = File.join(sheldon_data_dir, user_dir)
 
     Dir.entries(sheldon_path).each do |config_file|
       config_path = File.join(sheldon_path, config_file)
-      target_path = File.join(remote_path, config_file)
+      target_path = File.join(Dir.pwd, config_file)
 
       # Only offer to link files that aren't already linked
       unless File.exist?(target_path)
