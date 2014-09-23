@@ -35,7 +35,7 @@ class Sheldon
         next if config_file == '.' || config_file == '..'
         config_path = File.join(sheldon_path, config_file)
         if File.directory?(config_path)
-          test(File.join(root, config_file))
+          link(File.join(root, config_file))
         else
           target_path = File.join(Dir.pwd, '..', root, config_file)
           unless File.exist?(target_path)
