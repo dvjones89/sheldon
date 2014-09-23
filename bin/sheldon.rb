@@ -30,6 +30,13 @@ class Sheldon
       sheldon_data_dir = ENV['SHELDON_DATA_DIR'] || '~/dev/sheldon'
 
       sheldon_path = File.join(sheldon_data_dir, root)
+
+      # Abort linking if the sheldon data dir doesn't contain an entry for the user's working dir
+      if !File.exists?(sheldon_path)
+        puts "I don't have any files for the #{root} directory, I'm afraid."
+        exit
+      end
+
       
       Dir.entries(sheldon_path).each do |config_file|
         next if config_file == '.' || config_file == '..'
