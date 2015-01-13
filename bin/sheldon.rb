@@ -53,7 +53,7 @@ class Sheldon
           link(File.join(root, config_file)) # Recursive call to explore the directory we've just found
         else
           target_path = File.join(Dir.pwd, '..', root, config_file)
-          unless File.symlink?(target_path) # An existing symlink suggests Sheldon has already done his thing.
+          unless File.symlink?(target_path) && File.exists?(File.readlink(target_path)) # An existing (unbroken) symlink suggests Sheldon has already done his thing.
             print "Symlink #{File.join(root, config_file)} (y/n) ? "
             answer = STDIN.gets.chomp
             if answer.downcase == 'y'
