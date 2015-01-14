@@ -36,6 +36,7 @@ class Sheldon
     def self.link(root)
       root = File.basename(Dir.getwd) if root.nil? # Root of tree traversal. Defaults to user's working directory
       sheldon_data_dir = brains # Where do we search for matching config files
+      ignored_files = File.readlines(File.join(File.dirname(__FILE__), '../config/.sheldonignore')) # Files to be ignored are defined in config/.sheldonignore
 
       sheldon_path = File.join(sheldon_data_dir, root)
 
@@ -47,7 +48,7 @@ class Sheldon
 
       # Otherwise, iterate over the contents of the matching data directory, exploring directories as they're encountered (depth-first traversal)
       Dir.entries(sheldon_path).each do |config_file|
-        next if config_file == '.' || config_file == '..'
+        next if config_file == '.' || config_file == '..' || ignored_files.include?(config_file)
         config_path = File.join(sheldon_path, config_file)
         if File.directory?(config_path)
           link(File.join(root, config_file)) # Recursive call to explore the directory we've just found
