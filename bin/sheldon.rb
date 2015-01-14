@@ -13,6 +13,25 @@ class Sheldon
       ENV['SHELDON_DATA_DIR'] || '~/sheldon'
     end
 
+    def self.list
+      config_files = configs_in_path(File.join(brains, File.basename(Dir.getwd)))
+      if config_files.empty?
+        announce "I don't have any linkable files for your directory, I'm afraid."
+      else
+        announce 'The following files are eligible for linking to your current directory. Run `sheldon link` to get started.'
+        puts config_files
+      end
+    end
+
+    def self.configs_in_path(path)
+      return [] if !File.exists?(path)
+
+      ignored_files = File.readlines(File.join(File.dirname(__FILE__), '../config/.sheldonignore')) # Files to be ignored are defined in config/.sheldonignore
+      ignored_files.map!(&:strip) # Remove any \n characets that have been read from the .sheldonignore file
+      
+      Dir.entries(path).reject{ |config_file| ignored_files.include?(config_file)} # Return list of directory contents minus any files that are blacklisted in config/.sheldonignore
+    end
+
     # Finds all 'config_' files in a directory and compiles them to a single master 'config' file that can then easily be sourced.
     def self.build(dir)
       dir = File.basename(Dir.getwd) if dir.nil?
@@ -36,19 +55,16 @@ class Sheldon
     def self.link(root)
       root = File.basename(Dir.getwd) if root.nil? # Root of tree traversal. Defaults to user's working directory
       sheldon_data_dir = brains # Where do we search for matching config files
-      ignored_files = File.readlines(File.join(File.dirname(__FILE__), '../config/.sheldonignore')) # Files to be ignored are defined in config/.sheldonignore
 
-      sheldon_path = File.join(sheldon_data_dir, root)
-
-      # Abort linking if the sheldon data dir doesn't contain an entry for the user's working dir
-      if !File.exists?(sheldon_path)
+      sheldon_path = File.join(sheldon_data_dir, root) # Join the relevant subfolder(s) to the Sheldon data directory
+      configs_in_path = configs_in_path(sheldon_path) # Retrieve a list of files found in the data directory (exclusing those blacklisted in config/.sheldonignore)
+      
+      if configs_in_path.empty?
         puts "I don't have any files for the #{root} directory, I'm afraid."
         exit
       end
 
-      # Otherwise, iterate over the contents of the matching data directory, exploring directories as they're encountered (depth-first traversal)
-      Dir.entries(sheldon_path).each do |config_file|
-        next if config_file == '.' || config_file == '..' || ignored_files.include?(config_file)
+      configs_in_path.each do |config_file|
         config_path = File.join(sheldon_path, config_file)
         if File.directory?(config_path)
           link(File.join(root, config_file)) # Recursive call to explore the directory we've just found
@@ -78,6 +94,8 @@ class Sheldon
     link(ARGV[1])
   when 'brains'
     announce brains
+  when 'ls'
+    list 
   else
     puts "I may be a genius but even I don't know how to do that!"
   end
