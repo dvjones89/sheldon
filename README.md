@@ -1,32 +1,38 @@
 # Sheldon
 
-Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / UNIX devices.  
-Use whatever file sync mechanism you like (Dropbox, BitTorrent Sync) to mirror your files and have Sheldon symbolically link them with a single command.  
-Choose to symlink only the files you're interested in and, where appropriate, ask Sheldon to merge your files into a single "master" that can be easily sourced.
+Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
 
+Use whatever file syncing tool you like to keep your master config directory in sync across all your machines.  
 
-## Installation
-Write instructions for adding Sheldon.rb to user's path or, even better, concoct a nifty install script.  
-Explain how the data directory is defined.
+Sheldon will help you create and maintain symbolic links between your synchronised data directory and the different directories on your filesystem, where the config files need to live.
 
+As a final trick, split your huge config into several smaller, independently linkable configs, and Sheldon can merge them together to make a single config that's relevant just to your current host.
 
+## Use Sheldon For Linking
+  1) Navigate to a directory of interest, for example your home folder (~)
 
-## Usage
-### Creating Symbolic Links ( ```sheldon link```)
-Let's say you want to symlink all of your usual .dotfiles into your home directory (/home/dave) on a new machine.
-First, navigate into your home directory:
+  2) Use `sheldon ls` and Sheldon will list any config files that he thinks could be linked here (or in a subdirectory rooted here)
 
-```
-cd /home/dave
-```
+  3) Run `sheldon link` and he will offer to symlink any config files he knows about, ignoring files that have already been linked and fixing any broken symlinks he encounters.
 
-Then, ask Sheldon to create symbolic links from his data directory into your home directory. In this example, he links your .dotfiles for ZSH and Git.  
+## Use Sheldon To Build A Bespoke Config For Each Host
+Sometimes copying an entire config file between all your machine is overkill. What if you only want a subset of your configuration? Sheldon can help.  
 
-```
-sheldon link  
-Symlink dave/.gitconfig (y/n) ? y  
-Symlink dave/.zshrc (y/n) ? y  
-💥 Sheldon💥  Linking Complete
-```  
+Let's use your `ssh_config` as an example. You might have servers you SSH into for work and servers you SSH into at home. Never the twain shall meet.
 
-This assumes the presence of "dave" directory in your Sheldon data directory.
+  1) Split your `ssh_config` into `config_work`  and `config_personal`
+
+2) Add these 2 files to Sheldon's brain (see "Teaching Sheldon", below)
+
+  3) Navigate to `~/.ssh` and run `sheldon link`, accepting his offer to symlink both `config_work` and `config_personal` to your `~/.ssh` directory
+
+  4) Run `sheldon build` and Sheldon will combine all your `config_*` files into a single `config` file that can be easily sourced.
+
+## Teaching Sheldon
+  1) Typing `sheldon brains` shows you where Sheldon stores his intelligence. This defaults to `~/sheldon` but can be overriden using the `SHELDON_DATA_DIR` environment variable.
+  
+2) When you run `sheldon link`, Sheldon looks at the name of your current working directory and checks in his brain for a directory of the same name. If he finds a match, he'll offer to symlink the contents of that brain directory.
+
+3) For example, if John wants to backup the dotfiles in his `/home/john` directory, he first needs to create a `john` directory in Sheldon's brain (`~/sheldon/john`). Now he just needs to copy his config files into the newly created `~/sheldon/john` directory.
+
+4) Now if John moves to his home directory (`cd /home/john`) and runs `sheldon link`, Sheldon will offer to symlink all the config files that were just added to his brain (`~/sheldon/john`)
