@@ -14,6 +14,8 @@ As a final trick, split your huge config into several smaller, independently lin
 2) Add the following to your shell's .rc file, (commonly `~/.bashrc` or `~/.zshrc`):  
 `alias sheldon='ruby ~/sheldon/bin/sheldon.rb $1'`
 
+3) Restart your shell
+
 
 ## Use Sheldon For Linking
 1) Navigate to a directory of interest, for example your home folder (~)
