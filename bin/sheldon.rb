@@ -10,7 +10,8 @@ class Sheldon
     # Get the directory from which Sheldon reads his intelligence (AKA Data Directory)
     # Read from environment variable SHELDON_DATA_DIR or falls back to ~/sheldon
     def self.brains
-      ENV['SHELDON_DATA_DIR'] || '~/sheldon'
+      relative_path = ENV['SHELDON_DATA_DIR'] || '~/sheldon'
+      File.expand_path(relative_path) # Deals with the use of ~ when referencing home directories
     end
 
     def self.list
@@ -25,7 +26,6 @@ class Sheldon
 
     def self.configs_in_path(path)
       return [] if !File.exists?(path)
-
       ignored_files = File.readlines(File.join(File.dirname(__FILE__), '../config/.sheldonignore')) # Files to be ignored are defined in config/.sheldonignore
       ignored_files.map!(&:strip) # Remove any \n characets that have been read from the .sheldonignore file
       
