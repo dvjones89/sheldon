@@ -7,13 +7,14 @@ class Sheldon
       puts logo + "Sheldon" + logo + " #{message}"
     end
 
-    # Get the directory from which Sheldon reads his intelligence (AKA Data Directory)
+    # PUBLIC METHOD: Prints the absolute path where Sheldon searches for his intelligence.
     # Read from environment variable SHELDON_DATA_DIR or falls back to ~/sheldon
     def self.brains
       relative_path = ENV['SHELDON_DATA_DIR'] || '~/sheldon'
       File.expand_path(relative_path) # Deals with the use of ~ when referencing home directories
     end
 
+    # PUBLIC METHOD: Based on the user's current directory, prints the names of any config files that Sheldon could potentially link
     def self.list
       config_files = configs_in_path(File.join(brains, File.basename(Dir.getwd)))
       if config_files.empty?
@@ -24,15 +25,16 @@ class Sheldon
       end
     end
 
+    # PRIVATE METHOD: Returns a list of files within a path, excluding files mentioned in config/.sheldonignore
     def self.configs_in_path(path)
       return [] if !File.exists?(path)
       ignored_files = File.readlines(File.join(File.dirname(__FILE__), '../config/.sheldonignore')) # Files to be ignored are defined in config/.sheldonignore
-      ignored_files.map!(&:strip) # Remove any \n characets that have been read from the .sheldonignore file
+      ignored_files.map!(&:strip) # Remove any \n characters that have been read from the .sheldonignore file
       
       Dir.entries(path).reject{ |config_file| ignored_files.include?(config_file)} # Return list of directory contents minus any files that are blacklisted in config/.sheldonignore
     end
 
-    # Finds all 'config_' files in a directory and compiles them to a single master 'config' file that can then easily be sourced.
+    # PUBLIC METHOD: Finds all 'config_' files in a directory and compiles them to a single master 'config' file that can then easily be sourced.
     def self.build(dir)
       dir = File.basename(Dir.getwd) if dir.nil?
       home_directory = File.expand_path('~')
@@ -50,7 +52,7 @@ class Sheldon
       announce("Built #{dir}")
     end
 
-    # Takes the user's working directory and looks for a matching entry in Sheldon's data directory.
+    # PUBLIC METHOD: Takes the user's working directory and looks for a matching entry in Sheldon's data directory.
     # If a matching entry exists, offer to symlink files within that directory (and sub-folders) to your local file-system.
     def self.link(root)
       root = File.basename(Dir.getwd) if root.nil? # Root of tree traversal. Defaults to user's working directory
