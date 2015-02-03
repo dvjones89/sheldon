@@ -2,9 +2,9 @@
 
 Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
 
-Use whatever file syncing tool you like to keep your master config directory in sync across all your machines.  
+Sheldon will help you create and maintain symbolic links between your master config directory and the different directories on your filesystem, where the config files need to live.
 
-Sheldon will help you create and maintain symbolic links between your synchronised data directory and the different directories on your filesystem, where the config files need to live.
+Use whatever file syncing tool you like to keep your master config directory in sync across all your machines.  
 
 As a final trick, split your huge config into several smaller, independently linkable configs, and Sheldon can merge them together to make a single config that's relevant just to your current host.
 
