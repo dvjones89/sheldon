@@ -9,7 +9,7 @@ Use whatever file syncing tool you like to keep your master config directory in 
 As a final trick, split your huge config into several smaller, independently linkable configs, and Sheldon can merge them together to make a single config that's relevant just to your current host.
 
 ## Installation:
-1) `cd ~ && git clone git@github.com:dvjones89/sheldon.git .sheldon`
+1) `cd ~ && git clone https://github.com/dvjones89/sheldon.git .sheldon`
 
 2) Add the following to your shell's .rc file, (commonly `~/.bashrc` or `~/.zshrc`):  
 `alias sheldon='ruby ~/.sheldon/bin/sheldon.rb $1'`
