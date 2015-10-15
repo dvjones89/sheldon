@@ -11,7 +11,7 @@ class Sheldon
 
     # PUBLIC METHOD: Prints the absolute path where Sheldon searches for his intelligence.
     # Read from environment variable SHELDON_DATA_DIR or falls back to ~/sheldon
-    def self.brains
+    def self.locate_brain
       relative_path = '~/sheldon2'
       # relative_path = ENV['SHELDON_DATA_DIR'] || '~/sheldon'
       Pathname(relative_path).expand_path # Deals with the use of ~ when referencing home directories
@@ -28,26 +28,26 @@ class Sheldon
     #   end
     # end
 
-    def self.learn(brain, path_to_learn)
-      home_path = Pathname('~').expand_path
-      learn_path = Pathname.getwd.join(path_to_learn)
-      path_from_home = learn_path.relative_path_from home_path
-      absolute_path = home_path.join(path_from_home)
+    def self.learn(path_to_learn)
+      database = YAML::Store.new(File.join(locate_brain, 'db.yaml'))
+      abs_learn_path = File.join(Dir.pwd, path_to_learn)
+      rel_brain_path = Pathname(abs_learn_path).relative_path_from Pathname('~').expand_path
+      abs_brain_path = File.join(locate_brain,rel_brain_path)
 
-      
-      print("Friendly Name For File: ")
+      print("Friendly Name For File/Folder: ")
       friendly_name = STDIN.gets.chomp
 
-      brain.transaction do
-        if friendly_name == '' || brain[friendly_name]
+      database.transaction do
+        if friendly_name == '' || database[friendly_name]
           puts "Name not specified or already in use. Please try again."
           abort
         else
-          FileUtils.mkdir_p(File.dirname(brains.join(path_from_home)))
-          FileUtils.cp(absolute_path, File.dirname(brains.join(path_from_home)))
-          brain[friendly_name] = {link_path: path_from_home.to_s, data_path: path_from_home.to_s}
+          FileUtils.mkdir_p(File.dirname(abs_brain_path))
+          FileUtils.cp_r(abs_learn_path, abs_brain_path)
+          database[friendly_name] = {file_path: abs_learn_path.to_s, brain_path: abs_brain_path.to_s}
         end
       end
+
     end
 
     # # PRIVATE METHOD: Returns a list of files within a path, excluding files mentioned in config/.sheldonignore
@@ -124,7 +124,7 @@ class Sheldon
   # when 'link'
     # link(ARGV[1])
   when 'learn'
-    learn(brain, ARGV[1])
+    learn(ARGV[1])
   # when 'brains'
     # announce brains
   # when 'ls'
