@@ -1,6 +1,8 @@
 # Another dotfile/config manager. Bazinga!
 class Sheldon
   require 'fileutils'
+  require 'pathname'
+  require 'yaml/store'
 
     def self.announce(message)
       logo = '💥'.encode('utf-8') + ' '
@@ -10,29 +12,52 @@ class Sheldon
     # PUBLIC METHOD: Prints the absolute path where Sheldon searches for his intelligence.
     # Read from environment variable SHELDON_DATA_DIR or falls back to ~/sheldon
     def self.brains
-      relative_path = ENV['SHELDON_DATA_DIR'] || '~/sheldon'
-      File.expand_path(relative_path) # Deals with the use of ~ when referencing home directories
+      relative_path = '~/sheldon2'
+      # relative_path = ENV['SHELDON_DATA_DIR'] || '~/sheldon'
+      Pathname(relative_path).expand_path # Deals with the use of ~ when referencing home directories
     end
 
-    # PUBLIC METHOD: Based on the user's current directory, prints the names of any config files that Sheldon could potentially link
-    def self.list
-      config_files = configs_in_path(File.join(brains, File.basename(Dir.getwd)))
-      if config_files.empty?
-        announce "I don't have any linkable files for your directory, I'm afraid."
-      else
-        announce 'The following files are eligible for linking to your current directory. Run `sheldon link` to get started.'
-        puts config_files
+    # # PUBLIC METHOD: Based on the user's current directory, prints the names of any config files that Sheldon could potentially link
+    # def self.list
+    #   config_files = configs_in_path(File.join(brains, File.basename(Dir.getwd)))
+    #   if config_files.empty?
+    #     announce "I don't have any linkable files for your directory, I'm afraid."
+    #   else
+    #     announce 'The following files are eligible for linking to your current directory. Run `sheldon link` to get started.'
+    #     puts config_files
+    #   end
+    # end
+
+    def self.learn(brain, path_to_learn)
+      home_path = Pathname('~').expand_path
+      learn_path = Pathname.getwd.join(path_to_learn)
+      path_from_home = learn_path.relative_path_from home_path
+      absolute_path = home_path.join(path_from_home)
+
+      
+      print("Friendly Name For File: ")
+      friendly_name = STDIN.gets.chomp
+
+      brain.transaction do
+        if friendly_name == '' || brain[friendly_name]
+          puts "Name not specified or already in use. Please try again."
+          abort
+        else
+          FileUtils.mkdir_p(File.dirname(brains.join(path_from_home)))
+          FileUtils.cp(absolute_path, File.dirname(brains.join(path_from_home)))
+          brain[friendly_name] = {link_path: path_from_home.to_s, data_path: path_from_home.to_s}
+        end
       end
     end
 
-    # PRIVATE METHOD: Returns a list of files within a path, excluding files mentioned in config/.sheldonignore
-    def self.configs_in_path(path)
-      return [] if !File.exists?(path)
-      ignored_files = File.readlines(File.join(File.dirname(__FILE__), '../config/.sheldonignore')) # Files to be ignored are defined in config/.sheldonignore
-      ignored_files.map!(&:strip) # Remove any \n characters that have been read from the .sheldonignore file
+    # # PRIVATE METHOD: Returns a list of files within a path, excluding files mentioned in config/.sheldonignore
+    # def self.configs_in_path(path)
+    #   return [] if !File.exists?(path)
+    #   ignored_files = File.readlines(File.join(File.dirname(__FILE__), '../config/.sheldonignore')) # Files to be ignored are defined in config/.sheldonignore
+    #   ignored_files.map!(&:strip) # Remove any \n characters that have been read from the .sheldonignore file
       
-      Dir.entries(path).reject{ |config_file| ignored_files.include?(config_file)} # Return list of directory contents minus any files that are blacklisted in config/.sheldonignore
-    end
+    #   Dir.entries(path).reject{ |config_file| ignored_files.include?(config_file)} # Return list of directory contents minus any files that are blacklisted in config/.sheldonignore
+    # end
 
     # PUBLIC METHOD: Finds all 'config_' files in a directory and compiles them to a single master 'config' file that can then easily be sourced.
     def self.build(dir)
@@ -54,53 +79,56 @@ class Sheldon
 
     # PUBLIC METHOD: Takes the user's working directory and looks for a matching entry in Sheldon's data directory.
     # If a matching entry exists, offer to symlink files within that directory (and sub-folders) to your local file-system.
-    def self.link(root)
-      root = File.basename(Dir.getwd) if root.nil? # Root of tree traversal. Defaults to user's working directory
-      sheldon_data_dir = brains # Where do we search for matching config files
+    # def self.link(root)
+    #   root = File.basename(Dir.getwd) if root.nil? # Root of tree traversal. Defaults to user's working directory
+    #   sheldon_data_dir = brains # Where do we search for matching config files
 
-      sheldon_path = File.join(sheldon_data_dir, root) # Join the relevant subfolder(s) to the Sheldon data directory
-      configs_in_path = configs_in_path(sheldon_path) # Retrieve a list of files found in the data directory (exclusing those blacklisted in config/.sheldonignore)
+    #   sheldon_path = File.join(sheldon_data_dir, root) # Join the relevant subfolder(s) to the Sheldon data directory
+    #   configs_in_path = configs_in_path(sheldon_path) # Retrieve a list of files found in the data directory (exclusing those blacklisted in config/.sheldonignore)
       
-      if configs_in_path.empty?
-        puts "I don't have any files for the #{root} directory, I'm afraid."
-        exit
-      end
+    #   if configs_in_path.empty?
+    #     puts "I don't have any files for the #{root} directory, I'm afraid."
+    #     exit
+    #   end
 
-      configs_in_path.each do |config_file|
-        config_path = File.join(sheldon_path, config_file)
-        if File.directory?(config_path)
-          link(File.join(root, config_file)) # Recursive call to explore the directory we've just found
-        else
-          target_dir = File.join(Dir.pwd, '..', root)
-          target_path = File.join(target_dir, config_file)
+    #   configs_in_path.each do |config_file|
+    #     config_path = File.join(sheldon_path, config_file)
+    #     if File.directory?(config_path)
+    #       link(File.join(root, config_file)) # Recursive call to explore the directory we've just found
+    #     else
+    #       target_dir = File.join(Dir.pwd, '..', root)
+    #       target_path = File.join(target_dir, config_file)
       
-          unless File.symlink?(target_path) && File.exists?(File.readlink(target_path)) # An existing (unbroken) symlink suggests Sheldon has already done his thing.
-            print "Symlink #{File.join(root, config_file)} (y/n) ? "
-            answer = STDIN.gets.chomp
-            if answer.downcase == 'y'
-              FileUtils.mkdir_p(target_dir) if !Dir.exists?(target_dir) # If the target directory doesn't exist, create it, else our attempt to symlink will go horribly wrong
-              FileUtils.ln_s(config_path, target_path, force: true)
-            end
-          end
-        end
-      end
+    #       unless File.symlink?(target_path) && File.exists?(File.readlink(target_path)) # An existing (unbroken) symlink suggests Sheldon has already done his thing.
+    #         print "Symlink #{File.join(root, config_file)} (y/n) ? "
+    #         answer = STDIN.gets.chomp
+    #         if answer.downcase == 'y'
+    #           FileUtils.mkdir_p(target_dir) if !Dir.exists?(target_dir) # If the target directory doesn't exist, create it, else our attempt to symlink will go horribly wrong
+    #           FileUtils.ln_s(config_path, target_path, force: true)
+    #         end
+    #       end
+    #     end
+    #   end
 
-      # Linking is complete when we've traversed up and down the tree, returning back to the root (the user's working dir)
-      announce 'Linking Complete' if root == File.basename(Dir.getwd)
-    end
+    #   # Linking is complete when we've traversed up and down the tree, returning back to the root (the user's working dir)
+    #   announce 'Linking Complete' if root == File.basename(Dir.getwd)
+    # end
 
   # This is the entry point when Sheldon is called from command-line.
   # Here we route the user's request to the correct method, or complain.
   method = ARGV[0]
+  brain = YAML::Store.new("/Users/dave/brain.yml")
   case method
-  when 'build'
-    build(ARGV[1])
-  when 'link'
-    link(ARGV[1])
-  when 'brains'
-    announce brains
-  when 'ls'
-    list 
+  # when 'build'
+    # build(ARGV[1])
+  # when 'link'
+    # link(ARGV[1])
+  when 'learn'
+    learn(brain, ARGV[1])
+  # when 'brains'
+    # announce brains
+  # when 'ls'
+    # list
   else
     puts "I may be a genius but even I don't know how to do that!"
   end
