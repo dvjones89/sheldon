@@ -29,7 +29,7 @@ class Sheldon
     # end
 
     def self.learn(path_to_learn)
-      database = YAML::Store.new(File.join(locate_brain, 'db.yaml'))
+      database = YAML::Store.new(File.join(locate_brain, 'db.yaml')) 
       abs_learn_path = File.join(Dir.pwd, path_to_learn)
       rel_brain_path = Pathname(abs_learn_path).relative_path_from Pathname('~').expand_path
       abs_brain_path = File.join(locate_brain,rel_brain_path)
@@ -42,12 +42,17 @@ class Sheldon
           puts "Name not specified or already in use. Please try again."
           abort
         else
-          FileUtils.mkdir_p(File.dirname(abs_brain_path))
-          FileUtils.cp_r(abs_learn_path, abs_brain_path)
-          database[friendly_name] = {file_path: abs_learn_path.to_s, brain_path: abs_brain_path.to_s}
+          FileUtils.mkdir_p(abs_brain_path)
+          FileUtils.cp_r(abs_learn_path, File.join(abs_brain_path,'..')) # The '..' is required here else you duplicate the root
+          database[friendly_name] = {file_path: rebase_from_home(abs_learn_path), brain_path: rebase_from_home(abs_brain_path)}
         end
       end
 
+    end
+
+    def self.rebase_from_home(path)
+      home_path = Pathname(File.expand_path('~'))
+      Pathname(path).relative_path_from(home_path).to_s
     end
 
     # # PRIVATE METHOD: Returns a list of files within a path, excluding files mentioned in config/.sheldonignore
