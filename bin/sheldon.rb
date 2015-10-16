@@ -13,7 +13,7 @@ class Sheldon
     end
 
     def self.learn(path_to_learn)
-      database = YAML::Store.new(File.join(locate_brain, 'db.yaml')) 
+      database = load_db 
       abs_learn_path = File.join(Dir.pwd, path_to_learn)
       rel_brain_path = Pathname(abs_learn_path).relative_path_from Pathname('~').expand_path
       abs_brain_path = File.join(locate_brain,rel_brain_path)
@@ -35,15 +35,43 @@ class Sheldon
           FileUtils.mkdir_p(dest_path)
           FileUtils.mv(abs_learn_path, dest_path)
           FileUtils.ln_s(abs_brain_path, abs_learn_path)
-          database[friendly_name] = {file_path: rebase_from_home(abs_learn_path), brain_path: rebase_from_home(abs_brain_path)}
+          database[friendly_name] = {file_path: remove_home(abs_learn_path), brain_path: remove_home(abs_brain_path)}
         end
       end
 
     end
 
-    def self.rebase_from_home(path)
+    def self.list
+      database = load_db
+      database.transaction do
+        database.roots.each { |friendly_name| puts friendly_name }
+      end
+    end
+
+    def self.link(friendly_name)
+      database = load_db
+      database.transaction do
+        data = database[friendly_name]
+        if data
+          FileUtils.ln_s(add_home(data[:brain_path]), add_home(data[:file_path]))
+        else
+          puts "Unable to find entry '#{friendly_name}'"
+        end
+      end
+    end
+
+    def self.load_db
+      YAML::Store.new(File.join(locate_brain, 'db.yaml'))
+    end
+
+    def self.remove_home(path)
       home_path = Pathname(File.expand_path('~'))
       Pathname(path).relative_path_from(home_path).to_s
+    end
+
+    def self.add_home(path)
+      abs_home = File.expand_path('~')
+      File.join(abs_home,path).to_s
     end
 
   
@@ -52,6 +80,10 @@ class Sheldon
   case method
   when 'learn'
     learn(ARGV[1])
+  when 'list'
+    list
+  when 'link'
+    link(ARGV[1])
   else
     puts "I may be a genius but even I don't know how to do that!"
   end
