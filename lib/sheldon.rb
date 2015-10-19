@@ -3,14 +3,9 @@ class Sheldon
   require 'fileutils'
   require 'pathname'
   require 'yaml/store'
-
-    # PUBLIC METHOD: Prints the absolute path where Sheldon searches for his intelligence.
-    # Read from environment variable SHELDON_DATA_DIR or falls back to ~/sheldon
-    def self.locate_brain
-      relative_path = '~/sheldon2'
-      # relative_path = ENV['SHELDON_DATA_DIR'] || '~/sheldon'
-      Pathname(relative_path).expand_path # Deals with the use of ~ when referencing home directories
-    end
+  require_relative 'sheldon/helpers'
+  
+  include Helpers
 
     def self.learn(path_to_learn)
       database = load_db 
@@ -59,32 +54,4 @@ class Sheldon
         end
       end
     end
-
-    def self.load_db
-      YAML::Store.new(File.join(locate_brain, 'db.yaml'))
-    end
-
-    def self.remove_home(path)
-      home_path = Pathname(File.expand_path('~'))
-      Pathname(path).relative_path_from(home_path).to_s
-    end
-
-    def self.add_home(path)
-      abs_home = File.expand_path('~')
-      File.join(abs_home,path).to_s
-    end
-
-  
-
-  method = ARGV[0]
-  case method
-  when 'learn'
-    learn(ARGV[1])
-  when 'list'
-    list
-  when 'link'
-    link(ARGV[1])
-  else
-    puts "I may be a genius but even I don't know how to do that!"
-  end
 end
