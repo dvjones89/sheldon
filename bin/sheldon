@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'thor'
+require_relative '../lib/sheldon'
+
+class Launcher < Thor
+  desc "list", "lists the contents of Sheldon's brain"
+  def list
+    Sheldon.new.list
+  end
+end
+
+Launcher.start(ARGV)
