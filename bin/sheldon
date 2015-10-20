@@ -8,6 +8,11 @@ class Launcher < Thor
   def list
     Sheldon.new.list
   end
+
+  desc "learn PATH_TO_TARGET", "Add a new file/folder to Sheldon's brain"
+  def learn(rel_path_to_target)
+    Sheldon.new.learn(rel_path_to_target)
+  end
 end
 
 Launcher.start(ARGV)

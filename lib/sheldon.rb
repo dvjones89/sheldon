@@ -7,12 +7,12 @@ class Sheldon
   
   include Helpers
 
-  def learn(path_to_learn)
-    database = load_db 
-    abs_learn_path = File.join(Dir.pwd, path_to_learn)
-    rel_brain_path = Pathname(abs_learn_path).relative_path_from Pathname('~').expand_path
-    abs_brain_path = File.join(locate_brain,rel_brain_path)
+  def learn(rel_learn_path)
+    abs_learn_path = File.join(Dir.pwd, rel_learn_path)
+    basename = File.basename(rel_learn_path)
 
+    database = load_db 
+  
     print("Friendly Name For File/Folder: ")
     friendly_name = STDIN.gets.chomp
 
@@ -21,16 +21,11 @@ class Sheldon
         puts "Name not specified or already in use. Please try again."
         abort
       else
-        if File.file?(abs_learn_path)
-          dest_path = File.dirname(abs_brain_path) # If we're learning about a file, just create and move to the parent director(ies)
-        else
-          dest_path = File.join(abs_brain_path, '..') # If we're learning about a directory, we want to create parent director(ies) and drop the new file at the leaf
-        end
-
-        FileUtils.mkdir_p(dest_path)
-        FileUtils.mv(abs_learn_path, dest_path)
-        FileUtils.ln_s(abs_brain_path, abs_learn_path)
-        database[friendly_name] = {file_path: remove_home(abs_learn_path), brain_path: remove_home(abs_brain_path)}
+        abs_brain_path = File.join(locate_brain, friendly_name)
+        FileUtils.mkdir_p(abs_brain_path)
+        FileUtils.mv(abs_learn_path, abs_brain_path)
+        FileUtils.ln_s(File.join(abs_brain_path, basename), abs_learn_path)
+        database[friendly_name] = {file_path: remove_home(abs_learn_path)}
       end
     end
 
