@@ -20,4 +20,9 @@ module Helpers
     File.join(abs_home,path).to_s
   end
 
+  def find_synapse(friendly_name,rel_learn_path)
+    basename = File.basename(rel_learn_path)
+    File.join(locate_brain,friendly_name,basename)
+  end
+
 end

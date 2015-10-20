@@ -9,8 +9,6 @@ class Sheldon
 
   def learn(rel_learn_path)
     abs_learn_path = File.join(Dir.pwd, rel_learn_path)
-    basename = File.basename(rel_learn_path)
-
     database = load_db 
   
     print("Friendly Name For File/Folder: ")
@@ -21,10 +19,10 @@ class Sheldon
         puts "Name not specified or already in use. Please try again."
         abort
       else
-        abs_brain_path = File.join(locate_brain, friendly_name)
-        FileUtils.mkdir_p(abs_brain_path)
-        FileUtils.mv(abs_learn_path, abs_brain_path)
-        FileUtils.ln_s(File.join(abs_brain_path, basename), abs_learn_path)
+        synapse = find_synapse(friendly_name, rel_learn_path)
+        FileUtils.mkdir_p(synapse)
+        FileUtils.mv(abs_learn_path, synapse)
+        FileUtils.ln_s(synapse, abs_learn_path)
         database[friendly_name] = {file_path: remove_home(abs_learn_path)}
       end
     end
@@ -43,7 +41,8 @@ class Sheldon
     database.transaction do
       data = database[friendly_name]
       if data
-        FileUtils.ln_s(add_home(data[:brain_path]), add_home(data[:file_path]))
+        synapse = find_synapse(friendly_name, data[:file_path])
+        FileUtils.ln_s(synapse, add_home(data[:file_path]))
       else
         puts "Unable to find entry '#{friendly_name}'"
       end

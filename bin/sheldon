@@ -13,6 +13,11 @@ class Launcher < Thor
   def learn(rel_path_to_target)
     Sheldon.new.learn(rel_path_to_target)
   end
+
+  desc "link FRIENDLY_NAME", "Link a file in Sheldon's brain back to it's original filesystem location"
+  def link(friendly_name)
+    Sheldon.new.link(friendly_name)
+  end
 end
 
 Launcher.start(ARGV)
