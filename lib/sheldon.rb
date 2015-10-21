@@ -2,6 +2,7 @@ require 'fileutils'
 require 'pathname'
 require 'yaml/store'
 require_relative 'sheldon/helpers'
+require_relative 'sheldon/brain'
 
 class Sheldon
   
@@ -19,10 +20,7 @@ class Sheldon
         puts "Name not specified or already in use. Please try again."
         abort
       else
-        synapse = find_synapse(friendly_name, rel_learn_path)
-        FileUtils.mkdir_p(synapse)
-        FileUtils.mv(abs_learn_path, synapse)
-        FileUtils.ln_s(synapse, abs_learn_path)
+        Brain.new.learn(friendly_name, abs_learn_path)
         database[friendly_name] = {file_path: remove_home(abs_learn_path)}
       end
     end
