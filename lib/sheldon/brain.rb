@@ -1,25 +1,32 @@
+require 'pathname'
+require_relative 'memory'
+
 class Brain
+
+  def initialize(sheldon_data_dir)
+    @brain_location = sheldon_data_dir
+  end
+  
 
   def learn(recall_cue, abs_learn_path)
     synapse = find_synapse(recall_cue)
     FileUtils.mkdir_p(synapse)
     FileUtils.mv(abs_learn_path, synapse)
+    recall(recall_cue, abs_learn_path)
   end
 
   def recall(recall_cue, destination)
     FileUtils.ln_s(read_synapse(recall_cue), destination)
   end
 
-  private
-
-  def find_self
-    relative_path = "~/sheldon2"
-    # relative_path = ENV['SHELDON_DATA_DIR'] || '~/sheldon'
-    Pathname(relative_path).expand_path
+  def memory
+    @memory ||= Memory.new(@brain_location)
   end
 
+  private
+
   def find_synapse(recall_cue)
-    File.join(find_self, recall_cue)
+    File.join(@brain_location, recall_cue)
   end
 
   def read_synapse(recall_cue)

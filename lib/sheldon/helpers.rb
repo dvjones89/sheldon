@@ -1,9 +1,5 @@
 module Helpers
 
-  def load_db
-    YAML::Store.new(File.join(locate_brain, "db.yaml"))
-  end
-
   def remove_home(path)
     home_path = Pathname(File.expand_path("~"))
     Pathname(path).relative_path_from(home_path).to_s

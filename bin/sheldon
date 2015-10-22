@@ -19,6 +19,12 @@ class Launcher < Thor
     Memory.has_recollection?(recall_cue)
     Sheldon.new.recall(friendly_name,destination)
   end
+
+  desc "test CUE", "Dirty Hack"
+  def test(cue)
+    Sheldon.new.test(cue)
+  end
+
 end
 
 Launcher.start(ARGV)
