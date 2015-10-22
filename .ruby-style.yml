@@ -1,4 +1,4 @@
-llCops:
+AllCops:
   Exclude:
     - "vendor/**/*"
     - "db/schema.rb"
