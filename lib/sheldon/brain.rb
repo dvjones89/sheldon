@@ -2,13 +2,11 @@ class Brain
 
   def learn(recall_cue, abs_learn_path)
     synapse = find_synapse(recall_cue)
-    basename = File.basename(abs_learn_path)
     FileUtils.mkdir_p(synapse)
     FileUtils.mv(abs_learn_path, synapse)
   end
 
   def recall(recall_cue, destination)
-    synapse = find_synapse(recall_cue)
     FileUtils.ln_s(read_synapse(recall_cue), destination)
   end
 
