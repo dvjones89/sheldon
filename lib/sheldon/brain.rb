@@ -1,18 +1,16 @@
 class Brain
 
-  def learn(friendly_name, abs_learn_path)
-    synapse = find_synapse(friendly_name, abs_learn_path)
+  def learn(recall_cue, abs_learn_path)
+    synapse = find_synapse(recall_cue)
     basename = File.basename(abs_learn_path)
     FileUtils.mkdir_p(synapse)
     FileUtils.mv(abs_learn_path, synapse)
-    link(File.join(synapse, basename), abs_learn_path)
   end
 
-  # TODO - Move this back into lib/sheldon.rb ; a brain doesn't link things!
-  def link(source, destination)
-    FileUtils.ln_s(source, destination)
+  def recall(recall_cue, destination)
+    synapse = find_synapse(recall_cue)
+    FileUtils.ln_s(read_synapse(recall_cue), destination)
   end
-  
 
   private
 
@@ -22,9 +20,13 @@ class Brain
     Pathname(relative_path).expand_path # Deals with the use of ~ when referencing home directories
   end
 
-  def find_synapse(friendly_name, learn_path)
-    # basename = File.basename(learn_path)
-    File.join(find_self,friendly_name)
+  def find_synapse(recall_cue)
+    File.join(find_self,recall_cue)
+  end
+
+  def read_synapse(recall_cue)
+    synapse = find_synapse(recall_cue)
+    Dir.glob(File.join(synapse,'/*')).first
   end
 
 end

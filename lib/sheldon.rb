@@ -13,15 +13,17 @@ class Sheldon
     database = load_db 
   
     print("Friendly Name For File/Folder: ")
-    friendly_name = STDIN.gets.chomp
+    recall_cue = STDIN.gets.chomp
 
     database.transaction do
-      if friendly_name == '' || database[friendly_name]
+      if recall_cue == '' || database[recall_cue]
         puts "Name not specified or already in use. Please try again."
         abort
       else
-        Brain.new.learn(friendly_name, abs_learn_path)
-        database[friendly_name] = {file_path: remove_home(abs_learn_path)}
+        Brain.new.learn(recall_cue, abs_learn_path)
+        Brain.new.recall(recall_cue, abs_learn_path)
+        # FileUtils.ln_s(source, destination)
+        database[recall_cue] = {file_path: remove_home(abs_learn_path)}
       end
     end
 
@@ -30,19 +32,19 @@ class Sheldon
   def list
     database = load_db
     database.transaction do
-      database.roots.each { |friendly_name| puts friendly_name }
+      database.roots.each { |recall_cue| puts recall_cue }
     end
   end
 
-  def link(friendly_name)
+  def link(recall_cue)
     database = load_db
     database.transaction do
-      data = database[friendly_name]
+      data = database[recall_cue]
       if data
-        synapse = find_synapse(friendly_name, data[:file_path])
+        synapse = find_synapse(recall_cue, data[:file_path])
         FileUtils.ln_s(synapse, add_home(data[:file_path]))
       else
-        puts "Unable to find entry '#{friendly_name}'"
+        puts "Unable to find entry '#{recall_cue}'"
       end
     end
   end

@@ -14,9 +14,10 @@ class Launcher < Thor
     Sheldon.new.learn(rel_path_to_target)
   end
 
-  desc "link FRIENDLY_NAME", "Link a file in Sheldon's brain back to it's original filesystem location"
-  def link(friendly_name)
-    Sheldon.new.link(friendly_name)
+  desc "link RECALL_CUE", "Link a file in Sheldon's brain back to it's original filesystem location"
+  def link(recall_cue)
+    Memory.has_recollection?(recall_cue)
+    Sheldon.new.recall(friendly_name,destination)
   end
 end
 
