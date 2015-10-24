@@ -19,11 +19,11 @@ class Brain
     FileUtils.ln_s(read_synapse(recall_cue), destination)
   end
 
+  private
+
   def memory
     @memory ||= Memory.new(@brain_location)
   end
-
-  private
 
   def find_synapse(recall_cue)
     File.join(@brain_location, recall_cue)
