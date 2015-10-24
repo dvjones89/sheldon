@@ -4,25 +4,18 @@ require 'thor'
 require_relative '../lib/sheldon'
 
 class Launcher < Thor
-  desc "list", "lists the contents of Sheldon's brain"
-  def list
-    Sheldon.new.list
-  end
 
   desc "learn PATH_TO_TARGET", "Add a new file/folder to Sheldon's brain"
   def learn(rel_path_to_target)
-    Sheldon.new.learn(rel_path_to_target)
+    print("Friendly Name For File/Folder: ")
+    recall_cue = STDIN.gets.chomp
+    sheldon.learn(recall_cue, rel_path_to_target)
   end
 
-  desc "link RECALL_CUE", "Link a file in Sheldon's brain back to it's original filesystem location"
-  def link(recall_cue)
-    Memory.has_recollection?(recall_cue)
-    Sheldon.new.recall(friendly_name,destination)
-  end
+  private
 
-  desc "test CUE", "Dirty Hack"
-  def test(cue)
-    Sheldon.new.test(cue)
+  def sheldon
+    @sheldon ||= Sheldon.new
   end
 
 end
