@@ -1,4 +1,5 @@
 source "https://rubygems.org"
 
-gem "thor"
 gem "memfs"
+gem "rspec"
+gem "thor"
