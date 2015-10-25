@@ -1,12 +1,12 @@
-require 'pathname'
-require_relative 'memory'
+require "pathname"
+require_relative "memory"
 
 class Brain
 
   def initialize(sheldon_data_dir)
     @brain_location = sheldon_data_dir
   end
-  
+
 
   def learn(recall_cue, abs_learn_path)
     synapse = find_synapse(recall_cue)

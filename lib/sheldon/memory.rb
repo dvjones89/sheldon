@@ -1,4 +1,4 @@
-require 'yaml/store'
+require "yaml/store"
 
 class Memory
 

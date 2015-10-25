@@ -1,5 +1,5 @@
-require 'fileutils'
-require_relative 'sheldon/brain'
+require "fileutils"
+require_relative "sheldon/brain"
 
 class Sheldon
 

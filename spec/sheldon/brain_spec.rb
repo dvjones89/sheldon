@@ -1,10 +1,10 @@
-require 'spec_helper'
+require "spec_helper"
 
 describe Brain do
 
   let(:brain) { Brain.new("/Users/test/sheldon") }
 
-  describe '#learn' do
+  describe "#learn" do
     it "should move the target file/folder into Sheldon's brain" do
       FileUtils.expects(:mkdir_p).with("/Users/test/sheldon/my git config").once
       FileUtils.expects(:mv).with("~/.gitconfig", "/Users/test/sheldon/my git config").once
@@ -19,8 +19,8 @@ describe Brain do
 
       FileUtils.expects(:ln_s).with("/Users/test/sheldon/my git config/.gitconfig", "~/.gitconfig").once
 
-      brain.recall('my git config', '~/.gitconfig')
-      
+      brain.recall("my git config", "~/.gitconfig")
+
     end
   end
 
