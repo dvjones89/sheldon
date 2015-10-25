@@ -12,7 +12,6 @@ class Brain
     synapse = find_synapse(recall_cue)
     FileUtils.mkdir_p(synapse)
     FileUtils.mv(abs_learn_path, synapse)
-    recall(recall_cue, abs_learn_path)
   end
 
   def recall(recall_cue, destination)
