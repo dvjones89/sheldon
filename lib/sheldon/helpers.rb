@@ -10,4 +10,8 @@ module Helpers
     File.join(abs_home,path).to_s
   end
 
+  def abs(rel_path)
+    File.expand_path(rel_path).to_s
+  end
+
 end

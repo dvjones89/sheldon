@@ -30,7 +30,7 @@ class Brain
 
   def read_synapse(recall_cue)
     synapse = find_synapse(recall_cue)
-    Dir.glob(File.join(synapse, "/*")).first
+    Dir.glob(synapse).first
   end
 
 end
