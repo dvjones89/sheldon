@@ -3,7 +3,7 @@ require "yaml/store"
 class Memory
 
   def initialize(brain_location)
-    database_path = File.join(brain_location,"db.yml")
+    database_path = File.join(brain_location, "db.yml")
     @database = YAML::Store.new(database_path)
   end
 

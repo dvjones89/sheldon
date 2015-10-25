@@ -7,7 +7,7 @@ module Helpers
 
   def add_home(path)
     abs_home = File.expand_path("~")
-    File.join(abs_home,path).to_s
+    File.join(abs_home, path).to_s
   end
 
   def abs(rel_path)
