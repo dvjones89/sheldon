@@ -26,7 +26,7 @@ describe Brain do
     it "should symlink from Sheldon's brain back to the original file-system location" do
       brain.learn("my git config", "spec/Users/test/.gitconfig")
       brain.recall("my git config", "spec/Users/test/.gitconfig")
-      expect(File.symlink?("Users/test/.gitconfig"))
+      expect(File.symlink?("spec/Users/test/.gitconfig")).to be true
     end
   end
 
