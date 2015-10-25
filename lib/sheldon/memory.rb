@@ -7,6 +7,22 @@ class Memory
     @database = YAML::Store.new(database_path)
   end
 
+  def add(recall_cue, hash)
+    raise "cue already used" if has_cue?(recall_cue)
+    @database.transaction do
+      @database[recall_cue] = hash
+    end
+  end
+
+  def recall(recall_cue)
+    raise "no entry for cue" unless has_cue?(recall_cue)
+    @database.transaction { @database[recall_cue] }
+  end
+
+  def size
+    @database.transaction { @database.roots.count }
+  end
+
   def has_cue?(recall_cue)
     @database.transaction do
       @database.roots.any?{ |cue| cue == recall_cue }
