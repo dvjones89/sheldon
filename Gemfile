@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
-gem "memfs"
+gem "byebug"
 gem "rspec"
 gem "thor"
