@@ -20,6 +20,13 @@ describe Brain do
       brain.learn("my git config", "spec/Users/test/.gitconfig")
       expect(File.exists?(cell_path)).to be true
     end
+
+    it "should add a new entry to memory" do
+      cell_path = "spec/Users/test/sheldon/my git config/.gitconfig"
+      expect(brain.size).to eq 0
+      brain.learn("my git config", "spec/Users/test/.gitconfig")
+      expect(brain.size).to eq 1
+    end
   end
 
   describe "#recall" do
@@ -30,16 +37,17 @@ describe Brain do
     end
   end
 
-  describe "#memory" do
-    it "should return an instance of Memory" do
-      expect(brain.memory).to be_a Memory
+  describe "#has_cue?" do
+    it "should delegate to memory#has_cue?" do
+      expect(brain.send(:memory)).to receive(:has_cue?).once.with("lightbulb")
+      brain.has_cue?("lightbulb")
     end
   end
 
-  describe "#has_cue?" do
-    it "should delegate to memory#has_cue?" do
-      expect(brain.memory).to receive(:has_cue?).once.with("lightbulb")
-      brain.has_cue?("lightbulb")
+  describe "#size" do
+    it "should delegate to memory#size" do
+      expect(brain.send(:memory)).to receive(:size).once
+      brain.size
     end
   end
 

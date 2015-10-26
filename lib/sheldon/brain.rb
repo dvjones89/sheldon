@@ -1,4 +1,3 @@
-require "pathname"
 require_relative "memory"
 
 class Brain
@@ -9,9 +8,10 @@ class Brain
 
 
   def learn(recall_cue, abs_learn_path)
-    cell = find_cell(recall_cue)
+    cell = get_cell(recall_cue)
     FileUtils.mkdir_p(cell)
     FileUtils.mv(abs_learn_path, cell)
+    memory.add(recall_cue, abs_learn_path)
   end
 
   def recall(recall_cue, destination)
@@ -22,18 +22,22 @@ class Brain
     memory.has_cue?(recall_cue)
   end
 
-  def memory
-    @memory ||= Memory.new(@brain_location)
+  def size
+    memory.size
   end
 
   private
 
-  def find_cell(recall_cue)
+  def memory
+    @memory ||= Memory.new(@brain_location)
+  end
+
+  def get_cell(recall_cue)
     File.join(@brain_location, recall_cue)
   end
 
   def read_cell(recall_cue)
-    cell = find_cell(recall_cue)
+    cell = get_cell(recall_cue)
     Dir.glob(cell).first
   end
 
