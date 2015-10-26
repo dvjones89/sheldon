@@ -14,8 +14,10 @@ class Brain
     memory.add(recall_cue, abs_learn_path)
   end
 
-  def recall(recall_cue, destination)
-    FileUtils.ln_s(read_cell(recall_cue), destination)
+  def recall(recall_cue)
+    destination = memory.recall(recall_cue)
+    source_cell = get_cell(recall_cue)
+    FileUtils.ln_s(read_cell(source_cell), destination)
   end
 
   def has_cue?(recall_cue)
@@ -36,8 +38,7 @@ class Brain
     File.join(@brain_location, recall_cue)
   end
 
-  def read_cell(recall_cue)
-    cell = get_cell(recall_cue)
+  def read_cell(cell)
     Dir.glob(cell).first
   end
 

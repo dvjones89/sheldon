@@ -12,7 +12,11 @@ class Sheldon
       brain.learn(recall_cue, abs_learn_path)
       brain.recall(recall_cue, abs_learn_path)
     end
+  end
 
+  def recall(recall_cue)
+    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
+    brain.recall(recall_cue)
   end
 
   private
