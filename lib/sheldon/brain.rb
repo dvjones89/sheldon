@@ -18,6 +18,10 @@ class Brain
     FileUtils.ln_s(read_synapse(recall_cue), destination)
   end
 
+  def has_cue?(recall_cue)
+    memory.has_cue?(recall_cue)
+  end
+
   def memory
     @memory ||= Memory.new(@brain_location)
   end

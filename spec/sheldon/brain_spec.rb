@@ -36,4 +36,11 @@ describe Brain do
     end
   end
 
+  describe "#has_cue?" do
+    it "should delegate to memory#has_cue?" do
+      expect(brain.memory).to receive(:has_cue?).once.with("lightbulb")
+      brain.has_cue?("lightbulb")
+    end
+  end
+
 end

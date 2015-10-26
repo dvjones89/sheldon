@@ -6,7 +6,7 @@ class Sheldon
   def learn(recall_cue, rel_learn_path)
     abs_learn_path = File.join(Dir.pwd, rel_learn_path)
 
-    if brain.memory.has_cue?(recall_cue)
+    if brain.has_cue?(recall_cue)
       raise "This cue has already been used. Please provide another."
     else
       brain.learn(recall_cue, abs_learn_path)
