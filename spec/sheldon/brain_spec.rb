@@ -16,9 +16,9 @@ describe Brain do
 
   describe "#learn" do
     it "should move the target file/folder into Sheldon's brain" do
-      synapse_path = "spec/Users/test/sheldon/my git config/.gitconfig"
+      cell_path = "spec/Users/test/sheldon/my git config/.gitconfig"
       brain.learn("my git config", "spec/Users/test/.gitconfig")
-      expect(File.exists?(synapse_path)).to be true
+      expect(File.exists?(cell_path)).to be true
     end
   end
 
