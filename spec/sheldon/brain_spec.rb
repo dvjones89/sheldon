@@ -22,7 +22,6 @@ describe Brain do
     end
 
     it "should add a new entry to memory" do
-      cell_path = "spec/Users/test/sheldon/my git config/.gitconfig"
       expect(brain.size).to eq 0
       brain.learn("my git config", "spec/Users/test/.gitconfig")
       expect(brain.size).to eq 1

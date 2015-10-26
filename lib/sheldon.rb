@@ -10,7 +10,7 @@ class Sheldon
       raise "This cue has already been used. Please provide another."
     else
       brain.learn(recall_cue, abs_learn_path)
-      brain.recall(recall_cue, abs_learn_path)
+      brain.recall(recall_cue)
     end
   end
 
