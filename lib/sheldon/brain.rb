@@ -39,7 +39,7 @@ class Brain
   end
 
   def read_cell(cell)
-    Dir.glob(cell).first
+    Dir.glob(File.join(cell, "/*")).first
   end
 
 end
