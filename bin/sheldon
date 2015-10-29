@@ -12,6 +12,11 @@ class Launcher < Thor
     sheldon.learn(recall_cue, rel_path_to_target)
   end
 
+  desc "link recall_cue", "Link a previously learnt file/directory to it's original location on the filesystem"
+  def link(recall_cue)
+    sheldon.recall(recall_cue)
+  end
+
   private
 
   def sheldon

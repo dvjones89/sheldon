@@ -39,7 +39,8 @@ class Brain
   end
 
   def read_cell(cell)
-    Dir.glob(File.join(cell, "/*")).first
+    basename = (Dir.entries(cell) - [".", ".."]).first
+    File.join(cell,basename)
   end
 
 end
