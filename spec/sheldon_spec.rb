@@ -13,7 +13,7 @@ describe Sheldon do
   end
 
   let(:brain) { Brain.new("spec/Users/test/sheldon") }
-  let(:sheldon) { sheldon = Sheldon.new(brain) }
+  let(:sheldon) { Sheldon.new("spec/Users/test/sheldon", brain) }
 
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
@@ -46,6 +46,13 @@ describe Sheldon do
       it "should raise an error" do
         expect{ sheldon.recall("lightbulb") }.to raise_error("Cue 'lightbulb' could not be found.")
       end
+    end
+  end
+
+  describe "#list" do
+    it "should delegate to memory#list" do
+      expect(brain).to receive(:list).once
+      sheldon.list
     end
   end
 

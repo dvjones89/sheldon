@@ -2,8 +2,11 @@ require_relative "memory"
 
 class Brain
 
-  def initialize(sheldon_data_dir)
+  attr_reader :memory
+
+  def initialize(sheldon_data_dir, memory = nil)
     @brain_location = sheldon_data_dir
+    @memory = memory || Memory.new(@brain_location)
   end
 
 
@@ -28,11 +31,11 @@ class Brain
     memory.size
   end
 
-  private
-
-  def memory
-    @memory ||= Memory.new(@brain_location)
+  def list
+    memory.list
   end
+
+  private
 
   def get_cell(recall_cue)
     File.join(@brain_location, recall_cue)
@@ -40,7 +43,7 @@ class Brain
 
   def read_cell(cell)
     basename = (Dir.entries(cell) - [".", ".."]).first
-    File.join(cell,basename)
+    File.join(cell, basename)
   end
 
 end

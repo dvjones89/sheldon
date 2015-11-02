@@ -17,10 +17,15 @@ class Launcher < Thor
     sheldon.recall(recall_cue)
   end
 
+  desc "list", "List all cues currently known by Sheldon"
+  def list
+    puts sheldon.list
+  end
+
   private
 
   def sheldon
-    @sheldon ||= Sheldon.new
+    @sheldon ||= Sheldon.new(File.expand_path("~/sheldon2"))
   end
 
 end

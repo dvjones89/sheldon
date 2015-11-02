@@ -20,7 +20,11 @@ class Memory
   end
 
   def size
-    @database.transaction { @database.roots.count }
+    list.size
+  end
+
+  def list
+    @database.transaction { @database.roots }
   end
 
   def has_cue?(recall_cue)

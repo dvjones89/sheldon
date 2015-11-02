@@ -12,7 +12,8 @@ describe Brain do
     FileUtils.rm_r("spec/Users")
   end
 
-  let(:brain) { Brain.new(abs("spec/Users/test/sheldon")) }
+  let(:memory) { Memory.new(abs("spec/Users/test/sheldon")) }
+  let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory) }
 
   describe "#learn" do
     it "should move the target file/folder into Sheldon's brain" do
@@ -38,15 +39,22 @@ describe Brain do
 
   describe "#has_cue?" do
     it "should delegate to memory#has_cue?" do
-      expect(brain.send(:memory)).to receive(:has_cue?).once.with("lightbulb")
+      expect(memory).to receive(:has_cue?).once.with("lightbulb")
       brain.has_cue?("lightbulb")
     end
   end
 
   describe "#size" do
     it "should delegate to memory#size" do
-      expect(brain.send(:memory)).to receive(:size).once
+      expect(memory).to receive(:size).once
       brain.size
+    end
+  end
+
+  describe "#list" do
+    it "should delegate to memory#list" do
+      expect(memory).to receive(:list).once
+      brain.list
     end
   end
 

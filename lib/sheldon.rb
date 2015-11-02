@@ -2,14 +2,10 @@ require "fileutils"
 require_relative "sheldon/brain"
 
 class Sheldon
+  attr_reader :brain
 
-  def initialize(brain = nil)
-    if brain
-      @brain = brain
-    else
-      sheldon_data_dir = File.expand_path("~/sheldon2")
-      @brain ||= Brain.new(sheldon_data_dir)
-    end
+  def initialize(sheldon_data_dir, brain = nil)
+    @brain = brain || Brain.new(sheldon_data_dir)
   end
 
   def learn(recall_cue, rel_learn_path)
@@ -23,15 +19,13 @@ class Sheldon
     end
   end
 
+  def list
+    brain.list
+  end
+
   def recall(recall_cue)
     raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
     brain.recall(recall_cue)
-  end
-
-  private
-
-  def brain
-    @brain
   end
 
 end

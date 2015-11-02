@@ -62,4 +62,20 @@ describe Memory do
     end
   end
 
+  describe "#list" do
+    context "when the memory contains zero cues" do
+      it "should return an empty list" do
+        expect(memory.list).to be_empty
+      end
+    end
+
+    context "when memory contains multiple cues" do
+      it "should return the cues" do
+        memory.add("lightbulb", "moment")
+        memory.add("rolo", "bounty")
+        expect(memory.list).to eq %w(lightbulb rolo)
+      end
+    end
+  end
+
 end
