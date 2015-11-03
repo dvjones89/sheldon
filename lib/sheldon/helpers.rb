@@ -1,4 +1,5 @@
 module Helpers
+  require "pathname"
 
   def remove_home(path)
     home_path = Pathname(File.expand_path("~"))

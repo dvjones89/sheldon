@@ -14,11 +14,12 @@ class Brain
     cell = get_cell(recall_cue)
     FileUtils.mkdir_p(cell)
     FileUtils.mv(abs_learn_path, cell)
-    memory.add(recall_cue, abs_learn_path)
+    memory.add(recall_cue, remove_home(abs_learn_path))
   end
 
   def recall(recall_cue)
     destination = memory.recall(recall_cue)
+    destination = add_home(destination)
     source_cell = get_cell(recall_cue)
     FileUtils.ln_s(read_cell(source_cell), destination)
   end

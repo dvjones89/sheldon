@@ -14,24 +14,25 @@ describe Brain do
 
   let(:memory) { Memory.new(abs("spec/Users/test/sheldon")) }
   let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory) }
+  let(:abs_learn_path) { abs("spec/Users/test/.gitconfig") }
 
   describe "#learn" do
     it "should move the target file/folder into Sheldon's brain" do
       cell_path = "spec/Users/test/sheldon/my git config/.gitconfig"
-      brain.learn("my git config", "spec/Users/test/.gitconfig")
+      brain.learn("my git config", abs_learn_path)
       expect(File.exists?(cell_path)).to be true
     end
 
     it "should add a new entry to memory" do
       expect(brain.size).to eq 0
-      brain.learn("my git config", "spec/Users/test/.gitconfig")
+      brain.learn("my git config", abs_learn_path)
       expect(brain.size).to eq 1
     end
   end
 
   describe "#recall" do
     it "should symlink from Sheldon's brain back to the original file-system location" do
-      brain.learn("my git config", "spec/Users/test/.gitconfig")
+      brain.learn("my git config", abs_learn_path)
       brain.recall("my git config")
       expect(File.symlink?("spec/Users/test/.gitconfig")).to be true
     end

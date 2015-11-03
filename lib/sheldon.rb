@@ -1,6 +1,9 @@
 require "fileutils"
 require_relative "sheldon/brain"
 
+require_relative "../lib/sheldon/helpers"
+include Helpers
+
 class Sheldon
   attr_reader :brain
 
