@@ -14,6 +14,7 @@ describe Sheldon do
 
   let(:brain) { Brain.new("spec/Users/test/sheldon") }
   let(:sheldon) { Sheldon.new("spec/Users/test/sheldon", brain) }
+  let(:rel_learn_path) { "spec/Users/test/.gitconfig" }
 
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
@@ -21,14 +22,14 @@ describe Sheldon do
         abs_learn_path = File.expand_path("spec/Users/test/.gitconfig")
         expect(brain).to receive(:learn).once.with("my git config", abs_learn_path)
         expect(brain).to receive(:recall).once.with("my git config")
-        sheldon.learn("my git config", "spec/Users/test/.gitconfig")
+        sheldon.learn("my git config", rel_learn_path)
       end
     end
 
     context "for a cue that already exists in Sheldon's memory" do
       it "should raise an error" do
-        sheldon.learn("my git config", "spec/Users/test/.gitconfig")
-        expect{ sheldon.learn("my git config", "spec/Users/test/.gitconfig") }.to raise_error("This cue has already been used.")
+        sheldon.learn("my git config", rel_learn_path)
+        expect{ sheldon.learn("my git config", rel_learn_path) }.to raise_error("This cue has already been used.")
       end
     end
   end
@@ -36,7 +37,7 @@ describe Sheldon do
   describe "#recall" do
     context "for a cue that exists in Sheldon's memory" do
       it "should call the appropriate method(s) on Sheldon's brain" do
-        sheldon.learn("my git config", "spec/Users/test/.gitconfig")
+        sheldon.learn("my git config", rel_learn_path)
         expect(brain).to receive(:recall).once.with("my git config")
         sheldon.recall("my git config")
       end
