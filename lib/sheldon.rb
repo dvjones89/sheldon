@@ -1,6 +1,6 @@
-require "sheldon/brain"
-require "sheldon/helpers"
-require "sheldon/sheldon"
+require_relative "sheldon/brain"
+require_relative "sheldon/helpers"
+require_relative "sheldon/sheldon"
 
-require "sheldon/memory"
+require_relative "sheldon/memory"
 include Helpers
