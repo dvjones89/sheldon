@@ -7,9 +7,10 @@ class Launcher < Thor
 
   desc "learn PATH_TO_TARGET", "Add a new file/folder to Sheldon's brain"
   def learn(rel_path_to_target)
+    abs_learn_path = File.join(Dir.pwd, rel_path_to_target)
     print("Friendly Name For File/Folder: ")
     recall_cue = STDIN.gets.chomp
-    sheldon.learn(recall_cue, rel_path_to_target)
+    sheldon.learn(recall_cue, abs_learn_path)
   end
 
   desc "link recall_cue", "Link a previously learnt file/directory to it's original location on the filesystem"

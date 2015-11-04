@@ -11,9 +11,7 @@ class Sheldon
     @brain = brain || Brain.new(sheldon_data_dir)
   end
 
-  def learn(recall_cue, rel_learn_path)
-    abs_learn_path = File.join(Dir.pwd, rel_learn_path)
-
+  def learn(recall_cue, abs_learn_path)
     if brain.has_cue?(recall_cue)
       raise "This cue has already been used."
     else
