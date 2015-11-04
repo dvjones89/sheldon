@@ -6,5 +6,4 @@ SimpleCov.start do
   add_filter "/spec/"
 end
 
-Dir["#{File.dirname(__FILE__)}/../lib/*/*.rb"].each { |f| require f }
 require_relative "../lib/sheldon"

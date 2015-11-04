@@ -1,5 +1,3 @@
-require_relative "memory"
-
 class Brain
 
   attr_reader :memory
