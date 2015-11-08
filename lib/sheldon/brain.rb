@@ -2,9 +2,9 @@ class Brain
 
   attr_reader :memory
 
-  def initialize(sheldon_data_dir, memory = nil)
+  def initialize(sheldon_data_dir, opts={})
     @brain_location = sheldon_data_dir
-    @memory = memory || Memory.new(@brain_location)
+    @memory = opts[:memory] || Memory.new(@brain_location)
   end
 
 

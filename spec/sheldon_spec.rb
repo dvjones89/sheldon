@@ -13,7 +13,7 @@ describe Sheldon do
   end
 
   let(:brain) { Brain.new("spec/Users/test/sheldon") }
-  let(:sheldon) { Sheldon.new("spec/Users/test/sheldon", brain) }
+  let(:sheldon) { Sheldon.new("spec/Users/test/sheldon", brain: brain) }
   let(:abs_learn_path) { abs("spec/Users/test/.gitconfig") }
 
   describe "#learn" do

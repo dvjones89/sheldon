@@ -4,16 +4,23 @@ require_relative "../lib/sheldon"
 
 class Launcher < Thor
 
+
+  desc "build PATH_TO_TARGET", "Tell Sheldon to build all config_ files in a directory to single master config"
+  def build(rel_path_to_target)
+    abs_learn_path = File.expand_path(rel_path_to_target)
+    sheldon.build(abs_learn_path)
+  end
+
   desc "learn PATH_TO_TARGET", "Add a new file/folder to Sheldon's brain"
   def learn(rel_path_to_target)
-    abs_learn_path = File.join(Dir.pwd, rel_path_to_target)
+    abs_learn_path = File.expand_path(rel_path_to_target)
     print("Friendly Name For File/Folder: ")
     recall_cue = STDIN.gets.chomp
     sheldon.learn(recall_cue, abs_learn_path)
   end
 
-  desc "link recall_cue", "Link a previously learnt file/directory to it's original location on the filesystem"
-  def link(recall_cue)
+  desc "recall recall_cue", "Recall a previously learnt file/directory to it's original location on the filesystem"
+  def recall(recall_cue)
     sheldon.recall(recall_cue)
   end
 
@@ -28,6 +35,7 @@ class Launcher < Thor
     @sheldon ||= Sheldon.new(File.expand_path("~/sheldon2"))
   end
 
-end
+  map link: :recall
 
+end
 Launcher.start(ARGV)

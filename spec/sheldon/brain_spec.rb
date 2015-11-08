@@ -13,7 +13,7 @@ describe Brain do
   end
 
   let(:memory) { Memory.new(abs("spec/Users/test/sheldon")) }
-  let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory) }
+  let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory: memory) }
   let(:abs_learn_path) { abs("spec/Users/test/.gitconfig") }
 
   describe "#learn" do
