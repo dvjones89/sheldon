@@ -6,7 +6,7 @@ class Builder
     master_content = entries.inject("") do |buffer, entry|
       is_config?(entry) ? add_entry_to_buffer(entry, buffer) : buffer
     end
-    
+
     unless master_content.empty?
       master_path = File.join(abs_build_path, "config")
       File.open(master_path, "w") { |f| f.write(master_content) }
@@ -22,8 +22,7 @@ class Builder
 
   def is_config?(abs_path)
     basename = File.basename(abs_path)
-    return true if File.file?(abs_path) && basename.include?("config_")
-    false
+    File.file?(abs_path) && basename.include?("config_") ? true : false
   end
 
 end

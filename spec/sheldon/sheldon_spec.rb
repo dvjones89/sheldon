@@ -13,8 +13,18 @@ describe Sheldon do
   end
 
   let(:brain) { Brain.new("spec/Users/test/sheldon") }
-  let(:sheldon) { Sheldon.new("spec/Users/test/sheldon", brain: brain) }
+  let(:builder) { Builder.new }
+  let(:sheldon) { Sheldon.new("spec/Users/test/sheldon", brain: brain, builder: builder) }
+  let(:abs_home_path) { abs("spec/Users") }
   let(:abs_learn_path) { abs("spec/Users/test/.gitconfig") }
+
+
+  describe "#build" do
+    it "should delegate to Builder#build" do
+      expect(builder).to receive(:build).once.with(abs_home_path)
+      sheldon.build(abs_home_path)
+    end
+  end
 
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
@@ -51,7 +61,7 @@ describe Sheldon do
   end
 
   describe "#list" do
-    it "should delegate to memory#list" do
+    it "should delegate to Memory#list" do
       expect(brain).to receive(:list).once
       sheldon.list
     end

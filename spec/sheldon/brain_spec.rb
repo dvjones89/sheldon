@@ -20,7 +20,7 @@ describe Brain do
     it "should move the target file/folder into Sheldon's brain" do
       cell_path = "spec/Users/test/sheldon/my git config/.gitconfig"
       brain.learn("my git config", abs_learn_path)
-      expect(File.exists?(cell_path)).to be true
+      expect(File).to exist(cell_path)
     end
 
     it "should add a new entry to memory" do
@@ -34,7 +34,7 @@ describe Brain do
     it "should symlink from Sheldon's brain back to the original file-system location" do
       brain.learn("my git config", abs_learn_path)
       brain.recall("my git config")
-      expect(File.symlink?("spec/Users/test/.gitconfig")).to be true
+      expect(File).to be_symlink("spec/Users/test/.gitconfig")
     end
   end
 

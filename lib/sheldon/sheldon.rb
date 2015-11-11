@@ -3,7 +3,7 @@ require "fileutils"
 class Sheldon
   attr_reader :brain, :builder
 
-  def initialize(sheldon_data_dir, opts={})
+  def initialize(sheldon_data_dir, opts = {})
     @brain = opts[:brain] || Brain.new(sheldon_data_dir)
     @builder = opts[:builder] || Builder.new
   end
