@@ -36,6 +36,7 @@ class Launcher < Thor
   end
 
   map link: :recall
+  map ls: :list
 
 end
 Launcher.start(ARGV)
