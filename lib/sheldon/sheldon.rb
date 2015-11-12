@@ -10,6 +10,7 @@ class Sheldon
 
   def build(abs_learn_path)
     builder.build(abs_learn_path)
+    announce("Built #{File.basename(abs_learn_path)}")
   end
 
   def learn(recall_cue, abs_learn_path)
