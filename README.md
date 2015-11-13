@@ -2,7 +2,7 @@
 
 Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
 
-### Usage
+### How It Works
 #### Add files/folders to Sheldon (sheldon learn)
 Teach Sheldon about new files or directories using the `learn` command:
 ```shell
@@ -10,15 +10,15 @@ sheldon learn ~/.gitconfig
 Recall Cue For File/Folder: git
 ```
 
-Sheldon will move the original file/directory into his data directory and symlink back to it's original location.
+Sheldon will move the original file/directory into his data directory (defaults to `~/sheldon`) and symlink back to it's original location.
 ```shell
 ls -al ~ | grep .gitconfig
 .gitconfig -> /Users/dave/sheldon/git/.gitconfig
 ```
+Keep Sheldon's data directory synchronised across all your devices using your tool of choice, Dropbox, Google Drive, BTSync.
 
 #### Recall your files on other machines (sheldon recall)
-Use Dropbox / RSync / Whatever to copy Sheldon's data directory onto your new machine.
-Sheldon's `recall` command will symlink the file from the data directory to it's correct location on the filesystem:
+Sheldon's `recall` command will symlink the file from the data directory to it's correct location on any filesystem (even under different home directories):
 
 ```shell
 sheldon recall git
@@ -26,8 +26,6 @@ sheldon recall git
 ls -al ~ | grep .gitconfig
 .gitconfig -> /Users/john/sheldon/git/.gitconfig
 ```
-
-Keep your data directory in sync across all your devices using your tool of choice, Dropbox, Google Drive, BTSync.
 
 #### Build Bespoke Configs For Your Host (sheldon build)
 Sometimes copying an entire config file between all your machine is overkill. What if you only want a subset of your configuration? Sheldon can help.
