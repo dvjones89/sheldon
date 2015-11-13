@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+require "thor"
+require_relative "../lib/sheldon"
+
+class Launcher < Thor
+  map link: :recall
+  map ls: :list
+
+  desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
+  def build(rel_path_to_target)
+    abs_learn_path = File.expand_path(rel_path_to_target)
+    sheldon.build(abs_learn_path)
+    announce("Built #{File.basename(rel_path_to_target)}")
+  end
+
+  desc "learn path", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
+  def learn(rel_path_to_target)
+    abs_learn_path = File.expand_path(rel_path_to_target)
+    print("Recall Cue For File/Folder: ")
+    recall_cue = STDIN.gets.chomp
+    sheldon.learn(recall_cue, abs_learn_path)
+  end
+
+  desc "recall recall_cue", "Recall a previously learnt file/directory to it's original location on the filesystem"
+  def recall(recall_cue)
+    sheldon.recall(recall_cue)
+  end
+
+  desc "list", "List all recall cues currently known by Sheldon"
+  def list
+    puts sheldon.list
+  end
+
+  private
+
+  def announce(message)
+    logo = "💥".encode("utf-8")
+    puts logo + " Sheldon" + logo + "  #{message}"
+  end
+
+  def sheldon
+    @sheldon ||= Sheldon.new(sheldon_data_dir)
+  end
+
+  def sheldon_data_dir
+    path = ENV["SHELDON_DATA_DIR"] || "~/sheldon"
+    File.expand_path(path)
+  end
+
+end
+Launcher.start(ARGV)
