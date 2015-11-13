@@ -2,16 +2,6 @@
 
 Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
 
-### Installation:
-1) `cd ~ && git clone https://github.com/dvjones89/sheldon.git .sheldon`
-
-2) Add the following to your shell's .rc file, (commonly `~/.bashrc` or `~/.zshrc`):  
-`alias sheldon='ruby ~/.sheldon/bin/launcher'`
-
-3) Add your .dotfiles to `~/sheldon` or point Sheldon to a different directory using the `SHELDON_DATA_DIR` environment variable.
-
-4) Restart your shell
-
 ### Usage
 #### Add files/folders to Sheldon (sheldon learn)
 Teach Sheldon about new files or directories using the `learn` command:
@@ -54,6 +44,16 @@ sheldon build ~/.ssh
 
 source ~/.ssh/config
 ```
+
+### Installation:
+1) `cd ~ && git clone https://github.com/dvjones89/sheldon.git .sheldon`
+
+2) Add the following to your shell's .rc file, (commonly `~/.bashrc` or `~/.zshrc`):  
+`alias sheldon='ruby ~/.sheldon/bin/launcher'`
+
+3) Add your .dotfiles to `~/sheldon` or point Sheldon to a different directory using the `SHELDON_DATA_DIR` environment variable.
+
+4) Restart your shell
 
 ### Isn't This Just Homesick?
 Yes, yes it is. Unfortunately, I'd written 90% of Sheldon before I discovered the awesome [homesick](https://github.com/technicalpickles/homesick) so I decided to keep going.  
