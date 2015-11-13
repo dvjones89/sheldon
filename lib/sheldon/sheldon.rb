@@ -4,13 +4,13 @@ class Sheldon
   attr_reader :brain, :builder
 
   def initialize(sheldon_data_dir, opts = {})
+    raise "Directory #{sheldon_data_dir} does not exist" unless Dir.exists?(sheldon_data_dir)
     @brain = opts[:brain] || Brain.new(sheldon_data_dir)
     @builder = opts[:builder] || Builder.new
   end
 
   def build(abs_learn_path)
     builder.build(abs_learn_path)
-    announce("Built #{File.basename(abs_learn_path)}")
   end
 
   def learn(recall_cue, abs_learn_path)

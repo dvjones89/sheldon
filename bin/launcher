@@ -3,18 +3,20 @@ require "thor"
 require_relative "../lib/sheldon"
 
 class Launcher < Thor
+  map link: :recall
+  map ls: :list
 
-
-  desc "build PATH_TO_TARGET", "Tell Sheldon to build all config_ files in a directory to single master config"
+  desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
   def build(rel_path_to_target)
     abs_learn_path = File.expand_path(rel_path_to_target)
     sheldon.build(abs_learn_path)
+    announce("Built #{File.basename(rel_path_to_target)}")
   end
 
-  desc "learn PATH_TO_TARGET", "Add a new file/folder to Sheldon's brain"
+  desc "learn path", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
   def learn(rel_path_to_target)
     abs_learn_path = File.expand_path(rel_path_to_target)
-    print("Friendly Name For File/Folder: ")
+    print("Recall Cue For File/Folder: ")
     recall_cue = STDIN.gets.chomp
     sheldon.learn(recall_cue, abs_learn_path)
   end
@@ -24,19 +26,26 @@ class Launcher < Thor
     sheldon.recall(recall_cue)
   end
 
-  desc "list", "List all cues currently known by Sheldon"
+  desc "list", "List all recall cues currently known by Sheldon"
   def list
     puts sheldon.list
   end
 
   private
 
-  def sheldon
-    @sheldon ||= Sheldon.new(File.expand_path("~/sheldon2"))
+  def announce(message)
+    logo = "💥".encode("utf-8")
+    puts logo + " Sheldon" + logo + "  #{message}"
   end
 
-  map link: :recall
-  map ls: :list
+  def sheldon
+    @sheldon ||= Sheldon.new(sheldon_data_dir)
+  end
+
+  def sheldon_data_dir
+    path = ENV["SHELDON_DATA_DIR"] || "~/sheldon"
+    File.expand_path(path)
+  end
 
 end
 Launcher.start(ARGV)

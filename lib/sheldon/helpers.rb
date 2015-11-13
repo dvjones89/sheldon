@@ -15,9 +15,4 @@ module Helpers
     File.expand_path(rel_path).to_s
   end
 
-  def announce(message)
-    logo = "💥".encode("utf-8")
-    puts logo + " Sheldon" + logo + "  #{message}"
-  end
-
 end
