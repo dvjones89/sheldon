@@ -8,7 +8,9 @@ Designed with the obsessive developer in mind, Sheldon makes it easy for you to 
 2) Add the following to your shell's .rc file, (commonly `~/.bashrc` or `~/.zshrc`):  
 `alias sheldon='ruby ~/.sheldon/bin/launcher'`
 
-3) Restart your shell
+3) Add your .dotfiles to `~/sheldon` or point Sheldon to a different directory using the `SHELDON_DATA_DIR` environment variable.
+
+4) Restart your shell
 
 ### Usage
 #### Add files/folders to Sheldon (sheldon learn)
