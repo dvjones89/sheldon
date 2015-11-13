@@ -27,6 +27,8 @@ ls -al ~ | grep .gitconfig
 .gitconfig -> /Users/john/sheldon/my git config/.gitconfig
 ```
 
+Keep your data directory in sync across all your devices using your tool of choice, Dropbox, Google Drive, BTSync.
+
 #### Build Bespoke Configs For Your Host (sheldon build)
 Sometimes copying an entire config file between all your machine is overkill. What if you only want a subset of your configuration? Sheldon can help.
 
@@ -44,6 +46,19 @@ source ~/.ssh/config
 ```
 
 ### Isn't This Just Homesick?
-Yes, yes it is. Unfortunately, I'd written 90% of Sheldon before I discovered the wonderful [homesick](https://github.com/technicalpickles/homesick) so I decided to keep going.  
+Yes, yes it is. Unfortunately, I'd written 90% of Sheldon before I discovered the awesome [homesick](https://github.com/technicalpickles/homesick) so I decided to keep going.  
 Sheldon's `build` command is (as far as I know) unique to Sheldon and will perhaps prove useful to those who chunk their configs.  
 If nothing else, I hope this code will be a good point of reference for other developers (and indeed my future self).
+
+### Contributing
+
+1. Fork it ( https://github.com/[your-github-username]/sheldon/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Make sure you haven't broken anything `bundle exec rspec`
+5. Add your own specs for your new feature
+6. Push to the branch (`git push origin my-new-feature`)
+7. Create a new Pull Request
+
+### License
+See LICENSE
