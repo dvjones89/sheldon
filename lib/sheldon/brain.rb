@@ -20,7 +20,7 @@ class Brain
     entry = memory.recall(recall_cue)
     destination = add_home(entry[:filepath])
     source_cell = get_cell(recall_cue)
-    FileUtils.ln_s(read_cell(source_cell), destination)
+    FileUtils.ln_s(read_cell(source_cell), destination, force: true)
   end
 
   def has_cue?(recall_cue)
@@ -42,7 +42,7 @@ class Brain
   end
 
   def read_cell(cell)
-    basename = (Dir.entries(cell) - [".", ".."]).first
+    basename = (Dir.entries(cell) - [".", "..", ".DS_Store"]).first
     File.join(cell, basename)
   end
 
