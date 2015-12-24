@@ -37,8 +37,19 @@ Use Sheldon `learn` and `recall` to make the appropriate `_config` files availab
 Once the files are in the right place, use Sheldon `build` to create a single `config` file that can be easily sourced.
 
 ```shell
+cd ~/.ssh
+
+ls -l
+config_dev -> /Users/dave/sheldon/ssh_config_dev/config_dev
+config_personal -> /Users/dave/sheldon/ssh_config_personal/config_personal
+
 sheldon build ~/.ssh
 💥 Sheldon💥  Built .ssh
+
+ls -l
+config_dev -> /Users/dave/sheldon/ssh_config_dev/config_dev
+config_personal -> /Users/dave/sheldon/ssh_config_personal/config_personal
+config
 
 source ~/.ssh/config
 ```
