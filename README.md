@@ -27,6 +27,13 @@ ls -al ~ | grep .gitconfig
 .gitconfig -> /Users/john/sheldon/git/.gitconfig
 ```
 
+Pass the `-i` flag to Sheldon's `recall` command for interactive mode:
+```shell
+sheldon recall -i
+Recall git_config (Y/N): y
+Recall .zshrc (Y/N): y
+```
+
 #### Build Bespoke Configs For Your Host (sheldon build)
 Sometimes copying an entire config file between all your machine is overkill. What if you only want a subset of your configuration? Sheldon can help.
 
