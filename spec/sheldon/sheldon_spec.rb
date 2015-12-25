@@ -60,10 +60,10 @@ describe Sheldon do
     end
   end
 
-  describe "#list" do
-    it "should delegate to Memory#list" do
-      expect(brain).to receive(:list).once
-      sheldon.list
+  describe "#list_cues" do
+    it "should delegate to Brain#list_cues" do
+      expect(brain).to receive(:list_cues).once
+      sheldon.list_cues
     end
   end
 

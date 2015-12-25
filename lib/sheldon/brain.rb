@@ -31,8 +31,8 @@ class Brain
     memory.size
   end
 
-  def list
-    memory.list
+  def list_cues
+    memory.list_cues
   end
 
   private

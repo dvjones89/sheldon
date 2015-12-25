@@ -52,10 +52,10 @@ describe Brain do
     end
   end
 
-  describe "#list" do
-    it "should delegate to memory#list" do
-      expect(memory).to receive(:list).once
-      brain.list
+  describe "#list_cues" do
+    it "should delegate to memory#list_cues" do
+      expect(memory).to receive(:list_cues).once
+      brain.list_cues
     end
   end
 

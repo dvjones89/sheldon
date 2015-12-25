@@ -24,7 +24,7 @@ class Launcher < Thor
   option :i, type: :boolean, desc: "Interactive mode - prompts Y/N for each available recall_cue"
   def recall
     if options[:i]
-      sheldon.list.each do |recall_cue|
+      sheldon.list_cues.each do |recall_cue|
         answer = prompt_user("Recall #{recall_cue} (Y/N)")
         sheldon.recall(recall_cue) if answer.downcase == "y"
       end
@@ -36,7 +36,7 @@ class Launcher < Thor
 
   desc "list", "List all recall cues known by Sheldon"
   def list
-    puts sheldon.list
+    puts sheldon.list_cues
   end
 
   private

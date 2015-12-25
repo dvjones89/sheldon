@@ -22,8 +22,8 @@ class Sheldon
     end
   end
 
-  def list
-    brain.list
+  def list_cues
+    brain.list_cues
   end
 
   def recall(recall_cue)

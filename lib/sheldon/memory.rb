@@ -20,17 +20,15 @@ class Memory
   end
 
   def size
-    list.size
+    list_cues.size
   end
 
-  def list
+  def list_cues
     @database.transaction { @database.roots }
   end
 
   def has_cue?(recall_cue)
-    @database.transaction do
-      @database.roots.any?{ |cue| cue == recall_cue }
-    end
+    list_cues.any?{ |cue| cue == recall_cue }
   end
 
 end
