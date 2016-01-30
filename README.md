@@ -67,7 +67,7 @@ source ~/.ssh/config
 2) Add the following to your shell's .rc file, (commonly `~/.bashrc` or `~/.zshrc`):  
 `alias sheldon='ruby ~/.sheldon/bin/launcher'`
 
-3) Add your .dotfiles to `~/sheldon` or point Sheldon to a different directory using the `SHELDON_DATA_DIR` environment variable.
+3) Sync Sheldon's data directory (`~/sheldon` by default) across all of your machines. You can override the default folder location by setting the`SHELDON_DATA_DIR` environment variable on each host.
 
 4) Restart your shell
 
