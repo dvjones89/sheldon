@@ -20,23 +20,31 @@ class Launcher < Thor
     sheldon.learn(recall_cue, abs_learn_path)
   end
 
-  desc "recall", "Symlink a previously learnt file/directory to it's original location on the filesystem."
+  desc "recall recall_cue", "Symlink a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
   option :i, type: :boolean, desc: "Interactive mode - prompts Y/N for each available recall_cue"
-  def recall
+
+  def recall(recall_cue=nil)
     if options[:i]
       sheldon.list_cues.each do |recall_cue|
-        answer = prompt_user("Recall #{recall_cue} (Y/N)")
+        answer = prompt_user("Recall #{recall_cue}? (Y/N)")
         sheldon.recall(recall_cue) if answer.downcase == "y"
       end
     else
-      recall_cue = prompt_user("Recall Cue For File/Folder")
+      recall_cue ||= prompt_user("Recall Cue For File/Folder")
       sheldon.recall(recall_cue)
     end
+
+    announce("Recall Complete.")
   end
 
   desc "list", "List all recall cues known by Sheldon"
   def list
     puts sheldon.list_cues
+  end
+
+  desc "version", "Prints the current version of Sheldon"
+  def version
+    announce("version #{IO.read('VERSION')}")
   end
 
   private
