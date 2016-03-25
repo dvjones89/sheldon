@@ -44,7 +44,7 @@ class Launcher < Thor
 
   desc "version", "Prints the current version of Sheldon"
   def version
-    announce("version #{IO.read('VERSION')}")
+    announce sheldon.version
   end
 
   private

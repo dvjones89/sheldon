@@ -31,4 +31,9 @@ class Sheldon
     brain.recall(recall_cue)
   end
 
+  def version
+    version_path = File.join(File.dirname(__FILE__), '../../VERSION')
+    "version #{IO.read(version_path)}"
+  end
+
 end
