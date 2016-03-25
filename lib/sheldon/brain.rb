@@ -18,9 +18,11 @@ class Brain
 
   def recall(recall_cue)
     entry = memory.recall(recall_cue)
-    destination = add_home(entry[:filepath])
+    destination_path = add_home(entry[:filepath])
+    destination_dir = File.dirname(destination_path)
+    FileUtils.mkdir_p(destination_dir) unless File.directory?(destination_dir)
     source_cell = get_cell(recall_cue)
-    FileUtils.ln_s(read_cell(source_cell), destination, force: true)
+    FileUtils.ln_s(read_cell(source_cell), destination_path, force: true)
   end
 
   def has_cue?(recall_cue)

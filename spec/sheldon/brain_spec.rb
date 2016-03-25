@@ -5,7 +5,8 @@ describe Brain do
   before(:each) do
     FileUtils.rm_r("spec/Users") if Dir.exists?("spec/Users")
     FileUtils.mkdir_p("spec/Users/test/sheldon")
-    FileUtils.touch("spec/Users/test/.gitconfig")
+    FileUtils.mkdir_p("spec/Users/test/dotfiles")
+    FileUtils.touch("spec/Users/test/dotfiles/.gitconfig")
   end
 
   after(:each) do
@@ -14,7 +15,7 @@ describe Brain do
 
   let(:memory) { Memory.new(abs("spec/Users/test/sheldon")) }
   let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory: memory) }
-  let(:abs_learn_path) { abs("spec/Users/test/.gitconfig") }
+  let(:abs_learn_path) { abs("spec/Users/test/dotfiles/.gitconfig") }
 
   describe "#learn" do
     it "should move the target file/folder into Sheldon's brain" do
@@ -31,10 +32,22 @@ describe Brain do
   end
 
   describe "#recall" do
-    it "should symlink from Sheldon's brain back to the original file-system location" do
-      brain.learn("my git config", abs_learn_path)
-      brain.recall("my git config")
-      expect(File).to be_symlink("spec/Users/test/.gitconfig")
+    context "for a destination directory that already exists" do
+      it "should symlink from Sheldon's brain back to the original file-system location" do
+        brain.learn("my git config", abs_learn_path)
+        brain.recall("my git config")
+        expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
+      end
+    end
+
+    context "for a destination directory that doesn't exist" do
+      it "should create the destination directory and then perform the symlink" do
+        brain.learn("my git config", abs_learn_path)
+        FileUtils.rm_r("spec/Users/test/dotfiles")
+        brain.recall("my git config")
+        expect(Dir).to exist("spec/Users/test/dotfiles")
+        expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
+      end
     end
   end
 
