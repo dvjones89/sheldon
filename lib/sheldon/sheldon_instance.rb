@@ -1,6 +1,6 @@
 require "fileutils"
 
-class Sheldon
+class SheldonInstance
   attr_reader :brain, :builder
 
   def initialize(sheldon_data_dir, opts = {})

@@ -2,7 +2,7 @@
 require "thor"
 require_relative "../lib/sheldon"
 
-class Launcher < Thor
+class Sheldon < Thor
   map link: :recall
   map ls: :list
 
@@ -60,7 +60,7 @@ class Launcher < Thor
   end
 
   def sheldon
-    @sheldon ||= Sheldon.new(sheldon_data_dir)
+    @sheldon ||= SheldonInstance.new(sheldon_data_dir)
   end
 
   def sheldon_data_dir
@@ -69,4 +69,4 @@ class Launcher < Thor
   end
 
 end
-Launcher.start(ARGV)
+Sheldon.start(ARGV)
