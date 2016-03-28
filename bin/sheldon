@@ -2,71 +2,74 @@
 require "thor"
 require_relative "../lib/sheldon"
 
-class Sheldon < Thor
-  map link: :recall
-  map ls: :list
+module CLI
+  class Sheldon < Thor
+    map link: :recall
+    map ls: :list
 
-  desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
-  def build(rel_path_to_target)
-    abs_learn_path = File.expand_path(rel_path_to_target)
-    sheldon.build(abs_learn_path)
-    announce("Built #{File.basename(rel_path_to_target)}")
-  end
-
-  desc "learn path", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
-  def learn(rel_path_to_target)
-    abs_learn_path = File.expand_path(rel_path_to_target)
-    recall_cue = prompt_user("Recall Cue For File/Folder")
-    sheldon.learn(recall_cue, abs_learn_path)
-  end
-
-  desc "recall recall_cue", "Symlink a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
-  option :i, type: :boolean, desc: "Interactive mode - prompts Y/N for each available recall_cue"
-
-  def recall(recall_cue=nil)
-    if options[:i]
-      sheldon.list_cues.each do |recall_cue|
-        answer = prompt_user("Recall #{recall_cue}? (Y/N)")
-        sheldon.recall(recall_cue) if answer.downcase == "y"
-      end
-    else
-      recall_cue ||= prompt_user("Recall Cue For File/Folder")
-      sheldon.recall(recall_cue)
+    desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
+    def build(rel_path_to_target)
+      abs_learn_path = File.expand_path(rel_path_to_target)
+      sheldon.build(abs_learn_path)
+      announce("Built #{File.basename(rel_path_to_target)}")
     end
 
-    announce("Recall Complete.")
+    desc "learn path", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
+    def learn(rel_path_to_target)
+      abs_learn_path = File.expand_path(rel_path_to_target)
+      recall_cue = prompt_user("Recall Cue For File/Folder")
+      sheldon.learn(recall_cue, abs_learn_path)
+    end
+
+    desc "recall recall_cue", "Symlink a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
+    option :i, type: :boolean, desc: "Interactive mode - prompts Y/N for each available recall_cue"
+
+    def recall(recall_cue=nil)
+      if options[:i]
+        sheldon.list_cues.each do |recall_cue|
+          answer = prompt_user("Recall #{recall_cue}? (Y/N)")
+          sheldon.recall(recall_cue) if answer.downcase == "y"
+        end
+      else
+        recall_cue ||= prompt_user("Recall Cue For File/Folder")
+        sheldon.recall(recall_cue)
+      end
+
+      announce("Recall Complete.")
+    end
+
+    desc "list", "List all recall cues known by Sheldon"
+    def list
+      puts sheldon.list_cues
+    end
+
+    desc "version", "Prints the current version of Sheldon"
+    def version
+      announce sheldon.version
+    end
+
+    private
+
+    def prompt_user(prompt)
+      print(prompt + ": ")
+      STDIN.gets.chomp
+    end
+
+    def announce(message)
+      logo = "💥".encode("utf-8")
+      puts logo + " Sheldon" + logo + "  #{message}"
+    end
+
+    def sheldon
+      @sheldon ||= ::Sheldon.new(sheldon_data_dir)
+    end
+
+    def sheldon_data_dir
+      path = ENV["SHELDON_DATA_DIR"] || "~/sheldon"
+      File.expand_path(path)
+    end
+
   end
-
-  desc "list", "List all recall cues known by Sheldon"
-  def list
-    puts sheldon.list_cues
-  end
-
-  desc "version", "Prints the current version of Sheldon"
-  def version
-    announce sheldon.version
-  end
-
-  private
-
-  def prompt_user(prompt)
-    print(prompt + ": ")
-    STDIN.gets.chomp
-  end
-
-  def announce(message)
-    logo = "💥".encode("utf-8")
-    puts logo + " Sheldon" + logo + "  #{message}"
-  end
-
-  def sheldon
-    @sheldon ||= SheldonInstance.new(sheldon_data_dir)
-  end
-
-  def sheldon_data_dir
-    path = ENV["SHELDON_DATA_DIR"] || "~/sheldon"
-    File.expand_path(path)
-  end
-
 end
-Sheldon.start(ARGV)
+
+CLI::Sheldon.start(ARGV)

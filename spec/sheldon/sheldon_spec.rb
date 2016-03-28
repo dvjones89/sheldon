@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe SheldonInstance do
+describe Sheldon do
 
   before(:each) do
     FileUtils.rm_r("spec/Users") if Dir.exists?("spec/Users")
@@ -14,7 +14,7 @@ describe SheldonInstance do
 
   let(:brain) { Brain.new("spec/Users/test/sheldon") }
   let(:builder) { Builder.new }
-  let(:sheldon) { SheldonInstance.new("spec/Users/test/sheldon", brain: brain, builder: builder) }
+  let(:sheldon) { Sheldon.new("spec/Users/test/sheldon", brain: brain, builder: builder) }
   let(:abs_home_path) { abs("spec/Users") }
   let(:abs_learn_path) { abs("spec/Users/test/.gitconfig") }
 
