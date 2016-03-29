@@ -2,3 +2,5 @@ vendor/
 coverage/
 .DS_Store
 .bundle
+*.gem
+Gemfile.lock

@@ -67,10 +67,4 @@ describe Sheldon do
     end
   end
 
-  describe "#version" do
-    it "should pretty-print the current version of Sheldon" do
-      expect(sheldon.version).to eq("version #{IO.read("VERSION")}")
-    end
-  end
-
 end

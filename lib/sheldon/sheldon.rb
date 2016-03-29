@@ -1,6 +1,7 @@
 require "fileutils"
 
 class Sheldon
+  VERSION = "0.2.4".freeze
   attr_reader :brain, :builder
 
   def initialize(sheldon_data_dir, opts = {})
@@ -29,11 +30,6 @@ class Sheldon
   def recall(recall_cue)
     raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
     brain.recall(recall_cue)
-  end
-
-  def version
-    version_path = File.join(File.dirname(__FILE__), '../../VERSION')
-    "version #{IO.read(version_path)}"
   end
 
 end
