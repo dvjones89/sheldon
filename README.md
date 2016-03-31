@@ -1,7 +1,14 @@
 # Sheldon
 [![Build Status](https://travis-ci.org/dvjones89/sheldon.svg?branch=master)](https://travis-ci.org/dvjones89/sheldon)
 
+
 Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
+
+### Installation:
+1) `gem install sheldon`
+
+2) Sync Sheldon's data directory (`~/sheldon` by default) across all of your machines.  
+You can override the default folder location by setting the`SHELDON_DATA_DIR` environment variable on each host.
 
 ### How It Works
 #### Add files/folders to Sheldon (sheldon learn)
@@ -61,15 +68,6 @@ config
 
 source ~/.ssh/config
 ```
-
-### Installation:
-1) `cd ~ && git clone https://github.com/dvjones89/sheldon.git .sheldon`
-
-2) `cd ~/.sheldon && gem build sheldon.gemspec`
-
-3) `gem install Sheldon-<version>.gem`
-
-4) Sync Sheldon's data directory (`~/sheldon` by default) across all of your machines. You can override the default folder location by setting the`SHELDON_DATA_DIR` environment variable on each host.
 
 ### Isn't This Just Homesick?
 Yes, yes it is. Unfortunately, I'd written 90% of Sheldon before I discovered the awesome [homesick](https://github.com/technicalpickles/homesick) so I decided to keep going.  
