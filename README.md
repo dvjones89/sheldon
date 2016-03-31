@@ -1,5 +1,6 @@
 # Sheldon
 [![Build Status](https://travis-ci.org/dvjones89/sheldon.svg?branch=master)](https://travis-ci.org/dvjones89/sheldon)
+[![Gem Version](https://badge.fury.io/rb/sheldon.svg)](https://badge.fury.io/rb/sheldon)
 
 
 Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
