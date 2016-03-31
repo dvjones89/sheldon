@@ -3,11 +3,11 @@ $:.push File.expand_path("../lib", __FILE__)
 Gem::Specification.new do |s|
   require 'sheldon/sheldon'
 
-  s.name        = 'Sheldon'
+  s.name        = 'sheldon'
   s.version     = ::Sheldon::VERSION
   s.date        = Date.today.to_s
   s.summary     = "Another config and dotfile manager for unix environments"
-  s.description = "Teach Sheldon about your most important files and he'll recall them on your different machines. Heck, he'll even build bespoke configs for you, if you like."
+  s.description = s.summary
   s.authors     = ["David Jones"]
   s.email       = 'david@dvj.me.uk'
   s.homepage    = 'https://github.com/dvjones89/sheldon'
