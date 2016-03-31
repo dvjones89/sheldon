@@ -4,3 +4,5 @@ coverage/
 .bundle
 *.gem
 Gemfile.lock
+.vagrant/
+Vagrantfile
