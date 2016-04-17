@@ -1,0 +1,2 @@
+class MissingDataDirectoryException < StandardError
+end
