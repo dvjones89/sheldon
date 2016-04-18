@@ -67,6 +67,7 @@ module CLI
         @sheldon ||= ::Sheldon.new(sheldon_data_dir)
       rescue MissingDataDirectoryException
         announce "The data directory (#{sheldon_data_dir}) doesn't exist. Please create the directory or set an alternative using the $SHELDON_DATA_DIR environment variable."
+        exit
       end
     end
 

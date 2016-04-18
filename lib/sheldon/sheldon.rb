@@ -5,7 +5,7 @@ class Sheldon
   attr_reader :brain, :builder
 
   def initialize(sheldon_data_dir, opts = {})
-    raise MissingDataDirectoryException
+    raise MissingDataDirectoryException unless Dir.exists?(sheldon_data_dir)
     @brain = opts[:brain] || Brain.new(sheldon_data_dir)
     @builder = opts[:builder] || Builder.new
   end
