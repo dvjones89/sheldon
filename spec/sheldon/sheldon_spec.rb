@@ -18,6 +18,20 @@ describe Sheldon do
   let(:abs_home_path) { abs("spec/Users") }
   let(:abs_learn_path) { abs("spec/Users/test/.gitconfig") }
 
+  describe "#initialize" do
+    context "passing a data directory that doesn't exist" do
+      it "should raise an exception" do
+        expect { Sheldon.new("incorrect_path") }.to raise_error(MissingDataDirectoryException)
+      end
+    end
+
+    context "passing a data directory" do
+      it "should create a new Sheldon instance" do
+        expect(Sheldon.new("spec/Users/test/sheldon")).to be_a Sheldon
+      end
+    end
+  end
+
 
   describe "#build" do
     it "should delegate to Builder#build" do

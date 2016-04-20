@@ -1,11 +1,11 @@
 require "fileutils"
 
 class Sheldon
-  VERSION = "0.2.6".freeze
+  VERSION = "0.2.7".freeze
   attr_reader :brain, :builder
 
   def initialize(sheldon_data_dir, opts = {})
-    raise "Directory #{sheldon_data_dir} does not exist" unless Dir.exists?(sheldon_data_dir)
+    raise MissingDataDirectoryException unless Dir.exists?(sheldon_data_dir)
     @brain = opts[:brain] || Brain.new(sheldon_data_dir)
     @builder = opts[:builder] || Builder.new
   end

@@ -6,6 +6,8 @@ module CLI
   class Sheldon < Thor
     map link: :recall
     map ls: :list
+    map "-v" => :version
+    map "--version" => :version
 
     desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
     def build(rel_path_to_target)
@@ -61,7 +63,12 @@ module CLI
     end
 
     def sheldon
-      @sheldon ||= ::Sheldon.new(sheldon_data_dir)
+      begin
+        @sheldon ||= ::Sheldon.new(sheldon_data_dir)
+      rescue MissingDataDirectoryException
+        announce "The data directory (#{sheldon_data_dir}) doesn't exist. Please create the directory or set an alternative using the $SHELDON_DATA_DIR environment variable."
+        exit
+      end
     end
 
     def sheldon_data_dir
