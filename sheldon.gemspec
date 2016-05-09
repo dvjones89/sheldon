@@ -20,5 +20,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'thor', '~> 0.9'
   s.add_development_dependency "rake", '~> 11.1'
   s.add_development_dependency 'rspec', '~> 3.3'
-  s.add_development_dependency 'simplecov', '~> 0.10'
+  s.add_development_dependency 'coveralls', '~> 0.8.13'
 end
