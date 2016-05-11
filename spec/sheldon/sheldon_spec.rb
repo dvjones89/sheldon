@@ -42,10 +42,9 @@ describe Sheldon do
 
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
-      it "should call the appropriate method(s) on Sheldon's brain" do
+      it "should delegate to brain#learn" do
         abs_learn_path = File.expand_path("spec/Users/test/.gitconfig")
         expect(brain).to receive(:learn).once.with("my git config", abs_learn_path)
-        expect(brain).to receive(:recall).once.with("my git config")
         sheldon.learn("my git config", abs_learn_path)
       end
     end
@@ -71,6 +70,13 @@ describe Sheldon do
       it "should raise an error" do
         expect{ sheldon.recall("lightbulb") }.to raise_error("Cue 'lightbulb' could not be found.")
       end
+    end
+  end
+
+  describe "#recalled?" do
+    it "should delegate to Brain#recalled?" do
+      expect(brain).to receive(:recalled?).once
+      sheldon.recalled?("my git config")
     end
   end
 

@@ -19,12 +19,15 @@ class Sheldon
       raise "This cue has already been used."
     else
       brain.learn(recall_cue, abs_learn_path)
-      brain.recall(recall_cue)
     end
   end
 
   def list_cues
     brain.list_cues
+  end
+
+  def recalled?(recall_cue)
+    brain.recalled?(recall_cue)
   end
 
   def recall(recall_cue)

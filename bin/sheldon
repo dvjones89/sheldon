@@ -21,6 +21,7 @@ module CLI
       abs_learn_path = File.expand_path(rel_path_to_target)
       recall_cue = prompt_user("Recall Cue For File/Folder")
       sheldon.learn(recall_cue, abs_learn_path)
+      sheldon.recall(recall_cue)
     end
 
     desc "recall recall_cue", "Symlink a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
@@ -52,14 +53,22 @@ module CLI
 
     private
 
+    def announce(message)
+      logo = "💥".encode("utf-8")
+      puts logo + " Sheldon" + logo + "  #{message}"
+    end
+
+    def green(message)
+      puts "\e[32m#{message}\e[0m"
+    end
+
     def prompt_user(prompt)
       print(prompt + ": ")
       STDIN.gets.chomp
     end
 
-    def announce(message)
-      logo = "💥".encode("utf-8")
-      puts logo + " Sheldon" + logo + "  #{message}"
+    def red(message)
+      puts "\e[31m#{message}\e[0m"
     end
 
     def sheldon

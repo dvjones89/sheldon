@@ -25,6 +25,13 @@ class Brain
     FileUtils.ln_s(read_cell(source_cell), destination_path, force: true)
   end
 
+  def recalled?(recall_cue)
+    entry = memory.recall(recall_cue)
+    destination_path = add_home(entry[:filepath])
+    destination_dir = File.dirname(destination_path)
+    File.symlink?(destination_dir)
+  end
+
   def has_cue?(recall_cue)
     memory.has_cue?(recall_cue)
   end

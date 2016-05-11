@@ -51,6 +51,23 @@ describe Brain do
     end
   end
 
+  describe "#recalled?" do
+    context "for a file that has been recalled" do
+      it "should return true" do
+        brain.learn("my git config", abs_learn_path)
+        brain.recall("my git config")
+        expect(brain.recalled?("my git config")).to be true
+      end
+    end
+
+    context "for a file that has not been recalled" do
+      it "should return false" do
+        brain.learn("my git config", abs_learn_path)
+        expect(brain.recalled?("my git config")).to be false
+      end
+    end
+  end
+
   describe "#has_cue?" do
     it "should delegate to memory#has_cue?" do
       expect(memory).to receive(:has_cue?).once.with("lightbulb")
