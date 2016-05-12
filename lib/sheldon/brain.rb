@@ -29,7 +29,7 @@ class Brain
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])
     destination_dir = File.dirname(destination_path)
-    File.symlink?(destination_dir)
+    File.symlink?(destination_path)
   end
 
   def has_cue?(recall_cue)
