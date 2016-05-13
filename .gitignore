@@ -8,3 +8,4 @@ Gemfile.lock
 Vagrantfile
 .tags
 .byebug_history
+.coverall.yml
