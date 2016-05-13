@@ -43,7 +43,9 @@ module CLI
 
     desc "list", "List all recall cues known by Sheldon"
     def list
-      puts sheldon.list_cues
+      sheldon.list_cues.each do |recall_cue|
+        sheldon.recalled?(recall_cue) ? green(recall_cue) : red(recall_cue)
+      end
     end
 
     desc "version", "Prints the current version of Sheldon"

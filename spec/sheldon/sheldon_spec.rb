@@ -74,9 +74,18 @@ describe Sheldon do
   end
 
   describe "#recalled?" do
-    it "should delegate to Brain#recalled?" do
-      expect(brain).to receive(:recalled?).once
-      sheldon.recalled?("my git config")
+    context "for a cue that does not exist in Sheldon's memory" do
+      it "should raise an error" do
+        expect{ sheldon.recalled?("lightbulb") }.to raise_error("Cue 'lightbulb' could not be found.")
+      end
+    end
+
+    context "for a cue tht does exist in Sheldon's memory" do
+      it "should delegate to Brain#recalled?" do
+        sheldon.learn("my git config", abs_learn_path)
+        expect(brain).to receive(:recalled?).once
+        sheldon.recalled?("my git config")
+      end
     end
   end
 

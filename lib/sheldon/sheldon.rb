@@ -27,6 +27,7 @@ class Sheldon
   end
 
   def recalled?(recall_cue)
+    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
     brain.recalled?(recall_cue)
   end
 
