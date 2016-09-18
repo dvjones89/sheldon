@@ -1,4 +1,5 @@
 require "spec_helper"
+require "byebug"
 
 describe Brain do
 
@@ -63,6 +64,17 @@ describe Brain do
     context "for a file that has not been recalled" do
       it "should return false" do
         brain.learn("my git config", abs_learn_path)
+        expect(brain.recalled?("my git config")).to be false
+      end
+    end
+
+    context "for a broken symlink" do
+      it "should return false" do
+        brain.learn("my git config", abs_learn_path)
+        brain.recall("my git config")
+        FileUtils.rm("spec/Users/test/sheldon/my git config/.gitconfig")
+        expect(File.symlink?("spec/Users/test/.gitconfig")).to be true
+        expect(File.exists?("spec/Users/test/sheldon/my git config/.gitconfig")).to be false
         expect(brain.recalled?("my git config")).to be false
       end
     end

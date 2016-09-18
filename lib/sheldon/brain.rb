@@ -29,7 +29,8 @@ class Brain
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])
     destination_dir = File.dirname(destination_path)
-    File.symlink?(destination_path)
+    # Check for presence of symlink and that the symlink isn't broken
+    File.symlink?(destination_path) && File.exists?(File.readlink(destination_path))
   end
 
   def has_cue?(recall_cue)
