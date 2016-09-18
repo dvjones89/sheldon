@@ -73,7 +73,7 @@ describe Brain do
         brain.learn("my git config", abs_learn_path)
         brain.recall("my git config")
         FileUtils.rm("spec/Users/test/sheldon/my git config/.gitconfig")
-        expect(File.symlink?("spec/Users/test/.gitconfig")).to be true
+        expect(File.symlink?(abs_learn_path)).to be true
         expect(File.exists?("spec/Users/test/sheldon/my git config/.gitconfig")).to be false
         expect(brain.recalled?("my git config")).to be false
       end
