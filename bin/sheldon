@@ -41,6 +41,13 @@ module CLI
       announce("Recall Complete.")
     end
 
+    desc "forget recall_cue", "Remove file/folder from Sheldon's brain"
+    def forget(recall_cue=nil)
+      recall_cue ||= prompt_user("Recall Cue For File/Folder")
+      sheldon.forget(recall_cue)
+      announce("I've forgotten about #{recall_cue}. Let us never mention it again.")
+    end
+
     desc "list", "List all recall cues known by Sheldon"
     def list
       sheldon.list_cues.each do |recall_cue|

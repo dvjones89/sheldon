@@ -2,6 +2,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   require 'sheldon/sheldon'
+  require 'date'
 
   s.name        = 'sheldon'
   s.version     = ::Sheldon::VERSION

@@ -22,6 +22,16 @@ class Sheldon
     end
   end
 
+  def recall(recall_cue)
+    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
+    brain.recall(recall_cue)
+  end
+
+  def forget(recall_cue)
+    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
+    brain.forget(recall_cue)
+  end
+
   def list_cues
     brain.list_cues
   end
@@ -29,11 +39,6 @@ class Sheldon
   def recalled?(recall_cue)
     raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
     brain.recalled?(recall_cue)
-  end
-
-  def recall(recall_cue)
-    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
-    brain.recall(recall_cue)
   end
 
 end

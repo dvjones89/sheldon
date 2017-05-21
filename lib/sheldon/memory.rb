@@ -19,6 +19,11 @@ class Memory
     @database.transaction { @database[recall_cue] }
   end
 
+  def forget(recall_cue)
+    raise "no entry for cue" unless has_cue?(recall_cue)
+    @database.transaction{ @database.delete(recall_cue) }
+  end
+
   def size
     list_cues.size
   end

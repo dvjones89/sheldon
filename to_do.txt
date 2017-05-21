@@ -1,0 +1,1 @@
+* Catch passing an non-existant path to Sheldon#learn

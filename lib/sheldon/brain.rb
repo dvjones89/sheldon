@@ -9,9 +9,9 @@ class Brain
 
 
   def learn(recall_cue, abs_learn_path)
-    cell = get_cell(recall_cue)
-    FileUtils.mkdir_p(cell)
-    FileUtils.mv(abs_learn_path, cell)
+    brain_path = brain_path_for_cue(recall_cue)
+    FileUtils.mkdir_p(brain_path)
+    FileUtils.mv(abs_learn_path, brain_path)
     entry = { filepath: remove_home(abs_learn_path) }
     memory.add(recall_cue, entry)
   end
@@ -21,8 +21,18 @@ class Brain
     destination_path = add_home(entry[:filepath])
     destination_dir = File.dirname(destination_path)
     FileUtils.mkdir_p(destination_dir) unless File.directory?(destination_dir)
-    source_cell = get_cell(recall_cue)
-    FileUtils.ln_s(read_cell(source_cell), destination_path, force: true)
+    brain_path = brain_path_for_cue(recall_cue)
+    FileUtils.ln_s(get_content(brain_path), destination_path, force: true)
+  end
+
+  def forget(recall_cue)
+    entry = memory.recall(recall_cue)
+    brain_path = brain_path_for_cue(recall_cue)
+    destination_path = add_home(entry[:filepath])
+    FileUtils.rm_r(brain_path)
+    FileUtils.rm_r(destination_path)
+
+    memory.forget(recall_cue)
   end
 
   def recalled?(recall_cue)
@@ -47,13 +57,13 @@ class Brain
 
   private
 
-  def get_cell(recall_cue)
+  def brain_path_for_cue(recall_cue)
     File.join(@brain_location, recall_cue)
   end
 
-  def read_cell(cell)
-    basename = (Dir.entries(cell) - [".", "..", ".DS_Store"]).first
-    File.join(cell, basename)
+  def get_content(path)
+    basename = (Dir.entries(path) - [".", "..", ".DS_Store"]).first
+    File.join(path, basename)
   end
 
 end

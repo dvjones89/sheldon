@@ -39,6 +39,24 @@ describe Memory do
     end
   end
 
+  describe "#forget" do
+    context "when a cue does not exist in memory" do
+      it "should raise an error" do
+        expect{ memory.recall("lightbulb") }.to raise_error("no entry for cue")
+      end
+    end
+
+    context "when a cue does exist in memory" do
+      before(:each) { memory.add("lightbulb", "moment") }
+
+      it "should remove the entry from the database" do
+        expect(memory.has_cue?("lightbulb")). to be true
+        memory.forget("lightbulb")
+        expect(memory.has_cue?("lightbulb")). to be false
+      end
+    end
+  end
+
 
   describe "#has_cue" do
     context "when a cue is not saved in memory" do

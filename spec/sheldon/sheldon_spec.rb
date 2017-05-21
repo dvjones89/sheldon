@@ -42,7 +42,7 @@ describe Sheldon do
 
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
-      it "should delegate to brain#learn" do
+      it "should delegate to the appropriate methods on Sheldon's brain" do
         abs_learn_path = File.expand_path("spec/Users/test/.gitconfig")
         expect(brain).to receive(:learn).once.with("my git config", abs_learn_path)
         sheldon.learn("my git config", abs_learn_path)
@@ -59,7 +59,7 @@ describe Sheldon do
 
   describe "#recall" do
     context "for a cue that exists in Sheldon's memory" do
-      it "should call the appropriate method(s) on Sheldon's brain" do
+      it "should delegate to the appropriate methods on Sheldon's brain" do
         sheldon.learn("my git config", abs_learn_path)
         expect(brain).to receive(:recall).once.with("my git config")
         sheldon.recall("my git config")
@@ -73,6 +73,24 @@ describe Sheldon do
     end
   end
 
+  describe "#forget" do
+    context "for a cue that does not exist in Sheldon's memory" do
+      it "should raise an error" do
+        expect{ sheldon.forget("lightbulb") }.to raise_error("Cue 'lightbulb' could not be found.")
+      end
+    end
+
+    context "for a cue that exists in Sheldon's memory" do
+      before(:each) { sheldon.learn("my git config", abs_learn_path) }
+
+      it "should delegate to the appropriate methods on Sheldon's brain" do
+        expect(brain).to receive(:forget).once.with("my git config")
+        sheldon.forget("my git config")
+      end
+    end
+
+  end
+
   describe "#recalled?" do
     context "for a cue that does not exist in Sheldon's memory" do
       it "should raise an error" do
@@ -80,8 +98,8 @@ describe Sheldon do
       end
     end
 
-    context "for a cue tht does exist in Sheldon's memory" do
-      it "should delegate to Brain#recalled?" do
+    context "for a cue that does exist in Sheldon's memory" do
+      it "should delegate to the appropriate methods on Sheldon's brain" do
         sheldon.learn("my git config", abs_learn_path)
         expect(brain).to receive(:recalled?).once
         sheldon.recalled?("my git config")

@@ -17,12 +17,12 @@ describe Brain do
   let(:memory) { Memory.new(abs("spec/Users/test/sheldon")) }
   let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory: memory) }
   let(:abs_learn_path) { abs("spec/Users/test/dotfiles/.gitconfig") }
+  let(:abs_brain_path) { abs("spec/Users/test/sheldon/my git config/.gitconfig") }
 
   describe "#learn" do
     it "should move the target file/folder into Sheldon's brain" do
-      cell_path = "spec/Users/test/sheldon/my git config/.gitconfig"
       brain.learn("my git config", abs_learn_path)
-      expect(File).to exist(cell_path)
+      expect(File).to exist(abs_brain_path)
     end
 
     it "should add a new entry to memory" do
@@ -49,6 +49,31 @@ describe Brain do
         expect(Dir).to exist("spec/Users/test/dotfiles")
         expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
       end
+    end
+  end
+
+  describe "#forget" do
+    before(:each) do
+      brain.learn("my git config", abs_learn_path)
+      brain.recall("my git config")
+    end
+
+    it "should delete the entry from Sheldon's memory" do
+      expect(memory.has_cue?("my git config")).to be true
+      brain.forget("my git config")
+      expect(memory.has_cue?("my git config")).to be false
+    end
+
+    it "should delete the memorised file/folder from Sheldon's brain" do
+      expect(File).to exist(abs_brain_path)
+      brain.forget("my git config")
+      expect(File).not_to exist(abs_brain_path)
+    end
+
+    it "should purge any broken symlinks from the user's filesystem" do
+      expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
+      brain.forget("my git config")
+      expect(File).not_to be_symlink("spec/Users/test/dotfiles/.gitconfig")
     end
   end
 
@@ -81,21 +106,21 @@ describe Brain do
   end
 
   describe "#has_cue?" do
-    it "should delegate to memory#has_cue?" do
+    it "should delegate to appropriate method on Sheldon's memory" do
       expect(memory).to receive(:has_cue?).once.with("lightbulb")
       brain.has_cue?("lightbulb")
     end
   end
 
   describe "#size" do
-    it "should delegate to memory#size" do
+    it "should delegate to appropriate method on Sheldon's memory" do
       expect(memory).to receive(:size).once
       brain.size
     end
   end
 
   describe "#list_cues" do
-    it "should delegate to memory#list_cues" do
+    it "should delegate to appropriate method on Sheldon's memory" do
       expect(memory).to receive(:list_cues).once
       brain.list_cues
     end
