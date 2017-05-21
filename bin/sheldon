@@ -12,7 +12,7 @@ module CLI
     desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
     def build(rel_path_to_target)
       abs_learn_path = File.expand_path(rel_path_to_target)
-      sheldon.build(abs_learn_path)
+      with_exception_handling{ sheldon.build(abs_learn_path) }
       announce("Built #{File.basename(rel_path_to_target)}")
     end
 
@@ -20,8 +20,8 @@ module CLI
     def learn(rel_path_to_target)
       abs_learn_path = File.expand_path(rel_path_to_target)
       recall_cue = prompt_user("Recall Cue For File/Folder")
-      sheldon.learn(recall_cue, abs_learn_path)
-      sheldon.recall(recall_cue)
+      with_exception_handling { sheldon.learn(recall_cue, abs_learn_path) }
+      with_exception_handling { sheldon.recall(recall_cue) }
     end
 
     desc "recall recall_cue", "Symlink a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
@@ -31,11 +31,11 @@ module CLI
       if options[:i]
         sheldon.list_cues.each do |recall_cue|
           answer = prompt_user("Recall #{recall_cue}? (Y/N)")
-          sheldon.recall(recall_cue) if answer.downcase == "y"
+          with_exception_handling { sheldon.recall(recall_cue) if answer.downcase == "y" }
         end
       else
         recall_cue ||= prompt_user("Recall Cue For File/Folder")
-        sheldon.recall(recall_cue)
+        with_exception_handling { sheldon.recall(recall_cue) }
       end
 
       announce("Recall Complete.")
@@ -44,7 +44,7 @@ module CLI
     desc "forget recall_cue", "Remove file/folder from Sheldon's brain"
     def forget(recall_cue=nil)
       recall_cue ||= prompt_user("Recall Cue For File/Folder")
-      sheldon.forget(recall_cue)
+      with_exception_handling { sheldon.forget(recall_cue) }
       announce("I've forgotten about #{recall_cue}. Let us never mention it again.")
     end
 
@@ -62,36 +62,38 @@ module CLI
 
     private
 
-    def announce(message)
-      logo = "💥".encode("utf-8")
-      puts logo + " Sheldon" + logo + "  #{message}"
+    def prompt_user(prompt)
+      print(prompt + ": ")
+      STDIN.gets.chomp
     end
 
     def green(message)
       puts "\e[32m#{message}\e[0m"
     end
 
-    def prompt_user(prompt)
-      print(prompt + ": ")
-      STDIN.gets.chomp
-    end
-
     def red(message)
       puts "\e[31m#{message}\e[0m"
     end
 
+    def announce(message)
+      logo = "💥".encode("utf-8")
+      puts logo + " Sheldon" + logo + "  #{message}"
+    end
+
     def sheldon
-      begin
-        @sheldon ||= ::Sheldon.new(sheldon_data_dir)
-      rescue MissingDataDirectoryException
-        announce "The data directory (#{sheldon_data_dir}) doesn't exist. Please create the directory or set an alternative using the $SHELDON_DATA_DIR environment variable."
-        exit
-      end
+      with_exception_handling { @sheldon ||= ::Sheldon.new(sheldon_data_dir) }
     end
 
     def sheldon_data_dir
       path = ENV["SHELDON_DATA_DIR"] || "~/sheldon"
       File.expand_path(path)
+    end
+
+    def with_exception_handling(&block)
+      yield
+    rescue Exception => e
+      announce(e.message)
+      exit(1)
     end
 
   end
