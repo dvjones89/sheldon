@@ -10,15 +10,15 @@ describe Memory do
     context "when a cue has not previously been used" do
       it "should persist the new entry" do
         expect(memory.size).to eq 0
-        memory.add("lightbulb", "moment")
+        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
         expect(memory.size).to eq 1
       end
     end
 
     context "when a cue has been previously used" do
       it "should raise an error" do
-        memory.add("lightbulb", "moment")
-        expect{ memory.add("lightbulb", "moment") }.to raise_error("cue already used")
+        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
+        expect{ memory.add("lightbulb", {filepath: "/path/to/lightbulb"}) }.to raise_error("cue already used")
       end
     end
   end
@@ -33,8 +33,8 @@ describe Memory do
 
     context "when a cue does exist in memory" do
       it "should return the value associated with that cue" do
-        memory.add("lightbulb", "moment")
-        expect(memory.recall("lightbulb")).to eq "moment"
+        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
+        expect(memory.recall("lightbulb")).to eq ({filepath: "/path/to/lightbulb"})
       end
     end
   end
@@ -47,7 +47,7 @@ describe Memory do
     end
 
     context "when a cue does exist in memory" do
-      before(:each) { memory.add("lightbulb", "moment") }
+      before(:each) { memory.add("lightbulb", {filepath: "/path/to/lightbulb"}) }
 
       it "should remove the entry from the database" do
         expect(memory.has_cue?("lightbulb")). to be true
@@ -67,7 +67,7 @@ describe Memory do
 
     context "when a cue is saved in memory" do
       it "should return true" do
-        memory.add("lightbulb", "moment")
+        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
         expect(memory.has_cue?("lightbulb")).to be true
       end
     end
@@ -76,7 +76,7 @@ describe Memory do
 
   describe "#size" do
     it "should increase by 1 with each new entry" do
-      expect{ memory.add("lightbulb", "moment") }.to change{ memory.size }.by(1)
+      expect{ memory.add("lightbulb", {filepath: "/path/to/lightbulb"}) }.to change{ memory.size }.by(1)
     end
   end
 
@@ -89,9 +89,9 @@ describe Memory do
 
     context "when memory contains multiple cues" do
       it "should return the cues" do
-        memory.add("lightbulb", "moment")
-        memory.add("rolo", "bounty")
-        expect(memory.list_cues).to eq %w(lightbulb rolo)
+        memory.add("rolo", {filepath: "/path/to/rolo"})
+        memory.add("bounty", {filepath: "/path/to/bounty"})
+        expect(memory.list_cues).to eq %w(rolo bounty)
       end
     end
   end
