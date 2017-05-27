@@ -55,6 +55,12 @@ describe Sheldon do
         expect{ sheldon.learn("my git config", abs_learn_path) }.to raise_error("This cue has already been used.")
       end
     end
+
+    context "for an empty cue" do
+      it "should raise an error" do
+        expect{ sheldon.learn(" ", abs_learn_path) }. to raise_error("recall cue cannot be empty.")
+      end
+    end
   end
 
   describe "#recall" do
