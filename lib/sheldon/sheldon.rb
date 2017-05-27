@@ -1,7 +1,7 @@
 require "fileutils"
 
 class Sheldon
-  VERSION = "0.3.1".freeze
+  VERSION = "0.4.0".freeze
   attr_reader :brain, :builder
 
   def initialize(sheldon_data_dir, opts = {})
