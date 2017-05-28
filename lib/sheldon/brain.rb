@@ -9,6 +9,8 @@ class Brain
 
 
   def learn(recall_cue, abs_learn_path)
+    raise "Unable to find a file or folder at #{abs_learn_path}" unless File.exists?(abs_learn_path)
+
     brain_path = brain_path_for_cue(recall_cue)
     FileUtils.mkdir_p(brain_path)
     FileUtils.mv(abs_learn_path, brain_path)

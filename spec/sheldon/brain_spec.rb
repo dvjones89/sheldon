@@ -20,15 +20,23 @@ describe Brain do
   let(:abs_brain_path) { abs("spec/Users/test/sheldon/my git config/.gitconfig") }
 
   describe "#learn" do
-    it "should move the target file/folder into Sheldon's brain" do
-      brain.learn("my git config", abs_learn_path)
-      expect(File).to exist(abs_brain_path)
+    context "for a file /folder that does not exist on the filesystem" do
+      it "should raise an error" do
+        expect{brain.learn("my git config", "bad/file/path")}.to raise_error("Unable to find a file or folder at bad/file/path")
+      end
     end
 
-    it "should add a new entry to memory" do
-      expect(brain.size).to eq 0
-      brain.learn("my git config", abs_learn_path)
-      expect(brain.size).to eq 1
+    context "for a file/folder that exists on the filesystem" do
+      it "should move the target file/folder into Sheldon's brain" do
+        brain.learn("my git config", abs_learn_path)
+        expect(File).to exist(abs_brain_path)
+      end
+
+      it "should add a new entry to memory" do
+        expect(brain.size).to eq 0
+        brain.learn("my git config", abs_learn_path)
+        expect(brain.size).to eq 1
+      end
     end
   end
 
