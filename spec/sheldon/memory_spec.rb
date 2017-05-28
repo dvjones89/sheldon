@@ -27,7 +27,7 @@ describe Memory do
   describe "#recall" do
     context "when a cue does not exist in memory" do
       it "should raise an error" do
-        expect{ memory.recall("lightbulb") }.to raise_error("no entry for cue")
+        expect{ memory.recall("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
       end
     end
 
@@ -42,7 +42,7 @@ describe Memory do
   describe "#forget" do
     context "when a cue does not exist in memory" do
       it "should raise an error" do
-        expect{ memory.recall("lightbulb") }.to raise_error("no entry for cue")
+        expect{ memory.recall("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
       end
     end
 

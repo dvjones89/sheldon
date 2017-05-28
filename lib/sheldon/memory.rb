@@ -15,7 +15,7 @@ class Memory
   end
 
   def recall(recall_cue)
-    raise "no entry for cue" unless has_cue?(recall_cue)
+    raise "no entry for cue '#{recall_cue}'" unless has_cue?(recall_cue)
     @database.transaction { @database[recall_cue] }
   end
 

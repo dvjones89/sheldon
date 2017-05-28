@@ -43,7 +43,6 @@ describe Sheldon do
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
       it "should delegate to the appropriate methods on Sheldon's brain" do
-        abs_learn_path = File.expand_path("spec/Users/test/.gitconfig")
         expect(brain).to receive(:learn).once.with("my git config", abs_learn_path)
         sheldon.learn("my git config", abs_learn_path)
       end
@@ -74,7 +73,7 @@ describe Sheldon do
 
     context "for a cue that does not exist in Sheldon's memory" do
       it "should raise an error" do
-        expect{ sheldon.recall("lightbulb") }.to raise_error("Cue 'lightbulb' could not be found.")
+        expect{ sheldon.recall("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
       end
     end
   end
@@ -82,7 +81,7 @@ describe Sheldon do
   describe "#forget" do
     context "for a cue that does not exist in Sheldon's memory" do
       it "should raise an error" do
-        expect{ sheldon.forget("lightbulb") }.to raise_error("Cue 'lightbulb' could not be found.")
+        expect{ sheldon.forget("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
       end
     end
 
@@ -100,7 +99,7 @@ describe Sheldon do
   describe "#recalled?" do
     context "for a cue that does not exist in Sheldon's memory" do
       it "should raise an error" do
-        expect{ sheldon.recalled?("lightbulb") }.to raise_error("Cue 'lightbulb' could not be found.")
+        expect{ sheldon.recalled?("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
       end
     end
 

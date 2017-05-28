@@ -18,21 +18,14 @@ class Sheldon
   end
 
   def learn(recall_cue, abs_learn_path)
-    raise "recall cue cannot be empty." if recall_cue.strip.empty?
-    if brain.has_cue?(recall_cue)
-      raise "This cue has already been used."
-    else
-      brain.learn(recall_cue, abs_learn_path)
-    end
+    brain.learn(recall_cue, abs_learn_path)
   end
 
   def recall(recall_cue)
-    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
     brain.recall(recall_cue)
   end
 
   def forget(recall_cue)
-    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
     brain.forget(recall_cue)
   end
 
@@ -41,7 +34,6 @@ class Sheldon
   end
 
   def recalled?(recall_cue)
-    raise "Cue '#{recall_cue}' could not be found." unless brain.has_cue?(recall_cue)
     brain.recalled?(recall_cue)
   end
 
