@@ -10,10 +10,6 @@ describe Brain do
     FileUtils.touch("spec/Users/test/dotfiles/.gitconfig")
   end
 
-  after(:each) do
-    FileUtils.rm_r("spec/Users")
-  end
-
   let(:memory) { Memory.new(abs("spec/Users/test/sheldon")) }
   let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory: memory) }
   let(:abs_learn_path) { abs("spec/Users/test/dotfiles/.gitconfig") }
@@ -61,10 +57,7 @@ describe Brain do
   end
 
   describe "#forget" do
-    before(:each) do
-      brain.learn("my git config", abs_learn_path)
-      brain.recall("my git config")
-    end
+    before(:each){ brain.learn("my git config", abs_learn_path) }
 
     it "should delete the entry from Sheldon's memory" do
       expect(memory.has_cue?("my git config")).to be true
@@ -72,25 +65,33 @@ describe Brain do
       expect(memory.has_cue?("my git config")).to be false
     end
 
-    it "should delete the memorised file/folder from Sheldon's brain" do
-      expect(File).to exist(abs_brain_path)
-      brain.forget("my git config")
-      expect(File).not_to exist(abs_brain_path)
+    context "for a cue that's recalled on the local host" do
+      before(:each) { brain.recall("my git config") }
+
+      it "should delete the memorised file/folder from Sheldon's brain AND the local filesystem" do
+        expect(File).to exist(abs_brain_path)
+        expect(File).to exist(abs_learn_path)
+        brain.forget("my git config")
+        expect(File).not_to exist(abs_brain_path)
+        expect(File).not_to exist(abs_learn_path)
+      end
     end
 
-    it "should purge any broken symlinks from the user's filesystem" do
-      expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
-      brain.forget("my git config")
-      expect(File).not_to be_symlink("spec/Users/test/dotfiles/.gitconfig")
+    context "for a cue that is NOT recalled on the local host" do
+      it "should delete the file/folder only from Sheldon's brain" do
+        expect(File).to exist(abs_brain_path)
+        brain.forget("my git config")
+        expect(File).not_to exist(abs_brain_path)
+      end
     end
   end
+
 
   describe "#recalled?" do
     context "for a file that has been recalled" do
       it "should return true" do
         brain.learn("my git config", abs_learn_path)
         brain.recall("my git config")
-        expect(brain.recalled?("my git config")).to be true
       end
     end
 
@@ -133,5 +134,4 @@ describe Brain do
       brain.list_cues
     end
   end
-
 end

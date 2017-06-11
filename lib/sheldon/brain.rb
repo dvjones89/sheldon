@@ -33,8 +33,8 @@ class Brain
     entry = memory.recall(recall_cue)
     brain_path = brain_path_for_cue(recall_cue)
     destination_path = add_home(entry[:filepath])
+    FileUtils.rm_r(destination_path) if recalled?(recall_cue)
     FileUtils.rm_r(brain_path)
-    FileUtils.rm_r(destination_path)
 
     memory.forget(recall_cue)
   end
