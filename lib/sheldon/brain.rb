@@ -2,9 +2,9 @@ class Brain
 
   attr_reader :memory
 
-  def initialize(sheldon_data_dir, opts = {})
+  def initialize(sheldon_data_dir)
     @brain_location = sheldon_data_dir
-    @memory = opts[:memory] || Memory.new(@brain_location)
+    @memory = Memory.new(@brain_location)
   end
 
 
@@ -27,6 +27,7 @@ class Brain
     FileUtils.mkdir_p(destination_dir) unless File.directory?(destination_dir)
     brain_path = brain_path_for_cue(recall_cue)
     FileUtils.ln_s(get_content(brain_path), destination_path, force: true)
+    return true
   end
 
   def forget(recall_cue)

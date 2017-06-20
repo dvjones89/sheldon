@@ -12,6 +12,7 @@ class Memory
     @database.transaction do
       @database[recall_cue] = hash
     end
+    return true
   end
 
   def recall(recall_cue)
@@ -22,6 +23,7 @@ class Memory
   def forget(recall_cue)
     raise "no entry for cue" unless has_cue?(recall_cue)
     @database.transaction{ @database.delete(recall_cue) }
+    return true
   end
 
   def size

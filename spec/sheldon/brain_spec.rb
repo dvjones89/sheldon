@@ -1,5 +1,4 @@
 require "spec_helper"
-require "byebug"
 
 describe Brain do
 
@@ -10,8 +9,7 @@ describe Brain do
     FileUtils.touch("spec/Users/test/dotfiles/.gitconfig")
   end
 
-  let(:memory) { Memory.new(abs("spec/Users/test/sheldon")) }
-  let(:brain) { Brain.new(abs("spec/Users/test/sheldon"), memory: memory) }
+  let(:brain) { Brain.new(abs("spec/Users/test/sheldon")) }
   let(:abs_learn_path) { abs("spec/Users/test/dotfiles/.gitconfig") }
   let(:abs_brain_path) { abs("spec/Users/test/sheldon/my git config/.gitconfig") }
 
@@ -19,6 +17,19 @@ describe Brain do
     context "for a file /folder that does not exist on the filesystem" do
       it "should raise an error" do
         expect{brain.learn("my git config", "bad/file/path")}.to raise_error("Unable to find a file or folder at bad/file/path")
+      end
+    end
+
+    context "for an empty cue" do
+      it "should raise an error" do
+        expect{ brain.learn(" ", abs_learn_path) }. to raise_error("recall cue cannot be empty.")
+      end
+    end
+
+    context "for a cue that already exists in Sheldon's memory" do
+      it "should raise an error" do
+        brain.learn("my git config", abs_learn_path)
+        expect{ brain.learn("my git config", abs_learn_path) }.to raise_error("This cue has already been used.")
       end
     end
 
@@ -60,9 +71,9 @@ describe Brain do
     before(:each){ brain.learn("my git config", abs_learn_path) }
 
     it "should delete the entry from Sheldon's memory" do
-      expect(memory.has_cue?("my git config")).to be true
+      expect(brain.has_cue?("my git config")).to be true
       brain.forget("my git config")
-      expect(memory.has_cue?("my git config")).to be false
+      expect(brain.has_cue?("my git config")).to be false
     end
 
     context "for a cue that's recalled on the local host" do
@@ -88,6 +99,7 @@ describe Brain do
 
 
   describe "#recalled?" do
+
     context "for a file that has been recalled" do
       it "should return true" do
         brain.learn("my git config", abs_learn_path)
@@ -112,26 +124,41 @@ describe Brain do
         expect(brain.recalled?("my git config")).to be false
       end
     end
+
+    context "for a cue that does not exist in Sheldon's memory" do
+      it "should raise an error" do
+        expect{ brain.recalled?("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
+      end
+    end
   end
 
+  # Smoke-test
   describe "#has_cue?" do
-    it "should delegate to appropriate method on Sheldon's memory" do
-      expect(memory).to receive(:has_cue?).once.with("lightbulb")
-      brain.has_cue?("lightbulb")
+    context "for a cue that has previously been learnt" do
+      it "should return true" do
+        brain.learn("my git config", abs_learn_path)
+        expect(brain.has_cue?("my git config")).to be true
+      end
     end
   end
 
+# Smoke-test
   describe "#size" do
-    it "should delegate to appropriate method on Sheldon's memory" do
-      expect(memory).to receive(:size).once
-      brain.size
+    context "for a brain that has learnt a single cue" do
+      it "should return 1" do
+        brain.learn("my git config", abs_learn_path)
+        expect(brain.size).to eq 1
+      end
     end
   end
 
+# Smoke-test
   describe "#list_cues" do
-    it "should delegate to appropriate method on Sheldon's memory" do
-      expect(memory).to receive(:list_cues).once
-      brain.list_cues
+    context "for a brain that has learnt a single cue" do
+      it "should return the single cue" do
+        brain.learn("my git config", abs_learn_path)
+        expect(brain.list_cues).to eq ["my git config"]
+      end
     end
   end
 end

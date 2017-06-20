@@ -91,7 +91,7 @@ describe Memory do
       it "should return the cues" do
         memory.add("rolo", {filepath: "/path/to/rolo"})
         memory.add("bounty", {filepath: "/path/to/bounty"})
-        expect(memory.list_cues).to eq %w(rolo bounty)
+        expect(memory.list_cues).to eq ['rolo','bounty']
       end
     end
   end

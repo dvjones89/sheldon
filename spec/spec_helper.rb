@@ -1,3 +1,4 @@
+require "byebug"
 require 'coveralls'
 require "rspec"
 require "simplecov"

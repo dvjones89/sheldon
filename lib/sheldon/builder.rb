@@ -7,9 +7,12 @@ class Builder
       is_config?(entry) ? add_entry_to_buffer(entry, buffer) : buffer
     end
 
-    unless master_content.empty?
+    if master_content.empty?
+      return false
+    else
       master_path = File.join(abs_build_path, "config")
       File.open(master_path, "w") { |f| f.write(master_content) }
+      return true
     end
   end
 
