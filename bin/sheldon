@@ -16,6 +16,13 @@ module CLI
       announce("Built #{File.basename(rel_path_to_target)}")
     end
 
+    desc "forget recall_cue", "Remove file/folder from Sheldon's brain"
+    def forget(recall_cue=nil)
+      recall_cue ||= prompt_user("Recall Cue For File/Folder")
+      with_exception_handling { sheldon.forget(recall_cue) }
+      announce("I've forgotten about #{recall_cue}. Let us never mention it again.")
+    end
+
     desc "learn path", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
     def learn(rel_path_to_target)
       abs_learn_path = File.expand_path(rel_path_to_target)
@@ -23,6 +30,13 @@ module CLI
       recall_cue = prompt_user("Recall Cue For File/Folder (#{default_cue})") || default_cue
       with_exception_handling { sheldon.learn(recall_cue, abs_learn_path) }
       with_exception_handling { sheldon.recall(recall_cue) }
+    end
+
+    desc "list", "List all recall cues known by Sheldon"
+    def list
+      sheldon.list_cues.each do |recall_cue|
+        sheldon.recalled?(recall_cue) ? green(recall_cue) : red(recall_cue)
+      end
     end
 
     desc "recall recall_cue", "Symlink a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
@@ -40,20 +54,6 @@ module CLI
       end
 
       announce("Recall Complete.")
-    end
-
-    desc "forget recall_cue", "Remove file/folder from Sheldon's brain"
-    def forget(recall_cue=nil)
-      recall_cue ||= prompt_user("Recall Cue For File/Folder")
-      with_exception_handling { sheldon.forget(recall_cue) }
-      announce("I've forgotten about #{recall_cue}. Let us never mention it again.")
-    end
-
-    desc "list", "List all recall cues known by Sheldon"
-    def list
-      sheldon.list_cues.each do |recall_cue|
-        sheldon.recalled?(recall_cue) ? green(recall_cue) : red(recall_cue)
-      end
     end
 
     desc "version", "Prints the current version of Sheldon"
