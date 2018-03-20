@@ -17,20 +17,20 @@ class Sheldon
     builder.build(abs_learn_path)
   end
 
-  def learn(recall_cue, abs_learn_path)
-    brain.learn(recall_cue, abs_learn_path)
-  end
-
-  def recall(recall_cue)
-    brain.recall(recall_cue)
-  end
-
   def forget(recall_cue)
     brain.forget(recall_cue)
   end
 
+  def learn(recall_cue, abs_learn_path)
+    brain.learn(recall_cue, abs_learn_path)
+  end
+
   def list_cues
     brain.list_cues
+  end
+
+  def recall(recall_cue)
+    brain.recall(recall_cue)
   end
 
   def recalled?(recall_cue)
