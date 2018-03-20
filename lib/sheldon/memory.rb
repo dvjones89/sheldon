@@ -15,27 +15,27 @@ class Memory
     return true
   end
 
-  def recall(recall_cue)
-    raise "no entry for cue '#{recall_cue}'" unless has_cue?(recall_cue)
-    @database.transaction { @database[recall_cue] }
-  end
-
   def forget(recall_cue)
     raise "no entry for cue" unless has_cue?(recall_cue)
     @database.transaction{ @database.delete(recall_cue) }
     return true
   end
 
-  def size
-    list_cues.size
+  def has_cue?(recall_cue)
+    list_cues.any?{ |cue| cue == recall_cue }
   end
 
   def list_cues
     @database.transaction { @database.roots }
   end
 
-  def has_cue?(recall_cue)
-    list_cues.any?{ |cue| cue == recall_cue }
+  def recall(recall_cue)
+    raise "no entry for cue '#{recall_cue}'" unless has_cue?(recall_cue)
+    @database.transaction { @database[recall_cue] }
+  end
+
+  def size
+    list_cues.size
   end
 
 end
