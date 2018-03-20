@@ -7,6 +7,19 @@ class Brain
     @memory = Memory.new(@brain_location)
   end
 
+  def forget(recall_cue)
+    entry = memory.recall(recall_cue)
+    brain_path = brain_path_for_cue(recall_cue)
+    destination_path = add_home(entry[:filepath])
+    FileUtils.rm_r(destination_path) if recalled?(recall_cue)
+    FileUtils.rm_r(brain_path)
+
+    memory.forget(recall_cue)
+  end
+
+  def has_cue?(recall_cue)
+    memory.has_cue?(recall_cue)
+  end
 
   def learn(recall_cue, abs_learn_path)
     raise "recall cue cannot be empty." if recall_cue.strip.empty?
@@ -20,6 +33,10 @@ class Brain
     memory.add(recall_cue, entry)
   end
 
+  def list_cues
+    memory.list_cues
+  end
+
   def recall(recall_cue)
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])
@@ -30,16 +47,6 @@ class Brain
     return true
   end
 
-  def forget(recall_cue)
-    entry = memory.recall(recall_cue)
-    brain_path = brain_path_for_cue(recall_cue)
-    destination_path = add_home(entry[:filepath])
-    FileUtils.rm_r(destination_path) if recalled?(recall_cue)
-    FileUtils.rm_r(brain_path)
-
-    memory.forget(recall_cue)
-  end
-
   def recalled?(recall_cue)
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])
@@ -48,16 +55,8 @@ class Brain
     File.symlink?(destination_path) && File.exists?(File.readlink(destination_path))
   end
 
-  def has_cue?(recall_cue)
-    memory.has_cue?(recall_cue)
-  end
-
   def size
     memory.size
-  end
-
-  def list_cues
-    memory.list_cues
   end
 
   private
