@@ -73,6 +73,14 @@ describe Memory do
     end
   end
 
+  describe "#persist!" do
+    it "should write Sheldon's memory to local storage" do
+      expect(File).not_to exist("spec/Users/test/sheldon/db.yml")
+      memory.persist!
+      expect(File).to exist("spec/Users/test/sheldon/db.yml")
+    end
+  end
+
   describe "#persisted?" do
     context "when memory hasn't been persisted to storage" do
       it "should return false" do
@@ -82,7 +90,7 @@ describe Memory do
 
     context "when memory has been persisted to storage" do
       it "should return true" do
-        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
+        memory.persist!
         expect(memory.persisted?).to be true
       end
     end

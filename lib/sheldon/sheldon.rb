@@ -6,7 +6,7 @@ class Sheldon
 
   def initialize(sheldon_data_dir)
     unless Dir.exists?(sheldon_data_dir)
-      raise MissingDataDirectoryException, "The data directory (#{sheldon_data_dir}) doesn't exist. Please create the directory or set an alternative using the $SHELDON_DATA_DIR environment variable."
+      raise MissingDataDirectoryException, "Directory #{sheldon_data_dir} does not exist."
     end
 
     @brain = Brain.new(sheldon_data_dir)
@@ -35,6 +35,10 @@ class Sheldon
 
   def recall(recall_cue)
     brain.recall(recall_cue)
+  end
+
+  def setup!
+    brain.memory.persist!
   end
 
   def recalled?(recall_cue)

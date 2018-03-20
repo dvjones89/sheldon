@@ -88,6 +88,15 @@ describe Sheldon do
   end
 
   # Smoke-test
+  describe "#setup!" do
+    it "should setup Sheldon on the local file-system" do
+      expect(sheldon.is_setup?).to be false
+      sheldon.setup!
+      expect(sheldon.is_setup?).to be true
+    end
+  end
+
+  # Smoke-test
   describe "#recalled?" do
     context "for a cue that has been recalled" do
       it "should return true" do
