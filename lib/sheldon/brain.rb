@@ -37,6 +37,10 @@ class Brain
     memory.list_cues
   end
 
+  def persisted?
+    memory.persisted?
+  end
+
   def recall(recall_cue)
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])

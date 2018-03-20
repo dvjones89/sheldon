@@ -73,6 +73,21 @@ describe Memory do
     end
   end
 
+  describe "#persisted?" do
+    context "when memory hasn't been persisted to storage" do
+      it "should return false" do
+        expect(memory.persisted?).to be false
+      end
+    end
+
+    context "when memory has been persisted to storage" do
+      it "should return true" do
+        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
+        expect(memory.persisted?).to be true
+      end
+    end
+  end
+
   describe "#recall" do
     context "when a cue does not exist in memory" do
       it "should raise an error" do

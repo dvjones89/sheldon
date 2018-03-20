@@ -52,6 +52,15 @@ describe Sheldon do
   end
 
   # Smoke-test
+  describe "#is_setup?" do
+    context "for a Sheldon instance that hasn't written to the file-system" do
+      it "should return false" do
+        expect(sheldon.is_setup?).to be false
+      end
+    end
+  end
+
+  # Smoke-test
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
       it "should learn the new cue successfully" do

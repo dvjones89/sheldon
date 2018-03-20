@@ -21,6 +21,10 @@ class Sheldon
     brain.forget(recall_cue)
   end
 
+  def is_setup?
+    brain.memory.persisted?
+  end
+
   def learn(recall_cue, abs_learn_path)
     brain.learn(recall_cue, abs_learn_path)
   end

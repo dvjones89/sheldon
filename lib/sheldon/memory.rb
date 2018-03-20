@@ -29,6 +29,10 @@ class Memory
     @database.transaction { @database.roots }
   end
 
+  def persisted?
+    File.exists?(@database.path)
+  end
+
   def recall(recall_cue)
     raise "no entry for cue '#{recall_cue}'" unless has_cue?(recall_cue)
     @database.transaction { @database[recall_cue] }
