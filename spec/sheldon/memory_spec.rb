@@ -24,17 +24,17 @@ describe Memory do
   end
 
 
-  describe "#recall" do
-    context "when a cue does not exist in memory" do
-      it "should raise an error" do
-        expect{ memory.recall("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
+  describe "#has_cue" do
+    context "when a cue is not saved in memory" do
+      it "should return false" do
+        expect(memory.has_cue?("lightbulb")).to be false
       end
     end
 
-    context "when a cue does exist in memory" do
-      it "should return the value associated with that cue" do
+    context "when a cue is saved in memory" do
+      it "should return true" do
         memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
-        expect(memory.recall("lightbulb")).to eq ({filepath: "/path/to/lightbulb"})
+        expect(memory.has_cue?("lightbulb")).to be true
       end
     end
   end
@@ -57,29 +57,6 @@ describe Memory do
     end
   end
 
-
-  describe "#has_cue" do
-    context "when a cue is not saved in memory" do
-      it "should return false" do
-        expect(memory.has_cue?("lightbulb")).to be false
-      end
-    end
-
-    context "when a cue is saved in memory" do
-      it "should return true" do
-        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
-        expect(memory.has_cue?("lightbulb")).to be true
-      end
-    end
-  end
-
-
-  describe "#size" do
-    it "should increase by 1 with each new entry" do
-      expect{ memory.add("lightbulb", {filepath: "/path/to/lightbulb"}) }.to change{ memory.size }.by(1)
-    end
-  end
-
   describe "#list_cues" do
     context "when the memory contains zero cues" do
       it "should return an empty list" do
@@ -93,6 +70,28 @@ describe Memory do
         memory.add("bounty", {filepath: "/path/to/bounty"})
         expect(memory.list_cues).to eq ['rolo','bounty']
       end
+    end
+  end
+
+  describe "#recall" do
+    context "when a cue does not exist in memory" do
+      it "should raise an error" do
+        expect{ memory.recall("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
+      end
+    end
+
+    context "when a cue does exist in memory" do
+      it "should return the value associated with that cue" do
+        memory.add("lightbulb", {filepath: "/path/to/lightbulb"})
+        expect(memory.recall("lightbulb")).to eq ({filepath: "/path/to/lightbulb"})
+      end
+    end
+  end
+
+
+  describe "#size" do
+    it "should increase by 1 with each new entry" do
+      expect{ memory.add("lightbulb", {filepath: "/path/to/lightbulb"}) }.to change{ memory.size }.by(1)
     end
   end
 
