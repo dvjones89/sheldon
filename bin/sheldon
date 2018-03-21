@@ -56,6 +56,11 @@ module CLI
       announce("Recall Complete.")
     end
 
+    desc "setup path_to_data_directory", "Setup Sheldon on this host, supplying the path that where Sheldon's data directory can be found."
+    def setup(sheldon_data_dir)
+      announce("Not implemented yet.")
+    end
+
     desc "version", "Prints the current version of Sheldon"
     def version
       announce ::Sheldon::VERSION
