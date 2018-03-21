@@ -63,23 +63,23 @@ module CLI
 
     private
 
-    def prompt_user(prompt)
-      print(prompt + ": ")
-      input = STDIN.gets.chomp.strip
-      input.empty? ? nil : input
+    def announce(message)
+      logo = "💥".encode("utf-8")
+      puts logo + " Sheldon" + logo + "  #{message}"
     end
 
     def green(message)
       puts "\e[32m#{message}\e[0m"
     end
 
-    def red(message)
-      puts "\e[31m#{message}\e[0m"
+    def prompt_user(prompt)
+      print(prompt + ": ")
+      input = STDIN.gets.chomp.strip
+      input.empty? ? nil : input
     end
 
-    def announce(message)
-      logo = "💥".encode("utf-8")
-      puts logo + " Sheldon" + logo + "  #{message}"
+    def red(message)
+      puts "\e[31m#{message}\e[0m"
     end
 
     def sheldon
