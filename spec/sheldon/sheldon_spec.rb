@@ -94,6 +94,14 @@ describe Sheldon do
       sheldon.setup!
       expect(sheldon.is_setup?).to be true
     end
+
+    it "should write Sheldon's data directory to a .dotfile" do
+      allow_any_instance_of(Helpers).to receive(:add_home).and_return("spec/Users/test/.sheldon")
+
+      expect(File).not_to exist("spec/Users/test/.sheldon/")
+      sheldon.setup!
+      expect(File.read("spec/Users/test/.sheldon")).to eq(sheldon.brain.location)
+    end
   end
 
   # Smoke-test

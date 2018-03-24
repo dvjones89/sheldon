@@ -39,6 +39,10 @@ class Sheldon
 
   def setup!
     brain.memory.persist!
+    dotfile_path = add_home(".sheldon")
+    f = File.new(dotfile_path, 'w')
+    f.write(brain.location)
+    f.close
   end
 
   def recalled?(recall_cue)

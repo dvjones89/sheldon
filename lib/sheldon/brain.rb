@@ -1,10 +1,10 @@
 class Brain
 
-  attr_reader :memory
+  attr_reader :memory, :location
 
   def initialize(sheldon_data_dir)
-    @brain_location = sheldon_data_dir
-    @memory = Memory.new(@brain_location)
+    @location = sheldon_data_dir
+    @memory = Memory.new(@location)
   end
 
   def forget(recall_cue)
@@ -66,7 +66,7 @@ class Brain
   private
 
   def brain_path_for_cue(recall_cue)
-    File.join(@brain_location, recall_cue)
+    File.join(@location, recall_cue)
   end
 
   def get_content(path)
