@@ -29,11 +29,11 @@ class Memory
     @database.transaction { @database.roots }
   end
 
-  def persisted?
+  def present?
     File.exists?(@database.path)
   end
 
-  def persist!
+  def save!
     @database.transaction{@database.commit}
   end
 

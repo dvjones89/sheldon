@@ -73,25 +73,25 @@ describe Memory do
     end
   end
 
-  describe "#persist!" do
+  describe "#save!" do
     it "should write Sheldon's memory to local storage" do
       expect(File).not_to exist("spec/Users/test/sheldon/db.yml")
-      memory.persist!
+      memory.save!
       expect(File).to exist("spec/Users/test/sheldon/db.yml")
     end
   end
 
-  describe "#persisted?" do
+  describe "#present?" do
     context "when memory hasn't been persisted to storage" do
       it "should return false" do
-        expect(memory.persisted?).to be false
+        expect(memory.present?).to be false
       end
     end
 
-    context "when memory has been persisted to storage" do
+    context "when memory has been saved to storage" do
       it "should return true" do
-        memory.persist!
-        expect(memory.persisted?).to be true
+        memory.save!
+        expect(memory.present?).to be true
       end
     end
   end

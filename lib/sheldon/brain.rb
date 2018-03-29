@@ -37,8 +37,8 @@ class Brain
     memory.list_cues
   end
 
-  def persisted?
-    memory.persisted?
+  def present?
+    memory.present?
   end
 
   def recall(recall_cue)
