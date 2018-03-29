@@ -11,8 +11,8 @@ module CLI
 
     desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
     def build(rel_path_to_target)
-      abs_learn_path = File.expand_path(rel_path_to_target)
-      with_exception_handling{ sheldon.build(abs_learn_path) }
+      abs_build_path = File.expand_path(rel_path_to_target)
+      with_exception_handling{ sheldon.build(abs_build_path) }
       announce("Built #{File.basename(rel_path_to_target)}")
     end
 
