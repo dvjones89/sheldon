@@ -52,15 +52,6 @@ describe Sheldon do
   end
 
   # Smoke-test
-  describe "#is_setup?" do
-    context "for a Sheldon instance that hasn't written to the file-system" do
-      it "should return false" do
-        expect(sheldon.is_setup?).to be false
-      end
-    end
-  end
-
-  # Smoke-test
   describe "#learn" do
     context "for a new cue that does not exist in Sheldon's memory" do
       it "should learn the new cue successfully" do
@@ -89,18 +80,12 @@ describe Sheldon do
 
   # Smoke-test
   describe "#setup!" do
-    it "should setup Sheldon on the local file-system" do
-      expect(sheldon.is_setup?).to be false
-      sheldon.setup!
-      expect(sheldon.is_setup?).to be true
-    end
-
-    it "should write Sheldon's data directory to a .dotfile" do
+    it "should create a new brain on the local file-system" do
       allow_any_instance_of(Helpers).to receive(:add_home).and_return("spec/Users/test/.sheldon")
 
-      expect(File).not_to exist("spec/Users/test/.sheldon/")
+      expect(sheldon.brain.present?).to be false
       sheldon.setup!
-      expect(File.read("spec/Users/test/.sheldon")).to eq(sheldon.brain.location)
+      expect(sheldon.brain.present?).to be true
     end
   end
 

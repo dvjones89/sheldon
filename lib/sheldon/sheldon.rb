@@ -21,10 +21,6 @@ class Sheldon
     brain.forget(recall_cue)
   end
 
-  def is_setup?
-    brain.memory.persisted?
-  end
-
   def learn(recall_cue, abs_learn_path)
     brain.learn(recall_cue, abs_learn_path)
   end
@@ -38,11 +34,7 @@ class Sheldon
   end
 
   def setup!
-    brain.memory.persist!
-    dotfile_path = add_home(".sheldon")
-    f = File.new(dotfile_path, 'w')
-    f.write(brain.location)
-    f.close
+    brain.memory.save!
   end
 
   def recalled?(recall_cue)

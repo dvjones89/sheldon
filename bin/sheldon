@@ -56,9 +56,19 @@ module CLI
       announce("Recall Complete.")
     end
 
-    desc "setup path_to_data_directory", "Setup Sheldon on this host, supplying the path that where Sheldon's data directory can be found."
-    def setup(sheldon_data_dir)
-      sheldon.setup!
+    desc "setup path_to_data_directory", "Setup Sheldon on this host, supplying the path that where Sheldon's data directory can be found, or should be created."
+    def setup(rel_data_path)
+      abs_data_path = File.expand_path(rel_data_path)
+      with_exception_handling do
+        sheldon = ::Sheldon.new(abs_data_path)
+        if sheldon.brain.present?
+          announce "Using existing Sheldon database found at #{abs_data_path}."
+        else
+          sheldon.setup!
+          write_to_dotfile("data_directory", sheldon.brain.location)
+          announce "New Sheldon database created at #{abs_data_path}"
+        end
+      end
     end
 
     desc "version", "Prints the current version of Sheldon"
@@ -83,6 +93,11 @@ module CLI
       input.empty? ? nil : input
     end
 
+    def read_from_dotfile(key)
+      dotfile = YAML::Store.new(add_home(".sheldon"))
+      dotfile.transaction { dotfile[key] }
+    end
+
     def red(message)
       puts "\e[31m#{message}\e[0m"
     end
@@ -92,8 +107,8 @@ module CLI
     end
 
     def sheldon_data_dir
-      path = ENV["SHELDON_DATA_DIR"] || "~/sheldon"
-      File.expand_path(path)
+      sheldon_data_dir = read_from_dotfile("data_directory") || ENV['SHELDON_DATA_DIR']
+      sheldon_data_dir || raise("No configuration found. Please run `sheldon setup`")
     end
 
     def with_exception_handling(&block)
@@ -101,6 +116,11 @@ module CLI
     rescue Exception => e
       announce(e.message)
       exit(1)
+    end
+
+    def write_to_dotfile(key, value)
+      dotfile = YAML::Store.new(add_home(".sheldon"))
+      dotfile.transaction { @dotfile[key] = value }
     end
 
   end
