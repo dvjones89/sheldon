@@ -93,11 +93,6 @@ module CLI
       input.empty? ? nil : input
     end
 
-    def read_from_dotfile(key)
-      dotfile = YAML::Store.new(add_home(".sheldon"))
-      dotfile.transaction { dotfile[key] }
-    end
-
     def red(message)
       puts "\e[31m#{message}\e[0m"
     end
@@ -109,18 +104,6 @@ module CLI
     def sheldon_data_dir
       sheldon_data_dir = read_from_dotfile("data_directory") || ENV['SHELDON_DATA_DIR']
       sheldon_data_dir || raise("No configuration found. Please run `sheldon setup`")
-    end
-
-    def with_exception_handling(&block)
-      yield
-    rescue Exception => e
-      announce(e.message)
-      exit(1)
-    end
-
-    def write_to_dotfile(key, value)
-      dotfile = YAML::Store.new(add_home(".sheldon"))
-      dotfile.transaction { @dotfile[key] = value }
     end
 
   end
