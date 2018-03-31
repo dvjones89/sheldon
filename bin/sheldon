@@ -61,13 +61,15 @@ module CLI
       abs_data_path = File.expand_path(rel_data_path)
       with_exception_handling do
         sheldon = ::Sheldon.new(abs_data_path)
+
         if sheldon.brain.present?
-          announce "Using existing Sheldon database found at #{abs_data_path}."
+          green "Using existing Sheldon database found at #{abs_data_path}."
         else
           sheldon.setup!
-          write_to_dotfile("data_directory", sheldon.brain.location)
-          announce "New Sheldon database created at #{abs_data_path}"
+          green "New Sheldon database created at #{abs_data_path}"
         end
+
+        write_to_dotfile("data_directory", sheldon.brain.location)
       end
     end
 
