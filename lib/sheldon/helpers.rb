@@ -52,7 +52,7 @@ module Helpers
       red("To capture a stack trace, please set debug_file_path in ~/.sheldon")
     end
 
-    exit(1)
+    exit(0)
   end
 
   def write_to_dotfile(key, value)
