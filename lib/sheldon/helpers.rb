@@ -5,14 +5,33 @@ module Helpers
     File.expand_path(rel_path).to_s
   end
 
+  def announce(message)
+    logo = "💥".encode("utf-8")
+    puts logo + " Sheldon" + logo + "  #{message}"
+  end
+
   def add_home(path)
     abs_home = File.expand_path("~")
     File.join(abs_home, path).to_s
   end
 
+  def green(message)
+    puts "\e[32m#{message}\e[0m"
+  end
+
+  def prompt_user(prompt)
+    print(prompt + ": ")
+    input = STDIN.gets.chomp.strip
+    input.empty? ? nil : input
+  end
+
   def read_from_dotfile(key)
     dotfile = YAML::Store.new(add_home(".sheldon"))
     dotfile.transaction { dotfile[key] }
+  end
+
+  def red(message)
+    puts "\e[31m#{message}\e[0m"
   end
 
   def remove_home(path)
@@ -38,7 +57,7 @@ module Helpers
 
   def write_to_dotfile(key, value)
     dotfile = YAML::Store.new(add_home(".sheldon"))
-    dotfile.transaction { @dotfile[key] = value }
+    dotfile.transaction { dotfile[key] = value }
   end
 
 end
