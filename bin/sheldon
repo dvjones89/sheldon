@@ -80,6 +80,30 @@ module CLI
 
     private
 
+    def announce(message)
+      logo = "💥".encode("utf-8")
+      puts logo + " Sheldon" + logo + "  #{message}"
+    end
+
+    def green(message)
+      puts "\e[32m#{message}\e[0m"
+    end
+
+    def prompt_user(prompt)
+      print(prompt + ": ")
+      input = STDIN.gets.chomp.strip
+      input.empty? ? nil : input
+    end
+
+    def read_from_dotfile(key)
+      dotfile = YAML::Store.new(add_home(".sheldon"))
+      dotfile.transaction { dotfile[key] }
+    end
+
+    def red(message)
+      puts "\e[31m#{message}\e[0m"
+    end
+
     def sheldon
       with_exception_handling { @sheldon ||= ::Sheldon.new(sheldon_data_dir) }
     end
