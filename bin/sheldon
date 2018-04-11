@@ -9,7 +9,7 @@ module CLI
     map "-v" => :version
     map "--version" => :version
 
-    class_option :debug, :type => :boolean
+    class_option :debug, :desc => "Print errors and backtraces to the console for debugging."
 
     desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
     def build(rel_path_to_target)
@@ -59,7 +59,8 @@ module CLI
     end
 
     desc "setup path_to_data_directory", "Setup Sheldon on this host, supplying the path that where Sheldon's data directory can be found, or should be created."
-    def setup(rel_data_path)
+    def setup(rel_data_path=nil)
+      rel_data_path ||= prompt_user("Please supply location for new/existing data directory")
       abs_data_path = File.expand_path(rel_data_path)
       with_exception_handling do
         sheldon = ::Sheldon.new(abs_data_path)
@@ -119,7 +120,7 @@ module CLI
       yield
     rescue Exception => e
       if options[:debug]
-        puts ([e.message] + e.backtrace).join("\n")
+        puts ([e.inspect] + e.backtrace).join("\n")
       else
         red(e.message + "\nUse --debug to print backtrace")
       end
