@@ -9,6 +9,8 @@ module CLI
     map "-v" => :version
     map "--version" => :version
 
+    class_option :debug, :type => :boolean
+
     desc "build path", "Tell Sheldon to build all config_ files in a directory to single master config"
     def build(rel_path_to_target)
       abs_build_path = File.expand_path(rel_path_to_target)
@@ -111,6 +113,22 @@ module CLI
     def sheldon_data_dir
       sheldon_data_dir = read_from_dotfile("data_directory") || ENV['SHELDON_DATA_DIR']
       sheldon_data_dir || raise("No configuration found. Please run `sheldon setup`")
+    end
+
+    def with_exception_handling(&block)
+      yield
+    rescue Exception => e
+      if options[:debug]
+        puts ([e.message] + e.backtrace).join("\n")
+      else
+        red(e.message + "\nUse --debug to print backtrace")
+      end
+      exit(1)
+    end
+
+    def write_to_dotfile(key, value)
+      dotfile = YAML::Store.new(add_home(".sheldon"))
+      dotfile.transaction { dotfile[key] = value }
     end
 
   end
