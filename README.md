@@ -7,7 +7,7 @@ Designed with the obsessive developer in mind, Sheldon makes it easy for you to 
 
 ### Installation:
 1) `gem install sheldon`
-2) `sheldon setup ~/path/to/data-directory` to tell Sheldon where your existing data directory resides, or otherwise where a new directory should be created.
+2) `sheldon setup path/to/data-directory` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be created.
 3) Sync your data directory across all your different hosts using your preferred method (git, rsync, Dropbox, Resilio Sync), so Sheldon's knowledge is available everywhere.
 
 ### How It Works
