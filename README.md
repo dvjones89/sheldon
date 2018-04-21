@@ -7,9 +7,8 @@ Designed with the obsessive developer in mind, Sheldon makes it easy for you to 
 
 ### Installation:
 1) `gem install sheldon`
-
-2) Sync Sheldon's data directory (`~/sheldon` by default) across all of your machines.  
-You can override the default folder location by setting the`SHELDON_DATA_DIR` environment variable on each host.
+2) `sheldon setup ~/path/to/data-directory` to tell Sheldon where your existing data directory resides, or otherwise where a new directory should be created.
+3) Sync your data directory across all your different hosts using your preferred method (git, rsync, Dropbox, Resilio Sync), so Sheldon's knowledge is available everywhere.
 
 ### How It Works
 #### Add files/folders to Sheldon (sheldon learn)
@@ -24,7 +23,6 @@ Sheldon will move the original file/directory into his data directory (defaults 
 ls -al ~ | grep .gitconfig
 .gitconfig -> /Users/dave/sheldon/git/.gitconfig
 ```
-Keep Sheldon's data directory synchronised across all your devices using your tool of choice, Dropbox, Google Drive, BTSync.
 
 #### Recall your files on other machines (sheldon recall)
 Sheldon's `recall` command will symlink the file from the data directory to it's correct location on any filesystem (even under different home directories):
@@ -46,10 +44,8 @@ Recall .zshrc (Y/N): y
 #### Build Bespoke Configs For Your Host (sheldon build)
 Sometimes copying an entire config file between all your machine is overkill. What if you only want a subset of your configuration? Sheldon can help.
 
-Split your ssh config into `config_work` and `config_personal`
-
-Use Sheldon `learn` and `recall` to make the appropriate `_config` files available on the appropriate hosts.
-
+Split your ssh config into `config_work` and `config_personal`  
+Use Sheldon `learn` and `recall` to make the appropriate `_config` files available on the appropriate hosts.  
 Once the files are in the right place, use Sheldon `build` to create a single `config` file that can be easily sourced.
 
 ```shell
@@ -69,11 +65,6 @@ config
 
 source ~/.ssh/config
 ```
-
-### Isn't This Just Homesick?
-Yes, yes it is. Unfortunately, I'd written 90% of Sheldon before I discovered the awesome [homesick](https://github.com/technicalpickles/homesick) so I decided to keep going.  
-Sheldon's `build` command is (as far as I know) unique to Sheldon and will perhaps prove useful to those who chunk their configs.  
-If nothing else, I hope this code will be a good point of reference for other developers (and indeed my future self).
 
 ### Contributing
 
