@@ -18,7 +18,7 @@ sheldon learn ~/.gitconfig
 Recall Cue For File/Folder: git
 ```
 
-Sheldon will move the original file/directory into his data directory (defaults to `~/sheldon`) and symlink back to it's original location.
+Sheldon will move the original file/directory into his data directory and symlink the file/directory back to it's original location.
 ```shell
 ls -al ~ | grep .gitconfig
 .gitconfig -> /Users/dave/sheldon/git/.gitconfig
