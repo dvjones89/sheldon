@@ -124,7 +124,7 @@ module CLI
       else
         red(e.message + "\nUse --debug to print backtrace")
       end
-      exit(1)
+      exit!
     end
 
     def write_to_dotfile(key, value)
