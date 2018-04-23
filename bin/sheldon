@@ -37,7 +37,7 @@ module CLI
     desc "list", "List all recall cues known by Sheldon"
     def list
       sheldon.list_cues.each do |recall_cue|
-        sheldon.recalled?(recall_cue) ? green(recall_cue) : red(recall_cue)
+        sheldon.recalled?(recall_cue) ? say(recall_cue, :green) : say(recall_cue, :red)
       end
     end
 
@@ -66,10 +66,10 @@ module CLI
         sheldon = ::Sheldon.new(abs_data_path)
 
         if sheldon.brain.present?
-          green "Using existing Sheldon database found at #{abs_data_path}."
+          say("Using existing Sheldon database found at #{abs_data_path}.", :green)
         else
           sheldon.setup!
-          green "New Sheldon database created at #{abs_data_path}"
+          say("New Sheldon database created at #{abs_data_path}", :green)
         end
 
         write_to_dotfile("data_directory", sheldon.brain.location)
@@ -88,17 +88,9 @@ module CLI
       puts logo + " Sheldon" + logo + "  #{message}"
     end
 
-    def green(message)
-      puts "\e[32m#{message}\e[0m"
-    end
-
     def read_from_dotfile(key)
       dotfile = YAML::Store.new(add_home(".sheldon"))
       dotfile.transaction { dotfile[key] }
-    end
-
-    def red(message)
-      puts "\e[31m#{message}\e[0m"
     end
 
     def sheldon
@@ -116,7 +108,7 @@ module CLI
       if options[:debug]
         puts ([e.inspect] + e.backtrace).join("\n")
       else
-        red(e.message + "\nUse --debug to print backtrace")
+        say(e.message + "\nUse --debug to print backtrace", :red)
       end
       exit!
     end
