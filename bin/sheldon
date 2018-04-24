@@ -29,7 +29,7 @@ module CLI
     def learn(rel_path_to_target)
       abs_learn_path = File.expand_path(rel_path_to_target)
       default_cue = File.basename(rel_path_to_target)
-      recall_cue = ask("Recall Cue For File/Folder (#{default_cue})") || default_cue
+      recall_cue = ask("Recall Cue For File/Folder", default: default_cue)
       with_exception_handling { sheldon.learn(recall_cue, abs_learn_path) }
       with_exception_handling { sheldon.recall(recall_cue) }
     end
