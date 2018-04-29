@@ -3,7 +3,7 @@ require "spec_helper"
 describe Builder do
 
   before(:each) do
-    FileUtils.rm_r("spec/Users") if Dir.exists?("spec/Users")
+    FileUtils.rm_r("spec/Users") if Dir.exist?("spec/Users")
     FileUtils.mkdir_p("spec/Users/test")
   end
 

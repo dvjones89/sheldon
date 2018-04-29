@@ -30,7 +30,7 @@ class Memory
   end
 
   def present?
-    File.exists?(@database.path)
+    File.exist?(@database.path)
   end
 
   def save!

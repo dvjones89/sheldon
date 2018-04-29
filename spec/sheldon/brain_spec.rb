@@ -3,7 +3,7 @@ require "spec_helper"
 describe Brain do
 
   before(:each) do
-    FileUtils.rm_r("spec/Users") if Dir.exists?("spec/Users")
+    FileUtils.rm_r("spec/Users") if Dir.exist?("spec/Users")
     FileUtils.mkdir_p("spec/Users/test/sheldon")
     FileUtils.mkdir_p("spec/Users/test/dotfiles")
     FileUtils.touch("spec/Users/test/dotfiles/.gitconfig")

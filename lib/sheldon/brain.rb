@@ -24,7 +24,7 @@ class Brain
   def learn(recall_cue, abs_learn_path)
     raise "recall cue cannot be empty." if recall_cue.strip.empty?
     raise "This cue has already been used." if has_cue?(recall_cue)
-    raise "Unable to find a file or folder at #{abs_learn_path}" unless File.exists?(abs_learn_path)
+    raise "Unable to find a file or folder at #{abs_learn_path}" unless File.exist?(abs_learn_path)
 
     brain_path = brain_path_for_cue(recall_cue)
     FileUtils.mkdir_p(brain_path)
