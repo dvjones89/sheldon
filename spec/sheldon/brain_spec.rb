@@ -153,7 +153,7 @@ describe Brain do
     end
   end
 
-# Smoke-test
+  # Smoke-test
   describe "#size" do
     context "for a brain that has learnt a single cue" do
       it "should return 1" do
@@ -163,7 +163,7 @@ describe Brain do
     end
   end
 
-# Smoke-test
+  # Smoke-test
   describe "#list_cues" do
     context "for a brain that has learnt a single cue" do
       it "should return the single cue" do
