@@ -1,0 +1,173 @@
+#compdef sheldon
+
+_sheldon() {
+  __sheldon
+}
+
+__sheldon() {
+  readonly local DEPTH=2
+
+  case $CURRENT in
+    $DEPTH)
+      _arguments \
+        '*: :->subcommands'
+
+      case $state in
+        subcommands)
+          _values \
+            'subcommand' \
+            'zsh-completion[Print zsh completion script]' \
+            'build[Tell Sheldon to build all config_ files in a directory to single master config]' \
+            'forget[Remove file/folder from Sheldon''s brain]' \
+            'learn[Add a new file/folder to Sheldon''s brain. Supply a recall_cue at runtime.]' \
+            'list[List all recall cues known by Sheldon]' \
+            'recall[Symlink a previously learnt file/directory to it''s original location on the filesystem.
+Use `sheldon list` for available cues.]' \
+            'setup[Setup Sheldon on this host, supplying the path that where Sheldon''s data directory can be found, or should be created.]' \
+            'version[Prints the current version of Sheldon]' \
+            ;
+          ;;
+      esac
+      ;;
+    *)
+      case $words[$DEPTH] in
+        zsh-completion)
+          __sheldon_zsh-completion
+          ;;
+        build)
+          __sheldon_build
+          ;;
+        forget)
+          __sheldon_forget
+          ;;
+        learn)
+          __sheldon_learn
+          ;;
+        list)
+          __sheldon_list
+          ;;
+        recall)
+          __sheldon_recall
+          ;;
+        setup)
+          __sheldon_setup
+          ;;
+        version)
+          __sheldon_version
+          ;;
+        *)
+          # if does not match any subcommand
+          # complete rest arguments
+          _files
+          ;;
+      esac
+      ;;
+  esac
+}
+
+
+__sheldon_zsh-completion() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    {--name,-n} \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
+
+__sheldon_build() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
+
+__sheldon_forget() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
+
+__sheldon_learn() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
+
+__sheldon_list() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
+
+__sheldon_recall() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    --i'[Interactive mode - prompts Y/N for each available recall_cue]' \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
+
+__sheldon_setup() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
+
+__sheldon_version() {
+  _arguments \
+    --debug'[Print errors and backtraces to the console for debugging.]' \
+    '*: :->rest'
+
+  case $state in
+    rest)
+      # complete rest arguments
+      _files
+      ;;
+  esac
+}
