@@ -86,6 +86,17 @@ describe Brain do
         expect(File).not_to exist(abs_brain_path)
         expect(File).not_to exist(abs_learn_path)
       end
+
+      context "for a cue that has been manually deleted from Sheldon's data directory" do
+        it "should only delete the (broken) symlink on the user's filesystem" do
+          FileUtils.rm_r(File.dirname(abs_brain_path))
+          expect(File.exist?(abs_brain_path)).to be false
+
+          expect(File.symlink?(abs_learn_path)).to be true
+          brain.forget("my git config")
+          expect(File.symlink?(abs_learn_path)).to be false
+        end
+      end
     end
 
     context "for a cue that is NOT recalled on the local host" do
@@ -142,7 +153,7 @@ describe Brain do
     end
   end
 
-# Smoke-test
+  # Smoke-test
   describe "#size" do
     context "for a brain that has learnt a single cue" do
       it "should return 1" do
@@ -152,7 +163,7 @@ describe Brain do
     end
   end
 
-# Smoke-test
+  # Smoke-test
   describe "#list_cues" do
     context "for a brain that has learnt a single cue" do
       it "should return the single cue" do
