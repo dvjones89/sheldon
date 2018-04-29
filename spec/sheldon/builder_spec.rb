@@ -18,7 +18,7 @@ describe Builder do
   describe "build" do
     context "for a directory with no config_ files" do
       it "should not create a master config file" do
-        builder.build(abs_home_path)
+        expect(builder.build(abs_home_path)).to be false
         expect(File).not_to exist(abs_master_path)
       end
     end
@@ -27,7 +27,7 @@ describe Builder do
       it "should create a master config file" do
         File.write(File.join(abs_home_path, "config_1"), "hello")
         File.write(File.join(abs_home_path, "config_2"), "world")
-        builder.build(abs_home_path)
+        expect(builder.build(abs_home_path)).to be true
         expect(File.read(abs_master_path)).to eq "hello\nworld\n"
       end
     end
