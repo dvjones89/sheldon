@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require "thor"
+require "tty-prompt"
 require_relative "../lib/sheldon"
 
 module CLI
@@ -18,14 +19,14 @@ module CLI
         if sheldon.build(abs_build_path)
           announce("Built #{File.basename(rel_path_to_target)}")
         else
-          say("Could not find any config_ files at #{abs_build_path}", :red)
+          prompt.error("Could not find any config_ files at #{abs_build_path}")
         end
       end
     end
 
     desc "forget recall_cue", "Remove file/folder from Sheldon's brain"
     def forget(recall_cue=nil)
-      recall_cue ||= ask("Recall Cue For File/Folder")
+      recall_cue ||= prompt.ask("Recall Cue For File/Folder", required: true)
       with_exception_handling { sheldon.forget(recall_cue) }
       announce("I've forgotten about #{recall_cue}. Let us never mention it again.")
     end
@@ -34,7 +35,7 @@ module CLI
     def learn(rel_path_to_target)
       abs_learn_path = File.expand_path(rel_path_to_target)
       default_cue = File.basename(rel_path_to_target)
-      recall_cue = ask("Recall Cue For File/Folder", default: default_cue)
+      recall_cue = prompt.ask("Recall Cue For File/Folder", default: default_cue, required: true)
       with_exception_handling { sheldon.learn(recall_cue, abs_learn_path) }
       with_exception_handling { sheldon.recall(recall_cue) }
     end
@@ -42,7 +43,7 @@ module CLI
     desc "list", "List all recall cues known by Sheldon"
     def list
       sheldon.list_cues.each do |recall_cue|
-        sheldon.recalled?(recall_cue) ? say(recall_cue, :green) : say(recall_cue, :red)
+        sheldon.recalled?(recall_cue) ? prompt.say(recall_cue, color: :green) : prompt.say(recall_cue, color: :red)
       end
     end
 
@@ -52,11 +53,12 @@ module CLI
     def recall(recall_cue=nil)
       if options[:i]
         sheldon.list_cues.each do |recall_cue|
-          answer = ask("Recall #{recall_cue}? (Y/N)")
+          answer = prompt.yes?("Recall #{recall_cue}?")
           with_exception_handling { sheldon.recall(recall_cue) if answer.downcase == "y" }
         end
       else
-        recall_cue ||= ask("Recall Cue For File/Folder")
+        recall_cue = prompt.select("What should I recall?", sheldon.list_cues, filter: true)
+        # recall_cue ||= prompt.ask("Recall Cue For File/Folder", required: true)
         with_exception_handling { sheldon.recall(recall_cue) }
       end
 
@@ -71,10 +73,10 @@ module CLI
         sheldon = ::Sheldon.new(abs_data_path)
 
         if sheldon.brain.present?
-          say("Using existing Sheldon database found at #{abs_data_path}.", :green)
+          prompt.ok("Using existing Sheldon database found at #{abs_data_path}.")
         else
           sheldon.setup!
-          say("New Sheldon database created at #{abs_data_path}", :green)
+          prompt.ok("New Sheldon database created at #{abs_data_path}")
         end
 
         write_to_dotfile("data_directory", sheldon.brain.location)
@@ -91,6 +93,10 @@ module CLI
     def announce(message)
       logo = "💥".encode("utf-8")
       puts logo + " Sheldon" + logo + "  #{message}"
+    end
+
+    def prompt
+      @prompt ||= TTY::Prompt.new
     end
 
     def read_from_dotfile(key)
@@ -113,7 +119,7 @@ module CLI
       if options[:debug]
         puts ([e.inspect] + e.backtrace).join("\n")
       else
-        say(e.message + "\nUse --debug to print backtrace", :red)
+        prompt.error(e.message + "\nUse --debug to print backtrace")
       end
       exit!
     end
