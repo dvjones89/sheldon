@@ -26,12 +26,12 @@ module CLI
 
     desc "forget recall_cue", "Remove file/folder from Sheldon's brain"
     def forget(recall_cue=nil)
-      recall_cue ||= prompt.ask("Recall Cue For File/Folder", required: true)
+      recall_cue ||= cue_picker("What would you like to forget?")
       with_exception_handling { sheldon.forget(recall_cue) }
       announce("I've forgotten about #{recall_cue}. Let us never mention it again.")
     end
 
-    desc "learn path", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
+    desc "learn path_to_target", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
     def learn(rel_path_to_target)
       abs_learn_path = File.expand_path(rel_path_to_target)
       default_cue = File.basename(rel_path_to_target)
@@ -47,7 +47,7 @@ module CLI
       end
     end
 
-    desc "recall recall_cue", "Symlink a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
+    desc "recall recall_cue", "Recall a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
     option :i, type: :boolean, desc: "Interactive mode - prompts Y/N for each available recall_cue"
 
     def recall(recall_cue=nil)
@@ -57,8 +57,7 @@ module CLI
           with_exception_handling { sheldon.recall(recall_cue) if answer.downcase == "y" }
         end
       else
-        recall_cue = prompt.select("What should I recall?", sheldon.list_cues, filter: true)
-        # recall_cue ||= prompt.ask("Recall Cue For File/Folder", required: true)
+        recall_cue = cue_picker("What would you like to recall?")
         with_exception_handling { sheldon.recall(recall_cue) }
       end
 
@@ -67,7 +66,7 @@ module CLI
 
     desc "setup path_to_data_directory", "Setup Sheldon on this host, supplying the path that where Sheldon's data directory can be found, or should be created."
     def setup(rel_data_path=nil)
-      rel_data_path ||= ask("Please supply location for new/existing data directory")
+      rel_data_path ||= prompt.ask("Please supply location for new/existing data directory", required: true)
       abs_data_path = File.expand_path(rel_data_path)
       with_exception_handling do
         sheldon = ::Sheldon.new(abs_data_path)
@@ -96,7 +95,11 @@ module CLI
     end
 
     def prompt
-      @prompt ||= TTY::Prompt.new
+      @prompt ||= TTY::Prompt.new(interrupt: :exit)
+    end
+
+    def cue_picker(message)
+      prompt.select(message, sheldon.list_cues, per_page: 20, filter: true)
     end
 
     def read_from_dotfile(key)
