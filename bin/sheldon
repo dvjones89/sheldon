@@ -49,6 +49,11 @@ module CLI
 
     desc "open recall_cue", "Open your file/folder contents in your default editor"
     def open(recall_cue=nil)
+      if ENV['EDITOR'].nil?
+        prompt.error("Your system does not define a default editor. Please set $EDITOR and try again.")
+        exit!
+      end
+
       recall_cue ||= cue_picker("What would you like to open?")
       if sheldon.recalled?(recall_cue)
         abs_path = add_home(sheldon.brain.memory.recall(recall_cue)[:filepath])
