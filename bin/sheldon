@@ -47,6 +47,17 @@ module CLI
       end
     end
 
+    desc "open recall_cue", "Open your file/folder contents in your default editor"
+    def open(recall_cue=nil)
+      recall_cue ||= cue_picker("What would you like to open?")
+      if sheldon.recalled?(recall_cue)
+        abs_path = add_home(sheldon.brain.memory.recall(recall_cue)[:filepath])
+        system("#{ENV['EDITOR']} #{abs_path}")
+      else
+        prompt.error("#{recall_cue} has not been recalled on this computer. Use `sheldon recall #{recall_cue}` and then try again.")
+      end
+    end
+
     desc "recall recall_cue", "Recall a previously learnt file/directory to it's original location on the filesystem.\nUse `sheldon list` for available cues."
     option :i, type: :boolean, desc: "Interactive mode - prompts Y/N for each available recall_cue"
 
