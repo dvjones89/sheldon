@@ -3,11 +3,11 @@
 [![Coverage Status](https://coveralls.io/repos/github/dvjones89/sheldon/badge.svg?branch=master)](https://coveralls.io/github/dvjones89/sheldon?branch=master)
 [![Gem Version](https://badge.fury.io/rb/sheldon.svg)](https://badge.fury.io/rb/sheldon)
 
-Designed with the obsessive developer in mind, Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
+Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.
 
 ### Installation:
 1) `gem install sheldon`
-2) `sheldon setup path/to/data-directory` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be created.
+2) `sheldon setup path/to/data/directory` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be created.
 3) Sync your data directory across all your different hosts using your preferred method (git, rsync, Dropbox, Resilio Sync), so Sheldon's knowledge is available everywhere.
 
 ### How It Works
@@ -41,29 +41,11 @@ Recall git_config (Y/N): y
 Recall .zshrc (Y/N): y
 ```
 
-#### Build Bespoke Configs For Your Host (sheldon build)
-Sometimes copying an entire config file between all your machine is overkill. What if you only want a subset of your configuration? Sheldon can help.
-
-Split your ssh config into `config_work` and `config_personal`  
-Use Sheldon `learn` and `recall` to make the appropriate `_config` files available on the appropriate hosts.  
-Once the files are in the right place, use Sheldon `build` to create a single `config` file that can be easily sourced.
-
+#### Open Your Configs In A Flash (sheldon open)
+Want to quickly tweak that config file but can't remember where it resides on your system? No worries, Sheldon's got your back:
 ```shell
-cd ~/.ssh
-
-ls -l
-config_dev -> /Users/dave/sheldon/ssh_config_dev/config_dev
-config_personal -> /Users/dave/sheldon/ssh_config_personal/config_personal
-
-sheldon build ~/.ssh
-💥 Sheldon💥  Built .ssh
-
-ls -l
-config_dev -> /Users/dave/sheldon/ssh_config_dev/config_dev
-config_personal -> /Users/dave/sheldon/ssh_config_personal/config_personal
-config
-
-source ~/.ssh/config
+sheldon open git
+# Your ~/.gitconfig will be opened in your $EDITOR
 ```
 
 ### Contributing
@@ -77,4 +59,4 @@ source ~/.ssh/config
 7. Create a new Pull Request
 
 ### License
-See LICENSE
+See [LICENSE](https://github.com/dvjones89/sheldon/blob/master/LICENSE)
