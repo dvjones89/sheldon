@@ -72,7 +72,7 @@ module CLI
           with_exception_handling { sheldon.recall(recall_cue) if answer.downcase == "y" }
         end
       else
-        recall_cue = cue_picker("What would you like to recall?")
+        recall_cue ||= cue_picker("What would you like to recall?")
         with_exception_handling { sheldon.recall(recall_cue) }
       end
 
