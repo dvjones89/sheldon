@@ -49,17 +49,16 @@ module CLI
 
     desc "open recall_cue", "Open your file/folder contents in your default editor"
     def open(recall_cue=nil)
-      if ENV['EDITOR'].nil?
-        prompt.error("Your system does not define a default editor. Please set $EDITOR and try again.")
-        exit!
-      end
+      editor = ENV['EDITOR']
+      error_and_exit("Your system does not define a default editor. Please set $EDITOR and try again.") if editor.nil?
 
       recall_cue ||= cue_picker("What would you like to open?")
-      if sheldon.recalled?(recall_cue)
-        abs_path = add_home(sheldon.brain.memory.recall(recall_cue)[:filepath])
-        system("#{ENV['EDITOR']} '#{abs_path}'")
-      else
-        prompt.error("#{recall_cue} has not been recalled on this computer. Use `sheldon recall #{recall_cue}` and then try again.")
+      error_and_exit("#{recall_cue} has not been recalled on this computer. Use `sheldon recall #{recall_cue}` and then try again.") unless sheldon.recalled?(recall_cue)
+
+      with_exception_handling do
+        memory_entry = sheldon.brain.memory.recall(recall_cue)
+        filepath = add_home(memory_entry[:filepath])
+        system("#{ENV['EDITOR']} '#{filepath}'")
       end
     end
 
@@ -110,6 +109,11 @@ module CLI
       puts logo + " Sheldon" + logo + "  #{message}"
     end
 
+    def error_and_exit(message)
+      prompt.error(message)
+      exit!
+    end
+
     def prompt
       @prompt ||= TTY::Prompt.new(interrupt: :exit)
     end
@@ -129,7 +133,7 @@ module CLI
 
     def sheldon_data_dir
       sheldon_data_dir = read_from_dotfile("data_directory") || ENV['SHELDON_DATA_DIR']
-      sheldon_data_dir || raise("No configuration found. Please run `sheldon setup`")
+      sheldon_data_dir || error_and_exit("No configuration found. Please run `sheldon setup`")
     end
 
     def with_exception_handling(&block)
