@@ -49,10 +49,22 @@ describe Brain do
 
   describe "#recall" do
     context "for a destination directory that already exists" do
-      it "should symlink from Sheldon's brain back to the original file-system location" do
-        brain.learn("my git config", abs_learn_path)
-        brain.recall("my git config")
-        expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
+      context "when recalling a file" do
+        it "should symlink the file back to the existing filesystem directory" do
+          brain.learn("my git config", abs_learn_path)
+          brain.recall("my git config")
+          expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
+        end
+      end
+
+      context "when recalling a folder" do
+        it "should not duplicate the folder on the filesystem" do
+          dotfiles_dir = File.dirname(abs_learn_path)
+          brain.learn("dotfiles", dotfiles_dir)
+          FileUtils.mkdir_p(dotfiles_dir)
+          brain.recall("dotfiles")
+          expect(Dir).not_to exist("spec/Users/test/dotfiles/dotfiles")
+        end
       end
     end
 
