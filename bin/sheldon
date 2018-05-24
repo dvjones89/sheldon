@@ -58,7 +58,7 @@ module CLI
       with_exception_handling do
         memory_entry = sheldon.brain.memory.recall(recall_cue)
         filepath = add_home(memory_entry[:filepath])
-        system("#{ENV['EDITOR']} '#{filepath}'")
+        system("#{editor} '#{filepath}'")
       end
     end
 
