@@ -45,7 +45,7 @@ class Brain
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])
     destination_dir = File.dirname(destination_path)
-    raise DestinationNotEmptyException, "#{destination_path} is not empty." if File.exist?(destination_path)
+    raise DestinationNotEmptyException, "#{destination_path} already exists." if File.exist?(destination_path)
 
     FileUtils.mkdir_p(destination_dir) unless File.directory?(destination_dir)
     brain_path = brain_path_for_cue(recall_cue)
