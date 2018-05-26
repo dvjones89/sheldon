@@ -16,11 +16,7 @@ module CLI
     def build(rel_path_to_target)
       abs_build_path = File.expand_path(rel_path_to_target)
       with_exception_handling do
-        if sheldon.build(abs_build_path)
-          announce("Built #{File.basename(rel_path_to_target)}")
-        else
-          prompt.error("Could not find any config_ files at #{abs_build_path}")
-        end
+        announce("Built #{File.basename(rel_path_to_target)}") if sheldon.build(abs_build_path)
       end
     end
 
