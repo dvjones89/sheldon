@@ -12,6 +12,7 @@ describe Brain do
   let(:brain) { Brain.new(abs("spec/Users/test/sheldon")) }
   let(:abs_learn_path) { abs("spec/Users/test/dotfiles/.gitconfig") }
   let(:abs_brain_path) { abs("spec/Users/test/sheldon/my git config/.gitconfig") }
+  let(:dotfiles_directory) { abs("spec/Users/test/dotfiles") }
 
   describe "#learn" do
     context "for a file /folder that does not exist on the filesystem" do
@@ -48,33 +49,39 @@ describe Brain do
   end
 
   describe "#recall" do
-    context "for a destination directory that already exists" do
-      context "when recalling a file" do
-        it "should symlink the file back to the existing filesystem directory" do
-          brain.learn("my git config", abs_learn_path)
-          brain.recall("my git config")
-          expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
-        end
-      end
-
-      context "when recalling a folder" do
-        it "should not duplicate the folder on the filesystem" do
-          dotfiles_dir = File.dirname(abs_learn_path)
-          brain.learn("dotfiles", dotfiles_dir)
-          FileUtils.mkdir_p(dotfiles_dir)
-          brain.recall("dotfiles")
-          expect(Dir).not_to exist("spec/Users/test/dotfiles/dotfiles")
-        end
+    context "when recalling a file that already exists on the host" do
+      it "should raise a runtime exception" do
+        brain.learn("my git config", abs_learn_path)
+        FileUtils.touch(abs_learn_path)
+        expect { brain.recall("my git config") }.to raise_error(DestinationNotEmptyException)
       end
     end
 
-    context "for a destination directory that doesn't exist" do
-      it "should create the destination directory and then perform the symlink" do
+    context "when recalling a folder that already exists on the host" do
+      it "should raise a runtime exception" do
+        brain.learn("dotfiles", dotfiles_directory)
+        FileUtils.mkdir_p(dotfiles_directory)
+        expect { brain.recall("dotfiles") }.to raise_error(DestinationNotEmptyException)
+      end
+    end
+
+    context "when recalling a file into an existing directory" do
+      it "should successully symlink the file into the directory" do
+        expect(Dir).to exist(dotfiles_directory)
         brain.learn("my git config", abs_learn_path)
-        FileUtils.rm_r("spec/Users/test/dotfiles")
         brain.recall("my git config")
-        expect(Dir).to exist("spec/Users/test/dotfiles")
-        expect(File).to be_symlink("spec/Users/test/dotfiles/.gitconfig")
+        expect(File).to be_symlink(abs_learn_path)
+      end
+    end
+
+    context "when recalling a file to a destination that doesn't exist on the host" do
+      it "should create the destination directory and then symlink the file into it" do
+        brain.learn("my git config", abs_learn_path)
+        FileUtils.rm_r(dotfiles_directory)
+        expect(Dir).not_to exist(dotfiles_directory)
+        brain.recall("my git config")
+        expect(Dir).to exist(dotfiles_directory)
+        expect(File).to be_symlink(abs_learn_path)
       end
     end
   end
@@ -122,7 +129,6 @@ describe Brain do
 
 
   describe "#recalled?" do
-
     context "for a file that has been recalled" do
       it "should return true" do
         brain.learn("my git config", abs_learn_path)
