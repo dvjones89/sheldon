@@ -62,13 +62,14 @@ module CLI
     option :i, type: :boolean, desc: "Interactive mode - prompts Y/N for each available recall_cue"
 
     def recall(recall_cue=nil)
+      cue_options = sheldon.list_cues.reject{ |cue| sheldon.recalled?(cue) }
       if options[:i]
-        sheldon.list_cues.each do |recall_cue|
+        cue_options.each do |recall_cue|
           answer = prompt.yes?("Recall #{recall_cue}?")
           with_exception_handling { sheldon.recall(recall_cue) if answer.downcase == "y" }
         end
       else
-        recall_cue ||= cue_picker("What would you like to recall?")
+        recall_cue ||= cue_picker("What would you like to recall?", cue_options)
         with_exception_handling { sheldon.recall(recall_cue) }
       end
 
