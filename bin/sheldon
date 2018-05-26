@@ -47,7 +47,8 @@ module CLI
     def open(recall_cue=nil)
       editor = ENV['EDITOR']
       error_and_exit("Your system does not define a default editor. Please set $EDITOR and try again.") if editor.nil?
-      recall_cue ||= cue_picker("What would you like to open?")
+      cue_options = sheldon.list_cues.select{|cue| sheldon.recalled?(cue)}
+      recall_cue ||= cue_picker("What would you like to open?", cue_options)
 
       with_exception_handling do
         error_and_exit("#{recall_cue} has not been recalled on this computer. Use `sheldon recall #{recall_cue}` and then try again.") unless sheldon.recalled?(recall_cue)
@@ -113,8 +114,8 @@ module CLI
       @prompt ||= TTY::Prompt.new(interrupt: :exit)
     end
 
-    def cue_picker(message)
-      prompt.select(message, sheldon.list_cues, per_page: 20, filter: true)
+    def cue_picker(message, options=sheldon.list_cues)
+      prompt.select(message, options, per_page: 20, filter: true)
     end
 
     def read_from_dotfile(key)
