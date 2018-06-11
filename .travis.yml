@@ -1,1 +1,3 @@
 language: ruby
+rvm:
+  - ruby-1.9.3-p551
