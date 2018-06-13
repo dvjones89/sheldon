@@ -18,10 +18,9 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.executables   = 'sheldon'
 
-  s.add_runtime_dependency 'thor', '~> 0.9'
+  s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'tty-prompt'
-  s.add_development_dependency "rake", '~> 11.1'
-  s.add_development_dependency 'rspec', '~> 3.3'
-  s.add_development_dependency 'coveralls', '~> 0.8.13'
-  s.add_development_dependency 'byebug', '~> 9.0', '>= 9.0.0'
+  s.add_development_dependency "rake"
+  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'coveralls'
 end
