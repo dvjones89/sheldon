@@ -5,6 +5,10 @@
 
 Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.
 
+### Requirements:
+* Ruby 1.9.3 or above.
+* The `build-essential` and `ruby-dev` packages on linux systems
+
 ### Installation:
 1) `gem install sheldon`
 2) `sheldon setup path/to/data/directory` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be created.
@@ -18,14 +22,14 @@ sheldon learn ~/.gitconfig
 Recall Cue For File/Folder: git
 ```
 
-Sheldon will move the original file/directory into his data directory and symlink the file/directory back to it's original location.
+Sheldon will move the original file/directory into his data directory and symlink the file/directory back to its original location.
 ```shell
 ls -al ~ | grep .gitconfig
 .gitconfig -> /Users/dave/sheldon/git/.gitconfig
 ```
 
 #### Recall your files on other machines (sheldon recall)
-Sheldon's `recall` command will symlink the file from the data directory to it's correct location on any filesystem (even under different home directories):
+Sheldon's `recall` command will symlink the file from the data directory to its correct location on any filesystem (even under different home directories):
 
 ```shell
 sheldon recall git
@@ -44,7 +48,7 @@ Recall .zshrc (Y/N): y
 #### Open Your Configs In A Flash (sheldon open)
 Want to quickly tweak that config file but can't remember where it resides on your system? No worries, Sheldon's got your back:
 ```shell
-sheldon open git
+sheldon open git_config
 # Your ~/.gitconfig will be opened in your $EDITOR
 ```
 
