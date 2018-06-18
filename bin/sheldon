@@ -7,6 +7,7 @@ module CLI
   class Sheldon < Thor
     map link: :recall
     map ls: :list
+    map add: :learn
     map "-v" => :version
     map "--version" => :version
 
@@ -16,7 +17,7 @@ module CLI
     def build(rel_path_to_target)
       abs_build_path = File.expand_path(rel_path_to_target)
       with_exception_handling do
-        announce("Built #{File.basename(rel_path_to_target)}") if sheldon.build(abs_build_path)
+        prompt.ok("Built #{File.basename(rel_path_to_target)}") if sheldon.build(abs_build_path)
       end
     end
 
@@ -24,7 +25,7 @@ module CLI
     def forget(recall_cue=nil)
       recall_cue ||= cue_picker("What would you like to forget?")
       with_exception_handling { sheldon.forget(recall_cue) }
-      announce("I've forgotten about #{recall_cue}. Let us never mention it again.")
+      prompt.ok("I've forgotten about #{recall_cue}. Let us never mention it again.")
     end
 
     desc "learn path_to_target", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
@@ -34,6 +35,7 @@ module CLI
       recall_cue = prompt.ask("Recall Cue For File/Folder", default: default_cue, required: true)
       with_exception_handling { sheldon.learn(recall_cue, abs_learn_path) }
       with_exception_handling { sheldon.recall(recall_cue) }
+      prompt.ok("Sheldon learn complete: #{default_cue}")
     end
 
     desc "list", "List all recall cues known by Sheldon"
@@ -73,7 +75,7 @@ module CLI
         with_exception_handling { sheldon.recall(recall_cue) }
       end
 
-      announce("Recall Complete.")
+      prompt.ok("Sheldon recall complete: #{recall_cue}")
     end
 
     desc "setup path_to_data_directory", "Setup Sheldon on this host, supplying the path that where Sheldon's data directory can be found, or should be created."
@@ -96,15 +98,10 @@ module CLI
 
     desc "version", "Prints the current version of Sheldon"
     def version
-      announce ::Sheldon::VERSION
+      puts ::Sheldon::VERSION
     end
 
     private
-
-    def announce(message)
-      logo = "💥".encode("utf-8")
-      puts logo + " Sheldon" + logo + "  #{message}"
-    end
 
     def error_and_exit(message)
       prompt.error(message)
