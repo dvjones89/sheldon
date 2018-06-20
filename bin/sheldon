@@ -17,7 +17,7 @@ module CLI
     def build(rel_path_to_target)
       abs_build_path = File.expand_path(rel_path_to_target)
       with_exception_handling do
-        prompt.ok("Built #{File.basename(rel_path_to_target)}") if sheldon.build(abs_build_path)
+        prompt.ok("Sheldon build complete: #{abs_build_path}") if sheldon.build(abs_build_path)
       end
     end
 
@@ -25,7 +25,7 @@ module CLI
     def forget(recall_cue=nil)
       recall_cue ||= cue_picker("What would you like to forget?")
       with_exception_handling { sheldon.forget(recall_cue) }
-      prompt.ok("I've forgotten about #{recall_cue}. Let us never mention it again.")
+      prompt.ok("Sheldon forget complete: #{recall_cue}")
     end
 
     desc "learn path_to_target", "Add a new file/folder to Sheldon's brain. Supply a recall_cue at runtime."
