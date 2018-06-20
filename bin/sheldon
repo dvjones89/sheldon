@@ -35,7 +35,7 @@ module CLI
       recall_cue = prompt.ask("Recall Cue For File/Folder", default: default_cue, required: true)
       with_exception_handling { sheldon.learn(recall_cue, abs_learn_path) }
       with_exception_handling { sheldon.recall(recall_cue) }
-      prompt.ok("Sheldon learn complete: #{default_cue}")
+      prompt.ok("Sheldon learn complete: #{recall_cue}")
     end
 
     desc "list", "List all recall cues known by Sheldon"
