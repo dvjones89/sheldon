@@ -13,44 +13,44 @@ The video above demonstrates adding a config file to Sheldon (`sheldon learn`) a
 
 ### Installation:
 1) `gem install sheldon`
-2) `sheldon setup path/to/data/directory` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be created.
-3) Sync your data directory across all your different hosts using your preferred method (git, rsync, Dropbox, Resilio Sync), so Sheldon's knowledge is available everywhere.
+2) `sheldon setup ~/Dropbox/sheldon` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be created.
+3) Sync your data directory across all your different hosts using your preferred method (Dropbox, Google Drive, Git), so Sheldon's knowledge is available everywhere.
 
 ### How It Works
 #### Add files/folders to Sheldon (sheldon learn)
 Teach Sheldon about new files or directories using the `learn` command:
 ```shell
 sheldon learn ~/.gitconfig
-Recall Cue For File/Folder: git
+Recall Cue For File/Folder: my git config
 ```
 
 Sheldon will move the original file/directory into his data directory and symlink the file/directory back to its original location.
 ```shell
 ls -al ~ | grep .gitconfig
-.gitconfig -> /Users/dave/sheldon/git/.gitconfig
+.gitconfig -> /Users/dave/Dropbox/sheldon/my git config/.gitconfig
 ```
 
 #### Recall your files on other machines (sheldon recall)
 Sheldon's `recall` command will symlink the file from the data directory to its correct location on any filesystem (even under different home directories):
 
 ```shell
-sheldon recall git
+sheldon recall "my git config"
 
 ls -al ~ | grep .gitconfig
-.gitconfig -> /Users/vagrant/sheldon/git/.gitconfig
+.gitconfig -> /Users/vagrant/Dropbox/sheldon/my git config/.gitconfig
 ```
 
 Pass the `-i` flag to Sheldon's `recall` command for interactive mode:
 ```shell
 sheldon recall -i
-Recall git_config (Y/N): y
-Recall .zshrc (Y/N): y
+Recall my git config (Y/N): Y
+Recall my ZSH config (Y/N): Y
 ```
 
 #### Open Your Configs In A Flash (sheldon open)
 Want to quickly tweak that config file but can't remember where it resides on your system? No worries, Sheldon's got your back:
 ```shell
-sheldon open git_config
+sheldon open "my git config"
 # Your ~/.gitconfig will be opened in your $EDITOR
 ```
 
