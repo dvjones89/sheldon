@@ -3,7 +3,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/dvjones89/sheldon/badge.svg?branch=master)](https://coveralls.io/github/dvjones89/sheldon?branch=master)
 [![Gem Version](https://badge.fury.io/rb/sheldon.svg)](https://badge.fury.io/rb/sheldon)
 
-Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.
+![Demo](https://user-images.githubusercontent.com/1914715/41686022-79aecb46-74da-11e8-8af2-1cda3fcc14bb.gif)  
+Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
+The video above demonstrates adding a config file to Sheldon (`sheldon learn`) and recalling this config (`sheldon recall`) on another host.
 
 ### Requirements:
 * Ruby 1.9.3 or above.
@@ -35,7 +37,7 @@ Sheldon's `recall` command will symlink the file from the data directory to its 
 sheldon recall git
 
 ls -al ~ | grep .gitconfig
-.gitconfig -> /Users/john/sheldon/git/.gitconfig
+.gitconfig -> /Users/vagrant/sheldon/git/.gitconfig
 ```
 
 Pass the `-i` flag to Sheldon's `recall` command for interactive mode:
