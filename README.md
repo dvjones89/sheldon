@@ -7,6 +7,8 @@
 Sheldon makes it easy for you to manage your .dotfiles and configs across all your OS X / linux devices.  
 The video above demonstrates adding a config file to Sheldon (`sheldon learn`) and recalling this config (`sheldon recall`) on another host.
 
+Check out my [5 minute demo video](https://www.youtube.com/watch?v=7z2a1AmWNfU) to see more of Sheldon in action.
+
 ### Requirements:
 * Ruby 1.9.3 or above.
 * The `build-essential` and `ruby-dev` packages on linux systems
@@ -37,7 +39,7 @@ Sheldon's `recall` command will symlink the file from the data directory to its 
 sheldon recall "my git config"
 
 ls -al ~ | grep .gitconfig
-.gitconfig -> /Users/vagrant/Dropbox/sheldon/my git config/.gitconfig
+.gitconfig -> /home/vagrant/Dropbox/sheldon/my git config/.gitconfig
 ```
 
 Pass the `-i` flag to Sheldon's `recall` command for interactive mode:
