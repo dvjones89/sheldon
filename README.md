@@ -15,7 +15,7 @@ Check out my [5 minute demo video](https://www.youtube.com/watch?v=7z2a1AmWNfU) 
 
 ### Installation:
 1) `gem install sheldon`
-2) `sheldon setup ~/Dropbox/sheldon` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be created.
+2) `sheldon setup ~/Dropbox/sheldon` to tell Sheldon where your existing data directory resides, or otherwise where a new data directory should be established.
 3) Sync your data directory across all your different hosts using your preferred method (Dropbox, Google Drive, Git), so Sheldon's knowledge is available everywhere.
 
 ### How It Works
