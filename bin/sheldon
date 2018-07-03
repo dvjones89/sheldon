@@ -96,6 +96,13 @@ module CLI
       end
     end
 
+    desc "update", "Checks if an update is available for Sheldon"
+    def update
+      sheldon_gem = Gem::Dependency.new("sheldon")
+      latest_version = sheldon_gem.matching_specs.map(&:version).max
+      puts "latest_version: #{latest_version}"
+    end
+
     desc "version", "Prints the current version of Sheldon"
     def version
       puts ::Sheldon::VERSION
