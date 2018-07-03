@@ -98,9 +98,17 @@ module CLI
 
     desc "update", "Checks if an update is available for Sheldon"
     def update
-      sheldon_gem = Gem::Dependency.new("sheldon")
-      latest_version = sheldon_gem.matching_specs.map(&:version).max
-      puts "latest_version: #{latest_version}"
+      local_specs = Gem::Specification.select{|spec| spec.name == "sheldon"}
+      latest_local_spec = local_specs.max(&:version)
+
+      fetcher = Gem::SpecFetcher.fetcher
+      # dependency = Gem::Dependency.new("sheldon", "> #{latest_local_spec.version}")
+      dependency = Gem::Dependency.new("sheldon", "> 6.0.5")
+      newer_versions, errors = fetcher.search_for_dependency(dependency)
+
+      error_and_exit("Something went wrong") if errors.any?
+
+      newer_versions.any? ? prompt.ok("Update available!") : prompt.error("No updates available at this time.")
     end
 
     desc "version", "Prints the current version of Sheldon"
