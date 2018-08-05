@@ -68,7 +68,7 @@ module CLI
       if options[:i]
         cue_options.each do |recall_cue|
           answer = prompt.yes?("Recall #{recall_cue}?")
-          with_exception_handling { sheldon.recall(recall_cue) if answer.downcase == "y" }
+          with_exception_handling { sheldon.recall(recall_cue) if answer == true }
         end
       else
         recall_cue ||= cue_picker("What would you like to recall?", cue_options)
