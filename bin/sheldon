@@ -73,9 +73,8 @@ module CLI
       else
         recall_cue ||= cue_picker("What would you like to recall?", cue_options)
         with_exception_handling { sheldon.recall(recall_cue) }
+        prompt.ok("Sheldon recall complete: #{recall_cue}")
       end
-
-      prompt.ok("Sheldon recall complete: #{recall_cue}")
     end
 
     desc "setup path_to_data_directory", "Setup Sheldon on this host, supplying the path that where Sheldon's data directory can be found, or should be created."
