@@ -65,6 +65,8 @@ module CLI
 
     def recall(recall_cue=nil)
       cue_options = sheldon.list_cues.reject{ |cue| sheldon.recalled?(cue) }
+      error_and_exit("All of your files and folders have already been recalled. Use `sheldon list` to view them all.") if cue_options.empty?
+
       if options[:i]
         cue_options.each do |recall_cue|
           answer = prompt.yes?("Recall #{recall_cue}?")
