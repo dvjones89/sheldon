@@ -37,6 +37,12 @@ class Brain
     memory.list_cues
   end
 
+  def path_for_cue(recall_cue)
+    raise "no entry for cue '#{recall_cue}'" unless memory.has_cue?(recall_cue)
+    brain_directory = brain_directory_for_cue(recall_cue)
+    get_content(brain_directory)
+  end
+
   def present?
     memory.present?
   end
