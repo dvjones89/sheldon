@@ -9,7 +9,7 @@ class Brain
 
   def forget(recall_cue)
     entry = memory.recall(recall_cue)
-    brain_path = brain_path_for_cue(recall_cue)
+    brain_path = brain_directory_for_cue(recall_cue)
     destination_path = add_home(entry[:filepath])
     FileUtils.rm_r(destination_path) if File.symlink?(destination_path)
     FileUtils.rm_r(brain_path) if Dir.exist?(brain_path)
@@ -26,7 +26,7 @@ class Brain
     raise "This cue has already been used." if has_cue?(recall_cue)
     raise "Unable to find a file or folder at #{abs_learn_path}" unless File.exist?(abs_learn_path)
 
-    brain_path = brain_path_for_cue(recall_cue)
+    brain_path = brain_directory_for_cue(recall_cue)
     FileUtils.mkdir_p(brain_path)
     FileUtils.mv(abs_learn_path, brain_path)
     entry = { filepath: remove_home(abs_learn_path) }
@@ -48,7 +48,7 @@ class Brain
     raise DestinationNotEmptyException, "#{destination_path} already exists." if File.exist?(destination_path)
 
     FileUtils.mkdir_p(destination_dir) unless File.directory?(destination_dir)
-    brain_path = brain_path_for_cue(recall_cue)
+    brain_path = brain_directory_for_cue(recall_cue)
     FileUtils.ln_s(get_content(brain_path), destination_path)
     return true
   end
@@ -67,7 +67,7 @@ class Brain
 
   private
 
-  def brain_path_for_cue(recall_cue)
+  def brain_directory_for_cue(recall_cue)
     File.join(@location, recall_cue)
   end
 
