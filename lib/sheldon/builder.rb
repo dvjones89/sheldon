@@ -2,7 +2,7 @@ class Builder
   require "fileutils"
 
   def build(abs_build_path)
-    entries = Dir.glob(abs_build_path + "/*")
+    entries = Dir.glob(abs_build_path + "/*").sort
     master_content = entries.inject("") do |buffer, entry|
       is_config?(entry) ? add_entry_to_buffer(entry, buffer) : buffer
     end
