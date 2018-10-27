@@ -49,13 +49,10 @@ module CLI
     def open(recall_cue=nil)
       editor = ENV['EDITOR']
       error_and_exit("Your system does not define a default editor. Please set $EDITOR and try again.") if editor.nil?
-      cue_options = sheldon.list_cues.select{|cue| sheldon.recalled?(cue)}
-      recall_cue ||= cue_picker("What would you like to open?", cue_options)
+      recall_cue ||= cue_picker("What would you like to open?", sheldon.list_cues)
 
       with_exception_handling do
-        error_and_exit("#{recall_cue} has not been recalled on this computer. Use `sheldon recall #{recall_cue}` and then try again.") unless sheldon.recalled?(recall_cue)
-        memory_entry = sheldon.brain.memory.recall(recall_cue)
-        filepath = add_home(memory_entry[:filepath])
+        filepath = sheldon.brain.path_for_cue(recall_cue)
         system("#{editor} '#{filepath}'")
       end
     end
