@@ -127,6 +127,20 @@ describe Brain do
     end
   end
 
+  describe "#path_for_cue" do
+    context "for a cue that exists in Sheldon's memory" do
+      it "should return the brain path for a cue" do
+        brain.learn("my git config", abs_learn_path)
+        expect(brain.path_for_cue("my git config")).to eq(abs_brain_path)
+      end
+    end
+
+    context "for a cue that doesn't exist in Sheldon's memory" do
+      it "should raise a runtime exception" do
+        expect{ brain.path_for_cue("lightbulb") }.to raise_error("no entry for cue 'lightbulb'")
+      end
+    end
+  end
 
   describe "#recalled?" do
     context "for a file that has been recalled" do
