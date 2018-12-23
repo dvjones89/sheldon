@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.executables   = 'sheldon'
 
+  s.add_runtime_dependency 'git'
   s.add_runtime_dependency 'thor'
   s.add_runtime_dependency 'tty-prompt'
   s.add_development_dependency "rake"
