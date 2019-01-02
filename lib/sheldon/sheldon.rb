@@ -29,6 +29,12 @@ class Sheldon
     brain.list_cues
   end
 
+  def merge(cue, abs_user_filepath)
+    brain_file = File.new(brain.path_for_cue(cue))
+    user_file = File.new(abs_user_filepath)
+    FileMerger.new(brain).merge(brain_file, user_file)
+  end
+
   def recall(recall_cue)
     brain.recall(recall_cue)
   end
