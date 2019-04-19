@@ -29,8 +29,8 @@ class Sheldon
     brain.list_cues
   end
 
-  def recall(recall_cue)
-    brain.recall(recall_cue)
+  def recall(recall_cue, opts={})
+    brain.recall(recall_cue, opts)
   end
 
   def setup!
