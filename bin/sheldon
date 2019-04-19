@@ -66,12 +66,12 @@ module CLI
 
       if options[:i]
         cue_options.each do |recall_cue|
-          answer = prompt.yes?("Recall #{recall_cue}?")
-          with_exception_handling { sheldon.recall(recall_cue) if answer == true }
+          recall_confirmed = prompt.yes?("Recall #{recall_cue}?")
+          perform_recall(recall_cue) if recall_confirmed
         end
       else
         recall_cue ||= cue_picker("What would you like to recall?", cue_options)
-        with_exception_handling { sheldon.recall(recall_cue) }
+        perform_recall(recall_cue)
         prompt.ok("Sheldon recall complete: #{recall_cue}")
       end
     end
@@ -101,17 +101,28 @@ module CLI
 
     private
 
+    def cue_picker(message, options=sheldon.list_cues)
+      prompt.select(message, options, per_page: 20, filter: true)
+    end
+
     def error_and_exit(message)
       prompt.error(message)
       exit!
     end
 
-    def prompt
-      @prompt ||= TTY::Prompt.new(interrupt: :exit)
+    def perform_recall(recall_cue)
+      with_exception_handling do
+        begin
+          sheldon.recall(recall_cue)
+        rescue DestinationNotEmptyException => e
+          overwrite_confirmed = prompt.yes?("File/target already exists. Overwrite?")
+          sheldon.recall(recall_cue, overwrite: true) if overwrite_confirmed
+        end
+      end
     end
 
-    def cue_picker(message, options=sheldon.list_cues)
-      prompt.select(message, options, per_page: 20, filter: true)
+    def prompt
+      @prompt ||= TTY::Prompt.new(interrupt: :exit)
     end
 
     def read_from_dotfile(key)

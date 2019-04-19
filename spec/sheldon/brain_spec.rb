@@ -50,10 +50,20 @@ describe Brain do
 
   describe "#recall" do
     context "when recalling a file that already exists on the host" do
-      it "should raise a runtime exception" do
-        brain.learn("my git config", abs_learn_path)
-        FileUtils.touch(abs_learn_path)
-        expect { brain.recall("my git config") }.to raise_error(DestinationNotEmptyException)
+      context "when the overwrite argument hasn't been set" do
+        it "should raise a runtime exception" do
+          brain.learn("my git config", abs_learn_path)
+          FileUtils.touch(abs_learn_path)
+          expect { brain.recall("my git config") }.to raise_error(DestinationNotEmptyException)
+        end
+      end
+
+      context "when the overwrite argument has been set" do
+        it "should successfully symlink the file to the destination directory" do
+          brain.learn("my git config", abs_learn_path)
+          FileUtils.touch(abs_learn_path)
+          expect(brain.recall("my git config", overwrite: true)).to be true
+        end
       end
     end
 
