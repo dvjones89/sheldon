@@ -106,8 +106,15 @@ module CLI
       exit!
     end
 
-    def prompt
-      @prompt ||= TTY::Prompt.new(interrupt: :exit)
+    def perform_recall(recall_cue)
+      with_exception_handling do
+        begin
+          sheldon.recall(recall_cue)
+        rescue DestinationNotEmptyException => e
+          overwrite_confirmed = prompt.yes?("File/target already exists. Overwrite?")
+          sheldon.recall(recall_cue, overwrite: true) if overwrite_confirmed
+        end
+      end
     end
 
     def cue_picker(message, options=sheldon.list_cues)
