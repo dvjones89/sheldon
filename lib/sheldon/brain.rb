@@ -47,15 +47,16 @@ class Brain
     memory.present?
   end
 
-  def recall(recall_cue)
+  def recall(recall_cue, opts={})
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])
     destination_dir = File.dirname(destination_path)
-    raise DestinationNotEmptyException, "#{destination_path} already exists." if File.exist?(destination_path)
+
+    raise DestinationNotEmptyException, "#{destination_path} already exists." if File.exist?(destination_path) && !opts[:overwrite]
 
     FileUtils.mkdir_p(destination_dir) unless File.directory?(destination_dir)
     brain_path = brain_directory_for_cue(recall_cue)
-    FileUtils.ln_s(get_content(brain_path), destination_path)
+    FileUtils.ln_s(get_content(brain_path), destination_path, force: opts[:overwrite])
     return true
   end
 
