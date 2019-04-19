@@ -101,6 +101,10 @@ module CLI
 
     private
 
+    def cue_picker(message, options=sheldon.list_cues)
+      prompt.select(message, options, per_page: 20, filter: true)
+    end
+
     def error_and_exit(message)
       prompt.error(message)
       exit!
@@ -117,8 +121,8 @@ module CLI
       end
     end
 
-    def cue_picker(message, options=sheldon.list_cues)
-      prompt.select(message, options, per_page: 20, filter: true)
+    def prompt
+      @prompt ||= TTY::Prompt.new(interrupt: :exit)
     end
 
     def read_from_dotfile(key)
