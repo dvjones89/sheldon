@@ -66,12 +66,12 @@ module CLI
 
       if options[:i]
         cue_options.each do |recall_cue|
-          answer = prompt.yes?("Recall #{recall_cue}?")
-          with_exception_handling { sheldon.recall(recall_cue) if answer == true }
+          recall_confirmed = prompt.yes?("Recall #{recall_cue}?")
+          perform_recall(recall_cue) if recall_confirmed
         end
       else
         recall_cue ||= cue_picker("What would you like to recall?", cue_options)
-        with_exception_handling { sheldon.recall(recall_cue) }
+        perform_recall(recall_cue)
         prompt.ok("Sheldon recall complete: #{recall_cue}")
       end
     end
