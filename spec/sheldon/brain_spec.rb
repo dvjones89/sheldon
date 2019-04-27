@@ -70,10 +70,22 @@ describe Brain do
     end
 
     context "when recalling a folder that already exists on the host" do
-      it "should raise a runtime exception" do
-        brain.learn("dotfiles", dotfiles_directory)
-        FileUtils.mkdir_p(dotfiles_directory)
-        expect { brain.recall("dotfiles") }.to raise_error(DestinationNotEmptyException)
+      context "when the overwrite argument hasn't been set" do
+        it "should raise a runtime exception" do
+          brain.learn("dotfiles", dotfiles_directory)
+          FileUtils.mkdir_p(dotfiles_directory)
+          expect { brain.recall("dotfiles") }.to raise_error(DestinationNotEmptyException)
+        end
+      end
+
+      context "when the overwrite argument has been set" do
+        it "should overwrite the directory with Sheldon's version" do
+          brain.learn("dotfiles", dotfiles_directory)
+          FileUtils.mkdir(dotfiles_directory)
+          expect(Dir.entries(dotfiles_directory)).not_to include(".gitconfig")
+          brain.recall("dotfiles", overwrite: true)
+          expect(Dir.entries(dotfiles_directory)).to include(".gitconfig")
+        end
       end
     end
 
