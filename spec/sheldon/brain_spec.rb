@@ -6,7 +6,7 @@ describe Brain do
     FileUtils.rm_r("spec/Users") if Dir.exist?("spec/Users")
     FileUtils.mkdir_p("spec/Users/test/sheldon")
     FileUtils.mkdir_p("spec/Users/test/dotfiles")
-    FileUtils.touch("spec/Users/test/dotfiles/.gitconfig")
+    File.open("spec/Users/test/dotfiles/.gitconfig", 'w') {|f| f.write("git file content") }
   end
 
   let(:brain) { Brain.new(abs("spec/Users/test/sheldon")) }
@@ -59,10 +59,12 @@ describe Brain do
       end
 
       context "when the overwrite argument has been set" do
-        it "should successfully symlink the file to the destination directory" do
+        it "should overwrite the file with Sheldon's version" do
           brain.learn("my git config", abs_learn_path)
           FileUtils.touch(abs_learn_path)
-          expect(brain.recall("my git config", overwrite: true)).to be true
+          expect(File.read(abs_learn_path)).to be_empty
+          brain.recall("my git config", overwrite: true)
+          expect(File.read(abs_learn_path)).to eq("git file content")
         end
       end
     end
