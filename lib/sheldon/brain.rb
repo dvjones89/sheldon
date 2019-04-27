@@ -48,16 +48,28 @@ class Brain
   end
 
   def recall(recall_cue, opts={})
+    # Compute the absolute paths for recall
+    brain_path = brain_directory_for_cue(recall_cue)
     entry = memory.recall(recall_cue)
     destination_path = add_home(entry[:filepath])
     destination_dir = File.dirname(destination_path)
 
-    raise DestinationNotEmptyException, "#{destination_path} already exists." if File.exist?(destination_path) && !opts[:overwrite]
+    # Handle the destination file / directory already existing on the filesystem
+    if File.exist?(destination_path)
+      if opts[:overwrite]
+        FileUtils.remove_dir(destination_path) # this (badly named) method deletes both files and folders
+      else
+        raise DestinationNotEmptyException, "#{destination_path} already exists."
+      end
+    end
 
+    # Create the destination directory if required
     FileUtils.mkdir_p(destination_dir) unless File.directory?(destination_dir)
-    brain_path = brain_directory_for_cue(recall_cue)
-    FileUtils.ln_s(get_content(brain_path), destination_path, force: opts[:overwrite])
-    return true
+
+    # Create the symbolic link between sheldon's brain and the destination
+    FileUtils.ln_s(get_content(brain_path), destination_path)
+
+    return recalled?(recall_cue)
   end
 
   def recalled?(recall_cue)
