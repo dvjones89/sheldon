@@ -69,6 +69,26 @@ describe Brain do
       end
     end
 
+    context "when recalling a file that exists as a broken symlink on the host" do
+      before(:each) do
+        brain.learn("my git config", abs_learn_path)
+        FileUtils.ln_s(abs_learn_path, abs_learn_path, force: true)
+      end
+      context "when the overwrite argument hasn't been set" do
+
+        it "should raise a runtime exception" do
+          expect { brain.recall("my git config") }.to raise_error(DestinationNotEmptyException)
+        end
+      end
+
+      context "when the overwrite argument has been set" do
+        it "should replace the broken symlink with the recalled file content" do
+          brain.recall("my git config", overwrite: true)
+          expect(File.read(abs_learn_path)).to eq("git file content")
+        end
+      end
+    end
+
     context "when recalling a folder that already exists on the host" do
       context "when the overwrite argument hasn't been set" do
         it "should raise a runtime exception" do
