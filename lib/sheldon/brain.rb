@@ -55,7 +55,7 @@ class Brain
     destination_dir = File.dirname(destination_path)
 
     # Handle the destination file / directory already existing on the filesystem
-    if File.exist?(destination_path)
+    if File.exist?(destination_path) || File.symlink?(destination_path)
       if opts[:overwrite]
         FileUtils.remove_dir(destination_path) # this (badly named) method deletes both files and folders
       else
